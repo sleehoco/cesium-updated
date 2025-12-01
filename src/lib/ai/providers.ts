@@ -99,5 +99,9 @@ export function getBestProvider(): AIProvider {
   if (available.length === 0) {
     throw new Error('No AI providers configured. Please set GROQ_API_KEY, TOGETHER_API_KEY, or OPENAI_API_KEY');
   }
-  return available[0];
+  const provider = available[0];
+  if (!provider) {
+    throw new Error('No AI providers available');
+  }
+  return provider;
 }
