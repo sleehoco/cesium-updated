@@ -66,11 +66,11 @@ function validateEnv() {
   // Skip validation in browser
   if (typeof window !== 'undefined') {
     const clientEnv = {
-      NODE_ENV: process.env.NODE_ENV,
-      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
-      NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+      NODE_ENV: process.env['NODE_ENV'],
+      NEXT_PUBLIC_SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'],
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'],
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env['NEXT_PUBLIC_GA_MEASUREMENT_ID'],
+      NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'],
     };
 
     const parsed = clientEnvSchema.safeParse(clientEnv);

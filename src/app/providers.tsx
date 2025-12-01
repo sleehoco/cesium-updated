@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             // Retry failed queries once
             retry: 1,
             // Don't refetch on window focus in production
-            refetchOnWindowFocus: process.env.NODE_ENV === 'development',
+            refetchOnWindowFocus: process.env['NODE_ENV'] === 'development',
             // Cache data for 5 minutes
             staleTime: 5 * 60 * 1000,
             // Keep unused data in cache for 10 minutes

@@ -58,7 +58,7 @@ export interface VirusTotalFileReport {
  * Check if VirusTotal API key is configured
  */
 export function hasVirusTotalKey(): boolean {
-  return Boolean(process.env.VIRUSTOTAL_API_KEY);
+  return Boolean(process.env['VIRUSTOTAL_API_KEY']);
 }
 
 /**
@@ -72,7 +72,7 @@ export async function analyzeIP(ip: string): Promise<VirusTotalIPReport | null> 
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/ip_addresses/${ip}`, {
       headers: {
-        'x-apikey': process.env.VIRUSTOTAL_API_KEY!,
+        'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
     });
 
@@ -99,7 +99,7 @@ export async function analyzeDomain(domain: string): Promise<VirusTotalDomainRep
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/domains/${domain}`, {
       headers: {
-        'x-apikey': process.env.VIRUSTOTAL_API_KEY!,
+        'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
     });
 
@@ -126,7 +126,7 @@ export async function analyzeFileHash(hash: string): Promise<VirusTotalFileRepor
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/files/${hash}`, {
       headers: {
-        'x-apikey': process.env.VIRUSTOTAL_API_KEY!,
+        'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
     });
 

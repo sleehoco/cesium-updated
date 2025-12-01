@@ -50,27 +50,27 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
 export function getAIClient(provider: AIProvider) {
   switch (provider) {
     case 'groq':
-      if (!process.env.GROQ_API_KEY) {
+      if (!process.env['GROQ_API_KEY']) {
         throw new Error('GROQ_API_KEY is not set');
       }
       return new Groq({
-        apiKey: process.env.GROQ_API_KEY,
+        apiKey: process.env['GROQ_API_KEY'],
       });
 
     case 'together':
-      if (!process.env.TOGETHER_API_KEY) {
+      if (!process.env['TOGETHER_API_KEY']) {
         throw new Error('TOGETHER_API_KEY is not set');
       }
       return new Together({
-        apiKey: process.env.TOGETHER_API_KEY,
+        apiKey: process.env['TOGETHER_API_KEY'],
       });
 
     case 'openai':
-      if (!process.env.OPENAI_API_KEY) {
+      if (!process.env['OPENAI_API_KEY']) {
         throw new Error('OPENAI_API_KEY is not set');
       }
       return new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env['OPENAI_API_KEY'],
       });
 
     default:
@@ -84,9 +84,9 @@ export function getAIClient(provider: AIProvider) {
 export function getAvailableProviders(): AIProvider[] {
   const providers: AIProvider[] = [];
 
-  if (process.env.GROQ_API_KEY) providers.push('groq');
-  if (process.env.TOGETHER_API_KEY) providers.push('together');
-  if (process.env.OPENAI_API_KEY) providers.push('openai');
+  if (process.env['GROQ_API_KEY']) providers.push('groq');
+  if (process.env['TOGETHER_API_KEY']) providers.push('together');
+  if (process.env['OPENAI_API_KEY']) providers.push('openai');
 
   return providers.sort((a, b) => AI_PROVIDERS[a].priority - AI_PROVIDERS[b].priority);
 }
