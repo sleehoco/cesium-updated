@@ -59,7 +59,7 @@ const nextConfig: NextConfig = {
 
   // Environment variables that should be available in the browser
   env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000',
   },
 
   // Webpack configuration for optimizations
