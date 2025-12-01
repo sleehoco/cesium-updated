@@ -64,6 +64,7 @@ export function CyberGrid() {
       if (nodes.length < 2) return;
       const source = nodes[Math.floor(Math.random() * nodes.length)];
       const target = nodes[Math.floor(Math.random() * nodes.length)];
+      if (!source || !target) return;
       dataPackets.push({
         x: source.x,
         y: source.y,
