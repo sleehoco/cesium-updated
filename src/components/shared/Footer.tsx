@@ -8,10 +8,12 @@ const navigation = {
     { name: 'Contact', href: '/contact' },
   ],
   services: [
-    { name: 'Penetration Testing', href: '/services#penetration-testing' },
     { name: 'Security Assessment', href: '/services#security-assessment' },
-    { name: 'Incident Response', href: '/services#incident-response' },
-    { name: 'Compliance', href: '/services#compliance' },
+    { name: 'Cloud Security (M365)', href: '/services#cloud-security-m365' },
+    { name: 'Penetration Testing', href: '/services#penetration-testing' },
+    { name: 'Security Audit', href: '/services#security-audit' },
+    { name: 'AI Business Integration', href: '/services#ai-business-integration' },
+    { name: 'AI Security & Protection', href: '/services#ai-security' },
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
