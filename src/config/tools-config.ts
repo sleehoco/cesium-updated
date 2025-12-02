@@ -1,4 +1,4 @@
-import { Shield, Search, Lock, Brain, Zap, FileSearch } from 'lucide-react';
+import { Shield, Search, Lock, Brain, Zap, FileSearch, Bot, MessageSquare, Code, Network } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Tool {
@@ -17,6 +17,7 @@ export interface Tool {
 export const toolCategories = [
     'All Tools',
     'Threat Intelligence',
+    'AI Security Tools',
     'Vulnerability Assessment',
     'Incident Response',
     'Security Analysis',
@@ -114,7 +115,7 @@ export const tools: Tool[] = [
         tagline: 'Expert Security Guidance',
         description: 'Chat with an AI security expert for personalized advice on security architecture, best practices, and threat mitigation strategies.',
         icon: Brain,
-        category: 'Security Analysis',
+        category: 'AI Security Tools',
         path: '/tools/security-advisor',
         features: [
             'Interactive AI chat',
@@ -124,6 +125,74 @@ export const tools: Tool[] = [
         ],
         status: 'coming-soon',
         color: 'yellow-500',
+    },
+    {
+        id: 'ai-threat-hunter',
+        name: 'AI Threat Hunter',
+        tagline: 'Autonomous Threat Detection',
+        description: 'Advanced AI-powered threat hunting using machine learning to identify hidden threats, zero-day exploits, and advanced persistent threats in your environment.',
+        icon: Bot,
+        category: 'AI Security Tools',
+        path: '/tools/ai-threat-hunter',
+        features: [
+            'ML-based threat detection',
+            'Behavioral analysis',
+            'Zero-day identification',
+            'APT detection',
+        ],
+        status: 'coming-soon',
+        color: 'indigo-500',
+    },
+    {
+        id: 'ai-code-scanner',
+        name: 'AI Code Security Scanner',
+        tagline: 'Intelligent Code Analysis',
+        description: 'Leverage AI to scan source code for security vulnerabilities, insecure patterns, and compliance violations. Supports multiple programming languages.',
+        icon: Code,
+        category: 'AI Security Tools',
+        path: '/tools/ai-code-scanner',
+        features: [
+            'Multi-language support',
+            'Vulnerability detection',
+            'OWASP Top 10 scanning',
+            'Fix recommendations',
+        ],
+        status: 'coming-soon',
+        color: 'teal-500',
+    },
+    {
+        id: 'ai-phishing-detector',
+        name: 'AI Phishing Detector',
+        tagline: 'Smart Email Analysis',
+        description: 'AI-powered phishing email detection and analysis. Identify sophisticated phishing attempts, analyze email headers, and extract IOCs automatically.',
+        icon: MessageSquare,
+        category: 'AI Security Tools',
+        path: '/tools/ai-phishing-detector',
+        features: [
+            'Email content analysis',
+            'Header inspection',
+            'IOC extraction',
+            'Brand impersonation detection',
+        ],
+        status: 'coming-soon',
+        color: 'orange-500',
+    },
+    {
+        id: 'ai-network-analyzer',
+        name: 'AI Network Analyzer',
+        tagline: 'Intelligent Traffic Analysis',
+        description: 'Use AI to analyze network traffic patterns, detect anomalies, and identify potential security threats in real-time network communications.',
+        icon: Network,
+        category: 'AI Security Tools',
+        path: '/tools/ai-network-analyzer',
+        features: [
+            'Traffic pattern analysis',
+            'Anomaly detection',
+            'Protocol analysis',
+            'Malicious activity detection',
+        ],
+        status: 'coming-soon',
+        color: 'cyan-500',
     },
 ];
 
