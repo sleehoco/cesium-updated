@@ -1,4 +1,4 @@
-import { Shield, Search, Lock, Brain, Zap, FileSearch, Bot, MessageSquare, Code, Network } from 'lucide-react';
+import { Shield, Search, Lock, Brain, Zap, FileSearch, Bot, MessageSquare, Code, Network, PenTool } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Tool {
@@ -193,6 +193,23 @@ export const tools: Tool[] = [
         ],
         status: 'coming-soon',
         color: 'cyan-500',
+    },
+    {
+        id: 'ai-writing-assistant',
+        name: 'AI Writing Assistant',
+        tagline: 'Professional Business Communication',
+        description: 'AI-powered writing assistant for crafting professional business emails, reports, and documents. Get grammar corrections, style improvements, and tone adjustments for official communications.',
+        icon: PenTool,
+        category: 'AI Security Tools',
+        path: '/tools/ai-writing-assistant',
+        features: [
+            'Grammar and spelling correction',
+            'Business email composition',
+            'Professional tone refinement',
+            'Document formatting suggestions',
+        ],
+        status: 'beta',
+        color: 'violet-500',
     },
 ];
 
