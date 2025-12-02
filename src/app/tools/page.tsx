@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,8 +9,8 @@ import { toolCategories, getToolsByCategory } from '@/config/tools-config';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function ToolsPage() {
-    const [selectedCategory, setSelectedCategory] = useState('All Tools');
-    const filteredTools = getToolsByCategory(selectedCategory);
+    // Get all categories except "All Tools"
+    const categories = toolCategories.filter(cat => cat !== 'All Tools');
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -55,36 +54,34 @@ export default function ToolsPage() {
                     </p>
                 </motion.div>
 
-                {/* Category Filter */}
-                <motion.div
-                    className="flex flex-wrap justify-center gap-3 mb-12"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    {toolCategories.map((category) => (
-                        <Button
-                            key={category}
-                            variant={selectedCategory === category ? 'default' : 'outline'}
-                            onClick={() => setSelectedCategory(category)}
-                            className={`rounded-full transition-all duration-300 ${selectedCategory === category
-                                    ? 'bg-cesium text-black hover:bg-cesium-dark'
-                                    : 'border-cesium/30 text-cesium hover:bg-cesium/10'
-                                }`}
-                        >
-                            {category}
-                        </Button>
-                    ))}
-                </motion.div>
+                {/* Categories with Tools */}
+                {categories.map((category, categoryIndex) => {
+                    const categoryTools = getToolsByCategory(category);
 
-                {/* Tools Grid */}
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    {filteredTools.map((tool) => {
+                    return (
+                        <motion.div
+                            key={category}
+                            className="mb-16"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 + categoryIndex * 0.1 }}
+                        >
+                            {/* Category Header */}
+                            <div className="mb-8">
+                                <h2 className="text-3xl font-bold text-white mb-2 font-[var(--font-orbitron)]">
+                                    <span className="text-cesium">//</span> {category}
+                                </h2>
+                                <div className="h-1 w-20 bg-cesium"></div>
+                            </div>
+
+                            {/* Tools Grid for this Category */}
+                            <motion.div
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
+                                variants={containerVariants}
+                                initial="hidden"
+                                animate="visible"
+                            >
+                                {categoryTools.map((tool) => {
                         const Icon = tool.icon;
                         const isComingSoon = tool.status === 'coming-soon';
 
@@ -168,7 +165,10 @@ export default function ToolsPage() {
                             </motion.div>
                         );
                     })}
-                </motion.div>
+                            </motion.div>
+                        </motion.div>
+                    );
+                })}
 
                 {/* Info Section */}
                 <motion.div
