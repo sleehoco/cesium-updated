@@ -33,19 +33,19 @@ export default function ContactPage() {
   // Validate fields in real-time
   useEffect(() => {
     const newValidFields: Record<string, boolean> = {};
-    
+
     if (formData.name.trim().length > 0) {
-      newValidFields.name = true;
+      newValidFields['name'] = true;
     }
-    
+
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newValidFields.email = true;
+      newValidFields['email'] = true;
     }
-    
+
     if (formData.message.trim().length >= 10) {
-      newValidFields.message = true;
+      newValidFields['message'] = true;
     }
-    
+
     setValidFields(newValidFields);
     setCharCount(formData.message.length);
   }, [formData]);
@@ -94,7 +94,7 @@ export default function ContactPage() {
     }));
   };
 
-  const isFormValid = validFields.name && validFields.email && validFields.message;
+  const isFormValid = validFields['name'] && validFields['email'] && validFields['message'];
 
   // Animation variants
   const containerVariants = {
@@ -127,7 +127,7 @@ export default function ContactPage() {
         type: 'spring',
         stiffness: 200,
         damping: 15,
-      },
+      } as const,
     },
   };
 
@@ -235,11 +235,10 @@ export default function ContactPage() {
                   <div className="relative group">
                     <motion.label
                       htmlFor="name"
-                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${
-                        focusedField === 'name' || formData.name
-                          ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
-                          : 'top-2.5 text-sm text-gray-400'
-                      }`}
+                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${focusedField === 'name' || formData.name
+                        ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
+                        : 'top-2.5 text-sm text-gray-400'
+                        }`}
                     >
                       Name *
                     </motion.label>
@@ -255,7 +254,7 @@ export default function ContactPage() {
                       disabled={loading}
                       className="w-full px-4 py-3 bg-cyber border border-cesium/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cesium focus:border-transparent disabled:opacity-50 transition-all duration-200 group-hover:border-cesium/50"
                     />
-                    {validFields.name && (
+                    {validFields['name'] && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -270,11 +269,10 @@ export default function ContactPage() {
                   <div className="relative group">
                     <motion.label
                       htmlFor="email"
-                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${
-                        focusedField === 'email' || formData.email
-                          ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
-                          : 'top-2.5 text-sm text-gray-400'
-                      }`}
+                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${focusedField === 'email' || formData.email
+                        ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
+                        : 'top-2.5 text-sm text-gray-400'
+                        }`}
                     >
                       Email *
                     </motion.label>
@@ -290,7 +288,7 @@ export default function ContactPage() {
                       disabled={loading}
                       className="w-full px-4 py-3 bg-cyber border border-cesium/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cesium focus:border-transparent disabled:opacity-50 transition-all duration-200 group-hover:border-cesium/50"
                     />
-                    {validFields.email && (
+                    {validFields['email'] && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -305,11 +303,10 @@ export default function ContactPage() {
                   <div className="relative group">
                     <motion.label
                       htmlFor="company"
-                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${
-                        focusedField === 'company' || formData.company
-                          ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
-                          : 'top-2.5 text-sm text-gray-400'
-                      }`}
+                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${focusedField === 'company' || formData.company
+                        ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
+                        : 'top-2.5 text-sm text-gray-400'
+                        }`}
                     >
                       Company
                     </motion.label>
@@ -354,11 +351,10 @@ export default function ContactPage() {
                   <div className="relative group">
                     <motion.label
                       htmlFor="message"
-                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${
-                        focusedField === 'message' || formData.message
-                          ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
-                          : 'top-2.5 text-sm text-gray-400'
-                      }`}
+                      className={`absolute left-4 transition-all duration-200 pointer-events-none ${focusedField === 'message' || formData.message
+                        ? '-top-2.5 text-xs bg-cyber-light px-2 text-cesium'
+                        : 'top-2.5 text-sm text-gray-400'
+                        }`}
                     >
                       Message *
                     </motion.label>
@@ -376,7 +372,7 @@ export default function ContactPage() {
                     />
                     <div className="flex justify-between items-center mt-1">
                       <div className="flex items-center gap-2">
-                        {validFields.message && (
+                        {validFields['message'] && (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -399,9 +395,8 @@ export default function ContactPage() {
                       type="submit"
                       variant="gold"
                       size="lg"
-                      className={`w-full transition-all duration-300 ${
-                        isFormValid && !loading ? 'animate-pulse' : ''
-                      }`}
+                      className={`w-full transition-all duration-300 ${isFormValid && !loading ? 'animate-pulse' : ''
+                        }`}
                       disabled={loading || !isFormValid}
                     >
                       {loading ? (
