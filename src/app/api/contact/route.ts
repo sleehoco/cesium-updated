@@ -12,8 +12,8 @@ const resend = process.env['RESEND_API_KEY'] ? new Resend(process.env['RESEND_AP
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   email: z.string().email('Invalid email address'),
-  company: z.string().max(100).optional(),
-  service: z.string().optional(),
+  company: z.string().max(100).optional().or(z.literal('')),
+  service: z.string().optional().or(z.literal('')),
   message: z.string().min(10, 'Message must be at least 10 characters').max(2000),
 });
 
