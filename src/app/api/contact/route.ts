@@ -35,9 +35,11 @@ export async function POST(req: NextRequest) {
     const validatedData = contactSchema.parse(body);
 
     // Send email using Resend
+    // TODO: After verifying domain at resend.com/domains, update 'from' to use verified domain
+    // and 'to' back to 'information@cesiumcyber.com'
     const { data, error } = await resend.emails.send({
       from: 'CesiumCyber Contact Form <onboarding@resend.dev>', // Resend verified sender
-      to: 'information@cesiumcyber.com',
+      to: 'slee@sent.com', // TODO: Change to information@cesiumcyber.com after domain verification
       replyTo: validatedData.email,
       subject: `New Contact Form Submission from ${validatedData.name}`,
       html: `
