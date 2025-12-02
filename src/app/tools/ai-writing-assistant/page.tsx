@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { PenTool, Loader2, CheckCircle2, Sparkles, Mail, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import type { Metadata } from 'next';
 
 const modes = [
   {
