@@ -236,9 +236,9 @@ export default function AIWritingAssistantPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="prose prose-invert max-w-none">
-                    <div className="bg-cyber p-6 rounded-lg border border-gray-700">
-                      <ReactMarkdown className="text-gray-200">
+                  <div className="bg-cyber p-6 rounded-lg border border-gray-700">
+                    <div className="prose prose-invert max-w-none text-gray-200">
+                      <ReactMarkdown>
                         {output}
                       </ReactMarkdown>
                     </div>
