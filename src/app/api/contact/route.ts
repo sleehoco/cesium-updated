@@ -115,7 +115,8 @@ ${validatedData.message}
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to send email. Please try again or contact us directly.',
+          error: 'Email service is temporarily unavailable. Please contact us directly at information@cesiumcyber.com or call +1 (717) 543-4981.',
+          details: error,
         },
         { status: 500 }
       );
