@@ -34,7 +34,7 @@ const modes = [
 ];
 
 export default function AIWritingAssistantPage() {
-  const [mode, setMode] = useState(modes[0]);
+  const [mode, setMode] = useState(modes[0]!);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
