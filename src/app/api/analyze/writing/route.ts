@@ -1,38 +1,27 @@
-import { NextRequest } from 'next/server';
-import { createStreamingTextResponse } from '@/lib/ai/stream';
-import { getBestProvider } from '@/lib/ai/providers';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { generateCompletion } from '@/lib/ai/completions';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-interface WritingRequest {
-  text: string;
-  mode: 'review' | 'compose-email' | 'formalize';
-  systemPrompt?: string;
-}
+const requestSchema = z.object({
+  text: z.string().min(1).max(10000),
+  mode: z.enum(['review', 'compose-email', 'formalize']),
+});
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json() as WritingRequest;
-    const { text, mode, systemPrompt } = body;
-
-    if (!text || typeof text !== 'string') {
-      return new Response(JSON.stringify({ error: 'Text is required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Get the best available AI provider
-    const provider = getBestProvider();
+    const body = await req.json();
+    const { text, mode } = requestSchema.parse(body);
 
     // Build the system message based on mode
-    let systemMessage = systemPrompt || '';
+    let systemMessage = '';
+    let userMessage = '';
 
-    if (!systemMessage) {
-      switch (mode) {
-        case 'review':
-          systemMessage = `You are a professional writing assistant specializing in grammar, spelling, and style corrections.
+    switch (mode) {
+      case 'review':
+        systemMessage = `You are a professional writing assistant specializing in grammar, spelling, and style corrections.
 Review the provided text and:
 1. Identify and correct any grammar, spelling, or punctuation errors
 2. Suggest improvements for clarity and readability
@@ -40,10 +29,11 @@ Review the provided text and:
 4. Provide explanations for significant changes
 
 Format your response clearly with the corrected text and explanations.`;
-          break;
+        userMessage = `Please review the following text for grammar, spelling, punctuation, and clarity:\n\n${text}`;
+        break;
 
-        case 'compose-email':
-          systemMessage = `You are a professional business communication expert.
+      case 'compose-email':
+        systemMessage = `You are a professional business communication expert.
 Based on the user's request, compose a professional business email that:
 1. Uses appropriate business tone and language
 2. Has a clear subject line
@@ -52,10 +42,11 @@ Based on the user's request, compose a professional business email that:
 5. Maintains professional etiquette
 
 Format the email with Subject, Body, and appropriate signature placeholder.`;
-          break;
+        userMessage = `Write a professional business email based on this request:\n\n${text}`;
+        break;
 
-        case 'formalize':
-          systemMessage = `You are an expert in professional business writing.
+      case 'formalize':
+        systemMessage = `You are an expert in professional business writing.
 Transform the provided text into formal, professional business language that:
 1. Uses appropriate business terminology
 2. Maintains a professional, respectful tone
@@ -64,39 +55,51 @@ Transform the provided text into formal, professional business language that:
 5. Removes casual language while preserving meaning
 
 Provide the formalized version with brief notes on major changes if needed.`;
-          break;
+        userMessage = `Please rewrite the following text in a professional, formal business tone:\n\n${text}`;
+        break;
 
-        default:
-          systemMessage = 'You are a helpful writing assistant.';
-      }
+      default:
+        throw new Error('Invalid mode');
     }
 
-    const fullPrompt = systemMessage + '\n\n' + text;
-
-    // Create streaming response
-    const stream = await createStreamingTextResponse({
-      prompt: fullPrompt,
-      provider,
-      systemMessage: 'You are a professional writing assistant helping users improve their business communications.',
+    // Generate AI analysis
+    const result = await generateCompletion({
+      systemPrompt: systemMessage,
+      userMessage,
+      temperature: 0.3,
     });
 
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Transfer-Encoding': 'chunked',
+    // Return the result
+    return NextResponse.json({
+      success: true,
+      data: {
+        text,
+        mode,
+        result: result.content,
+        provider: result.provider,
+        model: result.model,
       },
     });
   } catch (error) {
     console.error('Writing analysis error:', error);
-    return new Response(
-      JSON.stringify({
-        error: 'Failed to analyze text',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      }),
+
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Invalid request',
+          details: error.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
       {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
+        success: false,
+        error: error instanceof Error ? error.message : 'Internal server error',
+      },
+      { status: 500 }
     );
   }
 }

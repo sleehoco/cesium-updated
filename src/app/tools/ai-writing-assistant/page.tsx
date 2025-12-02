@@ -62,29 +62,20 @@ export default function AIWritingAssistantPage() {
         body: JSON.stringify({
           text: input,
           mode: mode.id,
-          systemPrompt: mode.prompt,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to analyze text');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to analyze text');
       }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
+      const data = await response.json();
 
-      if (!reader) {
-        throw new Error('No response reader available');
-      }
-
-      let result = '';
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        result += chunk;
-        setOutput(result);
+      if (data.success && data.data.result) {
+        setOutput(data.data.result);
+      } else {
+        throw new Error('Invalid response from server');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
