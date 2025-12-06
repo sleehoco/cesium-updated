@@ -69,7 +69,7 @@ export default function ToolsPage() {
                             {/* Category Header */}
                             <div className="mb-8">
                                 <h2 className="text-3xl font-bold text-white mb-2 font-[var(--font-orbitron)]">
-                                    <span className="text-cesium">{'// '}</span>{category}
+                                    <span className="text-cesium">{'//'}</span> {category}
                                 </h2>
                                 <div className="h-1 w-20 bg-cesium"></div>
                             </div>
