@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   // Enable React strict mode for better development experience
@@ -132,4 +133,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry configuration - only enable if auth token is available
+export default process.env['SENTRY_AUTH_TOKEN']
+  ? withSentryConfig(nextConfig, {
+      org: process.env['SENTRY_ORG'],
+      project: process.env['SENTRY_PROJECT'],
+      silent: !process.env['CI'],
+      widenClientFileUpload: true,
+      tunnelRoute: '/monitoring',
+    })
+  : nextConfig;

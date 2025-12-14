@@ -45,9 +45,12 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
 };
 
 /**
- * Initialize AI clients
+ * Initialize AI clients with proper type overloads
  */
-export function getAIClient(provider: AIProvider) {
+export function getAIClient(provider: 'groq'): Groq;
+export function getAIClient(provider: 'together'): Together;
+export function getAIClient(provider: 'openai'): OpenAI;
+export function getAIClient(provider: AIProvider): Groq | Together | OpenAI {
   switch (provider) {
     case 'groq':
       if (!process.env['GROQ_API_KEY']) {

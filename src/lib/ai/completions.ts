@@ -5,6 +5,9 @@
 
 import { getAIClient, getBestProvider, AI_PROVIDERS, type AIProvider } from './providers';
 
+// Default timeout for AI completions (60 seconds)
+const DEFAULT_TIMEOUT_MS = 60000;
+
 export interface CompletionRequest {
   systemPrompt: string;
   userMessage: string;
@@ -12,6 +15,7 @@ export interface CompletionRequest {
   temperature?: number;
   maxTokens?: number;
   stream?: boolean;
+  timeoutMs?: number; // Optional custom timeout
 }
 
 export interface CompletionResponse {
@@ -26,29 +30,52 @@ export interface CompletionResponse {
 }
 
 /**
+ * Utility function to add timeout to a promise
+ */
+function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  operation: string
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`${operation} timed out after ${timeoutMs}ms`)),
+        timeoutMs
+      )
+    ),
+  ]);
+}
+
+/**
  * Generate AI completion
  */
 export async function generateCompletion(request: CompletionRequest): Promise<CompletionResponse> {
   const provider = request.provider || getBestProvider();
   const config = AI_PROVIDERS[provider];
-  const client = getAIClient(provider);
 
   const temperature = request.temperature ?? config.temperature ?? 0.1;
   const maxTokens = request.maxTokens ?? config.maxTokens ?? 8000;
+  const timeoutMs = request.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
   try {
     switch (provider) {
       case 'groq': {
-        const groqClient = client as import('groq-sdk').default;
-        const completion = await groqClient.chat.completions.create({
-          model: config.model,
-          messages: [
-            { role: 'system', content: request.systemPrompt },
-            { role: 'user', content: request.userMessage },
-          ],
-          temperature,
-          max_tokens: maxTokens,
-        });
+        const client = getAIClient('groq');
+        const completion = await withTimeout(
+          client.chat.completions.create({
+            model: config.model,
+            messages: [
+              { role: 'system', content: request.systemPrompt },
+              { role: 'user', content: request.userMessage },
+            ],
+            temperature,
+            max_tokens: maxTokens,
+          }),
+          timeoutMs,
+          `Groq API call`
+        );
 
         return {
           content: completion.choices[0]?.message?.content || '',
@@ -63,16 +90,20 @@ export async function generateCompletion(request: CompletionRequest): Promise<Co
       }
 
       case 'together': {
-        const togetherClient = client as import('together-ai').default;
-        const completion = await togetherClient.chat.completions.create({
-          model: config.model,
-          messages: [
-            { role: 'system', content: request.systemPrompt },
-            { role: 'user', content: request.userMessage },
-          ],
-          temperature,
-          max_tokens: maxTokens,
-        });
+        const client = getAIClient('together');
+        const completion = await withTimeout(
+          client.chat.completions.create({
+            model: config.model,
+            messages: [
+              { role: 'system', content: request.systemPrompt },
+              { role: 'user', content: request.userMessage },
+            ],
+            temperature,
+            max_tokens: maxTokens,
+          }),
+          timeoutMs,
+          `Together.ai API call`
+        );
 
         return {
           content: completion.choices[0]?.message?.content || '',
@@ -87,16 +118,20 @@ export async function generateCompletion(request: CompletionRequest): Promise<Co
       }
 
       case 'openai': {
-        const openaiClient = client as import('openai').OpenAI;
-        const completion = await openaiClient.chat.completions.create({
-          model: config.model,
-          messages: [
-            { role: 'system', content: request.systemPrompt },
-            { role: 'user', content: request.userMessage },
-          ],
-          temperature,
-          max_tokens: maxTokens,
-        });
+        const client = getAIClient('openai');
+        const completion = await withTimeout(
+          client.chat.completions.create({
+            model: config.model,
+            messages: [
+              { role: 'system', content: request.systemPrompt },
+              { role: 'user', content: request.userMessage },
+            ],
+            temperature,
+            max_tokens: maxTokens,
+          }),
+          timeoutMs,
+          `OpenAI API call`
+        );
 
         return {
           content: completion.choices[0]?.message?.content || '',
@@ -127,7 +162,6 @@ export async function* generateStreamingCompletion(
 ): AsyncGenerator<string, void, unknown> {
   const provider = request.provider || getBestProvider();
   const config = AI_PROVIDERS[provider];
-  const client = getAIClient(provider);
 
   const temperature = request.temperature ?? config.temperature ?? 0.1;
   const maxTokens = request.maxTokens ?? config.maxTokens ?? 8000;
@@ -135,8 +169,8 @@ export async function* generateStreamingCompletion(
   try {
     switch (provider) {
       case 'groq': {
-        const groqClient = client as import('groq-sdk').default;
-        const stream = await groqClient.chat.completions.create({
+        const client = getAIClient('groq');
+        const stream = await client.chat.completions.create({
           model: config.model,
           messages: [
             { role: 'system', content: request.systemPrompt },
@@ -157,8 +191,8 @@ export async function* generateStreamingCompletion(
       }
 
       case 'together': {
-        const togetherClient = client as import('together-ai').default;
-        const stream = await togetherClient.chat.completions.create({
+        const client = getAIClient('together');
+        const stream = await client.chat.completions.create({
           model: config.model,
           messages: [
             { role: 'system', content: request.systemPrompt },
@@ -179,8 +213,8 @@ export async function* generateStreamingCompletion(
       }
 
       case 'openai': {
-        const openaiClient = client as import('openai').OpenAI;
-        const stream = await openaiClient.chat.completions.create({
+        const client = getAIClient('openai');
+        const stream = await client.chat.completions.create({
           model: config.model,
           messages: [
             { role: 'system', content: request.systemPrompt },

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Shield, Loader2, AlertTriangle, CheckCircle2, Info } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import { SafeMarkdown } from '@/components/shared/SafeMarkdown';
 
 interface AnalysisResult {
   ioc: string;
@@ -233,7 +233,8 @@ export default function ThreatIntelPage() {
               {/* AI Analysis */}
               <div className="prose prose-invert prose-cesium max-w-none">
                 <div className="bg-cyber/50 p-6 rounded border border-cesium/20">
-                  <ReactMarkdown
+                  <SafeMarkdown
+                    content={result.analysis}
                     components={{
                       h1: ({ children }) => <h1 className="text-2xl font-bold text-white mb-4">{children}</h1>,
                       h2: ({ children }) => <h2 className="text-xl font-bold text-white mb-3">{children}</h2>,
@@ -247,9 +248,7 @@ export default function ThreatIntelPage() {
                         <code className="bg-black/50 px-2 py-1 rounded text-cesium font-mono text-sm">{children}</code>
                       ),
                     }}
-                  >
-                    {result.analysis}
-                  </ReactMarkdown>
+                  />
                 </div>
               </div>
 

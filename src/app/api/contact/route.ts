@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 const resend = process.env['RESEND_API_KEY'] ? new Resend(process.env['RESEND_API_KEY']) : null;
 
@@ -19,6 +20,24 @@ const contactSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    // Apply strict rate limiting for contact forms (prevent spam)
+    const rateLimitResult = rateLimit(req, RATE_LIMITS.CONTACT_FORM);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many contact attempts. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+            'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
     // Check if Resend is configured
     if (!resend) {
       return NextResponse.json(
