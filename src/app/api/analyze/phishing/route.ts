@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     const { content, analysisType, sender, subject } = phishingAnalysisSchema.parse(body);
 
     // Build the analysis prompt
-    const userPrompt = `
+    const userMessage = `
 Analyze the following for phishing indicators:
 
 **Analysis Type**: ${analysisType}
@@ -68,7 +68,7 @@ Provide a comprehensive phishing analysis including:
     // Generate AI analysis
     const analysis = await generateCompletion({
       systemPrompt: SECURITY_PROMPTS.PHISHING_ANALYZER,
-      userPrompt,
+      userMessage,
       provider: 'groq',
       temperature: 0.2, // Lower temperature for more consistent phishing detection
     });

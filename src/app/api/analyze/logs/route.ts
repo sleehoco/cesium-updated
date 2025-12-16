@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const { logs, logSource, focusArea } = logAnalysisSchema.parse(body);
 
     // Build the analysis prompt
-    const userPrompt = `
+    const userMessage = `
 Analyze the following security logs:
 
 ${logSource ? `**Log Source**: ${logSource}` : ''}
@@ -67,7 +67,7 @@ Focus on actionable intelligence and clear explanations.
     // Generate AI analysis
     const analysis = await generateCompletion({
       systemPrompt: SECURITY_PROMPTS.LOG_ANALYZER,
-      userPrompt,
+      userMessage,
       provider: 'groq',
       temperature: 0.3,
     });

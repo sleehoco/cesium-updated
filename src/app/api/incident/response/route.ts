@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       incidentResponseSchema.parse(body);
 
     // Build the analysis prompt
-    const userPrompt = `
+    const userMessage = `
 Provide incident response guidance for the following security incident:
 
 **Incident Type**: ${incidentType}
@@ -79,7 +79,7 @@ Format the response as a structured incident response playbook that can be follo
     // Generate AI analysis
     const analysis = await generateCompletion({
       systemPrompt: SECURITY_PROMPTS.INCIDENT_RESPONSE,
-      userPrompt,
+      userMessage,
       provider: 'groq',
       temperature: 0.3,
     });
