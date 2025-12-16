@@ -51,6 +51,9 @@ drizzle/
 *.swo
 *~
 
+# Claude Code
+.claude
+
 # OS
 Thumbs.db
 .DS_Store

@@ -55,7 +55,7 @@ export const tools: Tool[] = [
             'Remediation recommendations',
             'Compliance mapping',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'blue-500',
     },
     {
@@ -72,7 +72,7 @@ export const tools: Tool[] = [
             'Evidence collection',
             'Timeline reconstruction',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'red-500',
     },
     {
@@ -89,7 +89,7 @@ export const tools: Tool[] = [
             'Pattern recognition',
             'Threat correlation',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'purple-500',
     },
     {
@@ -174,7 +174,7 @@ export const tools: Tool[] = [
             'IOC extraction',
             'Brand impersonation detection',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'orange-500',
     },
     {
