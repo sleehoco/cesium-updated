@@ -128,6 +128,83 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* FEATURED TOOL: WarGames Terminal */}
+        <section className="relative py-24 bg-black border-y border-emerald-500/30 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 via-transparent to-emerald-900/10"></div>
+          
+          <div className="container relative z-10 mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="bg-black/80 border border-emerald-500/50 p-1 backdrop-blur-sm shadow-[0_0_50px_rgba(16,185,129,0.15)]">
+                <div className="border border-emerald-500/20 p-8 md:p-12 relative overflow-hidden group">
+                  {/* Glitch/Scanline effects */}
+                  <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(16,185,129,0.02)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+                  
+                  <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
+                    <div className="space-y-6 flex-1">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-mono tracking-widest uppercase animate-pulse">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        New Simulation Available
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-4xl md:text-5xl font-black text-white font-[var(--font-orbitron)] tracking-tight">
+                          WARGAMES <span className="text-emerald-500">DEFENSE</span>
+                        </h3>
+                        <p className="text-emerald-400/80 font-mono text-lg leading-relaxed max-w-xl border-l-2 border-emerald-500/30 pl-4">
+                          &gt; INITIALIZING GLOBAL THERMONUCLEAR DEFENSE PROTOCOLS...<br/>
+                          &gt; SENSORS ONLINE. AWAITING ANALYST INPUT.
+                        </p>
+                        <p className="text-gray-400 max-w-lg">
+                          Step into the command center. Test your incident response skills against an AI adversary in this retro-styled interactive terminal.
+                        </p>
+                      </div>
+
+                      <div className="pt-2">
+                        <Button 
+                          asChild 
+                          size="lg"
+                          className="bg-emerald-600 hover:bg-emerald-500 text-black font-bold text-lg px-8 rounded-none tracking-widest border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+                        >
+                          <Link href="/tools/cyber-defense-terminal">
+                            ENTER TERMINAL_
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* ASCII Art / Visual */}
+                    <div className="hidden md:block opacity-60 font-mono text-emerald-500/50 text-[10px] leading-[10px] whitespace-pre select-none">
+{`
+      .                                                      .
+        .n                   .                 .                  n.
+  .   .dP                  dP                   9b                 9b.    .
+ 4    qXb         .       dX                     Xb       .        dXp     t
+dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
+9XXb._       _.dXXXXb dXXXXbo.                 .odXXXXb dXXXXb._       _.dXXP
+ 9XXXXXXXXXXXXXXXXXXXVXXXXXXXXOo.           .oOXXXXXXXXVXXXXXXXXXXXXXXXXXXXP
+  \`9XXXXXXXXXXXXXXXXXXXXX'~   ~OOO8b   d8OOO~   ~XXXXXXXXXXXXXXXXXXXXXP'
+    \`9XXXXXXXXXXXP' \`9XX'   DIE    98v8P    DIE   \`XXP' \`9XXXXXXXXXXXP'
+        ~~~~~~~       9X.          .db|db.          .XP       ~~~~~~~
+                        )b.  .dbo.dP'\`v'\`9b.odb.  .dX(
+                      ,dXXXXXXXXXXXb     dXXXXXXXXXXXb.
+                     dXXXXXXXXXXXP'   .   \`9XXXXXXXXXXXb
+                    dXXXXXXXXXXXXb   d|b   dXXXXXXXXXXXXb
+                    9XXb'   \`XXXXXb.dX|Xb.dXXXXX'   \`dXXP
+                     \`'      9XXXXXX(   )XXXXXXP      \`'
+                              XXXX X.\`v'.X XXXX
+                              XP^X'\`b   d'\`X^XX
+                              X. 9  \`   '  P )X
+                              \`b  \`       '  d'
+`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* AI Services Grid - Brutal, Asymmetric */}
         <section className="relative py-32 bg-gradient-to-b from-black to-cyber-dark">
           <div className="container mx-auto px-4">

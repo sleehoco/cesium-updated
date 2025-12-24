@@ -53,6 +53,7 @@ drizzle/
 
 # Claude Code
 .claude
+.opencode/
 
 # OS
 Thumbs.db

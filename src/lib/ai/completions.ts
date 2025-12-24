@@ -7,8 +7,18 @@ import { getAIClient, getBestProvider, AI_PROVIDERS, type AIProvider } from './p
 
 // Default timeout for AI completions (60 seconds)
 const DEFAULT_TIMEOUT_MS = 60000;
+const DEFAULT_OLLAMA_BASE_URL = process.env['OLLAMA_BASE_URL'] || 'http://127.0.0.1:11434';
+
+interface OllamaChatResponse {
+  message?: {
+    content?: string;
+  };
+  response?: string;
+  done?: boolean;
+}
 
 export interface CompletionRequest {
+
   systemPrompt: string;
   userMessage: string;
   provider?: AIProvider;
@@ -145,10 +155,51 @@ export async function generateCompletion(request: CompletionRequest): Promise<Co
         };
       }
 
+      case 'ollama': {
+        const baseUrl = process.env['OLLAMA_BASE_URL'] || DEFAULT_OLLAMA_BASE_URL;
+        const response = await withTimeout(
+          fetch(`${baseUrl}/api/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: config.model,
+              stream: false,
+              options: {
+                temperature,
+                num_predict: maxTokens,
+              },
+              messages: [
+                { role: 'system', content: request.systemPrompt },
+                { role: 'user', content: request.userMessage },
+              ],
+            }),
+          }),
+          timeoutMs,
+          'Ollama API call'
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => 'Unknown error');
+          throw new Error(`Ollama request failed: ${errorText}`);
+        }
+
+        const body = (await response.json()) as OllamaChatResponse;
+        const content = body.message?.content ?? body.response ?? '';
+
+        return {
+          content,
+          provider,
+          model: config.model,
+        };
+      }
+
       default:
         throw new Error(`Unsupported provider: ${provider}`);
     }
   } catch (error) {
+
     console.error(`AI completion error with ${provider}:`, error);
     throw new Error(`Failed to generate completion: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
@@ -233,8 +284,78 @@ export async function* generateStreamingCompletion(
         }
         break;
       }
+
+      case 'ollama': {
+        const baseUrl = process.env['OLLAMA_BASE_URL'] || DEFAULT_OLLAMA_BASE_URL;
+        const response = await fetch(`${baseUrl}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: config.model,
+            stream: true,
+            options: {
+              temperature,
+              num_predict: maxTokens,
+            },
+            messages: [
+              { role: 'system', content: request.systemPrompt },
+              { role: 'user', content: request.userMessage },
+            ],
+          }),
+        });
+
+        if (!response.ok || !response.body) {
+          const errorText = !response.ok ? await response.text().catch(() => 'Unknown error') : 'No response body received from Ollama.';
+          throw new Error(`Ollama streaming request failed: ${errorText}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffered = '';
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
+          buffered += decoder.decode(value, { stream: true });
+          const segments = buffered.split('\n');
+          buffered = segments.pop() ?? '';
+
+          for (const segment of segments) {
+            if (!segment.trim()) {
+              continue;
+            }
+            try {
+              const parsed = JSON.parse(segment) as OllamaChatResponse;
+              const content = parsed.message?.content ?? parsed.response;
+              if (content) {
+                yield content;
+              }
+            } catch (err) {
+              console.warn('Failed to parse Ollama stream chunk', err);
+            }
+          }
+        }
+
+        if (buffered.trim()) {
+          try {
+            const parsed = JSON.parse(buffered) as OllamaChatResponse;
+            const content = parsed.message?.content ?? parsed.response;
+            if (content) {
+              yield content;
+            }
+          } catch (err) {
+            console.warn('Failed to parse final Ollama stream chunk', err);
+          }
+        }
+        break;
+      }
     }
   } catch (error) {
+
     console.error(`Streaming completion error with ${provider}:`, error);
     throw new Error(`Failed to generate streaming completion: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }

@@ -7,7 +7,8 @@ import Groq from 'groq-sdk';
 import Together from 'together-ai';
 import { OpenAI } from 'openai';
 
-export type AIProvider = 'groq' | 'together' | 'openai';
+export type AIProvider = 'groq' | 'together' | 'openai' | 'ollama';
+
 
 export interface AIProviderConfig {
   name: AIProvider;
@@ -42,7 +43,15 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
     temperature: 0.1,
     priority: 3,
   },
+  ollama: {
+    name: 'ollama',
+    model: process.env['OLLAMA_MODEL'] || 'llama3.1',
+    maxTokens: 4096,
+    temperature: 0.2,
+    priority: 0,
+  },
 };
+
 
 /**
  * Initialize AI clients with proper type overloads
@@ -50,6 +59,8 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
 export function getAIClient(provider: 'groq'): Groq;
 export function getAIClient(provider: 'together'): Together;
 export function getAIClient(provider: 'openai'): OpenAI;
+export function getAIClient(provider: 'ollama'): never;
+
 export function getAIClient(provider: AIProvider): Groq | Together | OpenAI {
   switch (provider) {
     case 'groq':
@@ -76,10 +87,14 @@ export function getAIClient(provider: AIProvider): Groq | Together | OpenAI {
         apiKey: process.env['OPENAI_API_KEY'],
       });
 
+    case 'ollama':
+      throw new Error('Ollama provider does not use the shared SDK client helper.');
+
     default:
       throw new Error(`Unsupported AI provider: ${provider}`);
   }
 }
+
 
 /**
  * Get available providers based on environment configuration
@@ -90,9 +105,11 @@ export function getAvailableProviders(): AIProvider[] {
   if (process.env['GROQ_API_KEY']) providers.push('groq');
   if (process.env['TOGETHER_API_KEY']) providers.push('together');
   if (process.env['OPENAI_API_KEY']) providers.push('openai');
+  if (process.env['OLLAMA_BASE_URL'] || process.env['OLLAMA_MODEL']) providers.push('ollama');
 
   return providers.sort((a, b) => AI_PROVIDERS[a].priority - AI_PROVIDERS[b].priority);
 }
+
 
 /**
  * Get the best available provider
@@ -100,8 +117,9 @@ export function getAvailableProviders(): AIProvider[] {
 export function getBestProvider(): AIProvider {
   const available = getAvailableProviders();
   if (available.length === 0) {
-    throw new Error('No AI providers configured. Please set GROQ_API_KEY, TOGETHER_API_KEY, or OPENAI_API_KEY');
+    throw new Error('No AI providers configured. Please set GROQ_API_KEY, TOGETHER_API_KEY, OPENAI_API_KEY, or OLLAMA_BASE_URL');
   }
+
   const provider = available[0];
   if (!provider) {
     throw new Error('No AI providers available');

@@ -53,7 +53,7 @@ export function getAIClient(provider: 'openai'): OpenAI;
 // All completions have 60s timeout by default
 const analysis = await generateCompletion({
   systemPrompt: SECURITY_PROMPTS.THREAT_INTELLIGENCE,
-  userPrompt: `Analyze: ${ioc}`,
+  userMessage: `Analyze: ${ioc}`,
   provider: 'groq',
   temperature: 0.3,
 });

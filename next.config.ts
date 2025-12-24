@@ -1,11 +1,16 @@
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   // Enable React strict mode for better development experience
   reactStrictMode: true,
 
+  // Ensure Next.js uses this repo as the workspace root for builds and start
+  outputFileTracingRoot: path.join(__dirname),
+
   // Image optimization configuration
+
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
