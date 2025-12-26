@@ -356,12 +356,15 @@ function processEnemyRetaliation(state: GameState): GameState {
 
   state.playerAssets.cities = Math.max(0, state.playerAssets.cities - Math.floor(hits / 2));
 
+  // Generate enemy taunt/dialogue
+  const enemyTaunt = getEnemyTaunt(state, hits);
+
   state.history.push({
     turn: state.turn,
     timestamp: Date.now(),
     type: 'LAUNCH',
     actor: state.enemySide,
-    description: `Enemy retaliated with ${quantity} ICBMs. ${hits} hit, ${intercepted} intercepted.`,
+    description: `Enemy retaliated with ${quantity} ICBMs. ${hits} hit, ${intercepted} intercepted. ${enemyTaunt}`,
   });
 
   if (state.playerAssets.cities === 0) {
@@ -371,6 +374,60 @@ function processEnemyRetaliation(state: GameState): GameState {
   }
 
   return state;
+}
+
+/**
+ * Generate enemy taunts/dialogue based on game state
+ */
+function getEnemyTaunt(state: GameState, hits: number): string {
+  const enemyName = state.enemySide === 'USSR' ? 'SOVIET COMMAND' : 'US COMMAND';
+  const playerCitiesRemaining = state.playerAssets.cities;
+  const enemyCitiesRemaining = state.enemyAssets.cities;
+
+  // Critical damage taunts
+  if (hits >= 3) {
+    const criticalTaunts = [
+      `${enemyName}: "Your cities burn. Surrender now."`,
+      `${enemyName}: "Direct hits confirmed. Your defenses are inadequate."`,
+      `${enemyName}: "Your people pay the price for your aggression."`,
+      `${enemyName}: "Our missiles find their targets. Can you say the same?"`,
+    ];
+    return criticalTaunts[Math.floor(Math.random() * criticalTaunts.length)] || '';
+  }
+
+  // Losing taunts (enemy has fewer cities)
+  if (enemyCitiesRemaining < playerCitiesRemaining) {
+    const losingTaunts = [
+      `${enemyName}: "You may win this battle, but at what cost?"`,
+      `${enemyName}: "For every city we lose, three of yours will burn."`,
+      `${enemyName}: "We will not go quietly into the night."`,
+      `${enemyName}: "If we fall, we take you with us."`,
+    ];
+    return losingTaunts[Math.floor(Math.random() * losingTaunts.length)] || '';
+  }
+
+  // Winning taunts (player has fewer cities)
+  if (enemyCitiesRemaining > playerCitiesRemaining) {
+    const winningTaunts = [
+      `${enemyName}: "Your strategic position deteriorates. Stand down."`,
+      `${enemyName}: "We have the advantage. Cease hostilities immediately."`,
+      `${enemyName}: "Your remaining cities are within range. Surrender."`,
+      `${enemyName}: "The balance of power favors us. This is your final warning."`,
+    ];
+    return winningTaunts[Math.floor(Math.random() * winningTaunts.length)] || '';
+  }
+
+  // Standard retaliation taunts
+  const standardTaunts = [
+    `${enemyName}: "You have been warned. We will respond in kind."`,
+    `${enemyName}: "Retaliation authorized. Prepare for incoming."`,
+    `${enemyName}: "An eye for an eye. Our response is measured and justified."`,
+    `${enemyName}: "You initiated this. We are merely responding to aggression."`,
+    `${enemyName}: "Your attack will not go unanswered."`,
+    `${enemyName}: "Counter-strike in progress. DEFCON 1 maintained."`,
+  ];
+
+  return standardTaunts[Math.floor(Math.random() * standardTaunts.length)] || '';
 }
 
 function processDefense(state: GameState, command: Command): GameState {

@@ -806,6 +806,24 @@ export default function WOPRPage() {
             if (citiesLost > 0) {
               await typeText(term, `WARNING: ${citiesLost} CITIES DESTROYED!\r\n`, 20);
             }
+
+            // Display enemy taunt/dialogue from history
+            const lastEvent = newState.history[newState.history.length - 1];
+            if (lastEvent && lastEvent.actor === newState.enemySide) {
+              // Extract just the taunt part (after "intercepted. ")
+              const tauntMatch = lastEvent.description.match(/intercepted\. (.+)/);
+              if (tauntMatch && tauntMatch[1]) {
+                const enemyTaunt = tauntMatch[1];
+                await typeText(term, '\r\n', 10);
+                await typeText(term, `${enemyTaunt}\r\n`, 20);
+
+                // Extract just the quoted dialogue for voice
+                const voiceMatch = enemyTaunt.match(/"(.+)"/);
+                if (voiceMatch && voiceMatch[1]) {
+                  await speakText(voiceMatch[1]);
+                }
+              }
+            }
           }
         } else if (gameCommand.type === 'DEFEND') {
           outputMessage = `DEFENSE SYSTEMS ACTIVATED FOR ${gameCommand.target || 'ALL ASSETS'}.`;
