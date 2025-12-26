@@ -127,13 +127,19 @@ export default function WOPRPage() {
   };
 
   const speakText = async (text: string) => {
-    if (!voiceEnabled || typeof window === 'undefined') return;
+    console.log('[WOPR Voice] speakText called:', { text, voiceEnabled });
+
+    if (!voiceEnabled || typeof window === 'undefined') {
+      console.log('[WOPR Voice] Voice disabled or not in browser');
+      return;
+    }
 
     try {
       const apiKey = process.env['NEXT_PUBLIC_ELEVENLABS_API_KEY'];
+      console.log('[WOPR Voice] API Key found:', !!apiKey);
 
       if (!apiKey) {
-        console.warn('ElevenLabs API key not found, voice disabled');
+        console.warn('[WOPR Voice] ElevenLabs API key not found, voice disabled');
         return;
       }
 
@@ -141,6 +147,7 @@ export default function WOPRPage() {
       // Voice ID: Adam (deep, authoritative male voice - good for WOPR)
       const voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam voice
 
+      console.log('[WOPR Voice] Fetching audio from ElevenLabs...');
       const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
         method: 'POST',
         headers: {
@@ -160,22 +167,34 @@ export default function WOPRPage() {
         }),
       });
 
+      console.log('[WOPR Voice] Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`ElevenLabs API error: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`ElevenLabs API error: ${response.status} - ${errorText}`);
       }
 
       // Convert response to audio and play
       const audioBlob = await response.blob();
+      console.log('[WOPR Voice] Audio blob size:', audioBlob.size);
+
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
 
       audio.onended = () => {
+        console.log('[WOPR Voice] Audio playback ended');
         URL.revokeObjectURL(audioUrl);
       };
 
+      audio.onerror = (e) => {
+        console.error('[WOPR Voice] Audio playback error:', e);
+      };
+
+      console.log('[WOPR Voice] Starting audio playback...');
       await audio.play();
+      console.log('[WOPR Voice] Audio playing...');
     } catch (error) {
-      console.error('Voice synthesis error:', error);
+      console.error('[WOPR Voice] Voice synthesis error:', error);
     }
   };
 
