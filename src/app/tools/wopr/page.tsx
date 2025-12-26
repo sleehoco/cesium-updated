@@ -693,8 +693,44 @@ export default function WOPRPage() {
         await typeText(term, 'WOPR will now speak all responses using ElevenLabs AI voice.\r\n', 10);
         await typeText(term, 'Testing voice... Listen for audio.\r\n', 10);
 
-        // Test voice using ElevenLabs
-        await speakText('Voice synthesis enabled. Greetings Professor Falken.');
+        // Wait for React state to update, then test voice
+        await sleep(100);
+
+        // Force-call speakText by temporarily checking newState instead of voiceEnabled
+        const apiKey = process.env['NEXT_PUBLIC_ELEVENLABS_API_KEY'];
+        if (apiKey) {
+          try {
+            const voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam voice
+            const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+              method: 'POST',
+              headers: {
+                'Accept': 'audio/mpeg',
+                'Content-Type': 'application/json',
+                'xi-api-key': apiKey,
+              },
+              body: JSON.stringify({
+                text: 'Voice synthesis enabled. Greetings Professor Falken.',
+                model_id: 'eleven_monolingual_v1',
+                voice_settings: {
+                  stability: 0.75,
+                  similarity_boost: 0.75,
+                  style: 0.0,
+                  use_speaker_boost: true,
+                },
+              }),
+            });
+
+            if (response.ok) {
+              const audioBlob = await response.blob();
+              const audioUrl = URL.createObjectURL(audioBlob);
+              const audio = new Audio(audioUrl);
+              audio.onended = () => URL.revokeObjectURL(audioUrl);
+              await audio.play();
+            }
+          } catch (error) {
+            console.error('[WOPR Voice Test] Error:', error);
+          }
+        }
       } else {
         await typeText(term, 'Voice output deactivated.\r\n', 10);
       }
