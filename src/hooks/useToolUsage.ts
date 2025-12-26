@@ -49,8 +49,16 @@ export function useToolUsage(toolId: string) {
     };
     localStorage.setItem(STORAGE_PREFIX + toolId, JSON.stringify(usage));
 
+    console.log('[useToolUsage] Tracking usage:', {
+      toolId,
+      newCount,
+      hasSignedUp,
+      shouldShow: newCount > FREE_TIER_LIMIT && !hasSignedUp
+    });
+
     // Show modal if exceeded free tier and haven't signed up
     if (newCount > FREE_TIER_LIMIT && !hasSignedUp) {
+      console.log('[useToolUsage] Showing modal!');
       setShouldShowModal(true);
     }
   };

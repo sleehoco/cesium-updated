@@ -34,7 +34,6 @@ export default function PhishingDetectorPage() {
     }
 
     // Track tool usage for email capture modal
-    trackUsage();
 
     setLoading(true);
     setError(null);
@@ -61,6 +60,9 @@ export default function PhishingDetectorPage() {
       }
 
       setResult(data.data.analysis);
+
+      // Track tool usage AFTER successful analysis (for email capture modal)
+      trackUsage();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

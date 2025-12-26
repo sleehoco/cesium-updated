@@ -52,9 +52,6 @@ export default function ThreatIntelPage() {
       return;
     }
 
-    // Track tool usage for email capture modal
-    trackUsage();
-
     setLoading(true);
     setError(null);
     setResult(null);
@@ -75,6 +72,9 @@ export default function ThreatIntelPage() {
       }
 
       setResult(data.data);
+
+      // Track tool usage AFTER successful analysis (for email capture modal)
+      trackUsage();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
