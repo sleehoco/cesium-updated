@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Shield, Loader2, AlertTriangle, CheckCircle2, Info } from 'lucide-react';
 import { SafeMarkdown } from '@/components/shared/SafeMarkdown';
+import EmailCaptureModal from '@/components/marketing/EmailCaptureModal';
+import { useToolUsage } from '@/hooks/useToolUsage';
 
 interface AnalysisResult {
   ioc: string;
@@ -36,11 +38,22 @@ export default function ThreatIntelPage() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Email capture integration
+  const {
+    shouldShowModal,
+    trackUsage,
+    markSignedUp,
+    closeModal,
+  } = useToolUsage('threat-intel');
+
   const handleAnalyze = async () => {
     if (!ioc.trim()) {
       setError('Please enter an IOC to analyze');
       return;
     }
+
+    // Track tool usage for email capture modal
+    trackUsage();
 
     setLoading(true);
     setError(null);
@@ -66,6 +79,31 @@ export default function ThreatIntelPage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Email capture submission handler
+  const handleEmailSubmit = async (email: string, name: string) => {
+    try {
+      const response = await fetch('/api/marketing/capture-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          toolId: 'threat-intel',
+          source: 'tool-gate',
+        }),
+      });
+
+      if (response.ok) {
+        markSignedUp();
+      }
+    } catch (error) {
+      console.error('Email capture failed:', error);
+      throw error;
     }
   };
 
@@ -315,6 +353,14 @@ export default function ThreatIntelPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Email Capture Modal */}
+        <EmailCaptureModal
+          isOpen={shouldShowModal}
+          onClose={closeModal}
+          onSubmit={handleEmailSubmit}
+          toolName="Threat Intelligence Analyzer"
+        />
       </div>
     </main>
   );

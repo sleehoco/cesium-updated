@@ -88,3 +88,60 @@
     @apply bg-muted-foreground/50;
   }
 }
+
+/* WOPR Terminal CRT Effects */
+@layer utilities {
+  /* CRT Flicker Animation */
+  @keyframes crt-flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.92; }
+    94% { opacity: 1; }
+    95% { opacity: 0.95; }
+    96% { opacity: 1; }
+  }
+
+  .animate-crt-flicker {
+    animation: crt-flicker 0.15s infinite;
+  }
+
+  /* Terminal Text Glow */
+  @keyframes terminal-glow {
+    0%, 100% {
+      text-shadow:
+        0 0 5px rgba(51, 255, 51, 0.8),
+        0 0 10px rgba(51, 255, 51, 0.5);
+    }
+    50% {
+      text-shadow:
+        0 0 3px rgba(51, 255, 51, 0.6),
+        0 0 7px rgba(51, 255, 51, 0.3);
+    }
+  }
+
+  .terminal-glow {
+    animation: terminal-glow 2s ease-in-out infinite;
+  }
+
+  /* Scan line effect */
+  .crt-scanline {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      transparent 50%,
+      rgba(0, 0, 0, 0.5) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+  }
+}
+
+/* VT323 Retro Terminal Font */
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2hsYHpT2dkNE.woff2) format('woff2');
+}

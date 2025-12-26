@@ -189,16 +189,22 @@ export default function CyberDefenseTerminalPage() {
   const [intrusionScore, setIntrusionScore] = useState(82);
   const [shieldLevel, setShieldLevel] = useState(34);
   const [alertsResolved, setAlertsResolved] = useState(0);
-  const [scenarioIndex, setScenarioIndex] = useState(() =>
-    scenarioDeck.length ? Math.floor(Math.random() * scenarioDeck.length) : 0
-  );
-  const [injectIndex, setInjectIndex] = useState(() =>
-    incidentInjects.length ? Math.floor(Math.random() * incidentInjects.length) : 0
-  );
+  const [scenarioIndex, setScenarioIndex] = useState(0);
+  const [injectIndex, setInjectIndex] = useState(0);
   const [isTransmitting, setIsTransmitting] = useState(false);
   const { playSound, speak } = useRetroSounds();
 
   const logRef = useRef<HTMLDivElement>(null);
+
+  // Set random scenario/inject on client-side only to avoid hydration mismatch
+  useEffect(() => {
+    if (scenarioDeck.length > 0) {
+      setScenarioIndex(Math.floor(Math.random() * scenarioDeck.length));
+    }
+    if (incidentInjects.length > 0) {
+      setInjectIndex(Math.floor(Math.random() * incidentInjects.length));
+    }
+  }, []);
 
   useEffect(() => {
     logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' });

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
-import { requireAuthAPI } from '@/lib/auth/utils';
 import { sanitizePromptInput } from '@/lib/ai/sanitize';
 
 const requestSchema = z.object({
@@ -47,14 +46,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Require authentication
-  const authResult = await requireAuthAPI();
-  if ('error' in authResult) {
-    return NextResponse.json(
-      { error: authResult.error },
-      { status: authResult.status }
-    );
-  }
+  // NOTE: Authentication removed to support freemium model
+  // Email capture modal handles usage tracking on client-side
 
   try {
     const body = await req.json();
