@@ -733,6 +733,27 @@ export default function WOPRPage() {
           outputMessage = `STRIKE COMPLETE. ${launchedCount} launched, ${hits} on target, ${intercepted} intercepted.\r\n`;
           outputMessage += `DEFCON LEVEL NOW: ${newState.defcon}`;
           await speakText(`Strike complete. DEFCON ${newState.defcon}.`);
+
+          // Check if enemy retaliated
+          const enemyRetaliated = newState.strikes.enemyLaunched > oldState.strikes.enemyLaunched;
+          if (enemyRetaliated) {
+            const enemyLaunched = newState.strikes.enemyLaunched - oldState.strikes.enemyLaunched;
+            const enemyIntercepted = newState.strikes.playerIntercepted - oldState.strikes.playerIntercepted;
+            const enemyHits = enemyLaunched - enemyIntercepted;
+
+            await typeText(term, '\r\n', 10);
+            await sleep(500);
+            await typeText(term, '\r\n!!! ENEMY COUNTERSTRIKE DETECTED !!!\r\n\r\n', 20);
+            await speakText('Enemy counterstrike detected!');
+            await playAnimation(term, getCounterStrikeAnimation());
+            await playAnimation(term, getExplosionAnimation());
+            await typeText(term, `\r\nENEMY RETALIATION: ${enemyLaunched} ICBMs launched, ${enemyHits} hit, ${enemyIntercepted} intercepted.\r\n`, 20);
+
+            const citiesLost = oldState.playerAssets.cities - newState.playerAssets.cities;
+            if (citiesLost > 0) {
+              await typeText(term, `WARNING: ${citiesLost} CITIES DESTROYED!\r\n`, 20);
+            }
+          }
         } else if (gameCommand.type === 'DEFEND') {
           outputMessage = `DEFENSE SYSTEMS ACTIVATED FOR ${gameCommand.target || 'ALL ASSETS'}.`;
           await speakText('Defense systems activated.');
