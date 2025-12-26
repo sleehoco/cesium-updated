@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { PenTool, Loader2, CheckCircle2, Sparkles, Mail, FileText } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import { SafeMarkdown } from '@/components/shared/SafeMarkdown';
 
 const modes = [
   {
@@ -238,9 +238,7 @@ export default function AIWritingAssistantPage() {
                 <CardContent>
                   <div className="bg-cyber p-6 rounded-lg border border-gray-700">
                     <div className="prose prose-invert max-w-none text-gray-200">
-                      <ReactMarkdown>
-                        {output}
-                      </ReactMarkdown>
+                      <SafeMarkdown content={output} />
                     </div>
                   </div>
                 </CardContent>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -12,6 +13,24 @@ const requestSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+            'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
     const body = await req.json();
     const { text, mode } = requestSchema.parse(body);
 

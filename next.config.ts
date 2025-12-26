@@ -1,10 +1,16 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   // Enable React strict mode for better development experience
   reactStrictMode: true,
 
+  // Ensure Next.js uses this repo as the workspace root for builds and start
+  outputFileTracingRoot: path.join(__dirname),
+
   // Image optimization configuration
+
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -62,48 +68,8 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000',
   },
 
-  // Webpack configuration for optimizations
-  webpack: (config, { dev, isServer }) => {
-    // Optimize bundle size
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk for react and react-dom
-            framework: {
-              name: 'framework',
-              chunks: 'all',
-              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-              priority: 40,
-              enforce: true,
-            },
-            // Common libraries chunk
-            lib: {
-              test: /[\\/]node_modules[\\/]/,
-              name(module: any) {
-                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)?.[1];
-                return `npm.${packageName?.replace('@', '')}`;
-              },
-              priority: 30,
-            },
-            // Commons chunk for shared code
-            commons: {
-              name: 'commons',
-              minChunks: 2,
-              priority: 20,
-            },
-          },
-        },
-      };
-    }
-
-    return config;
-  },
+  // Turbopack configuration (Next.js 16+)
+  turbopack: {},
 
   // Experimental features
   experimental: {
@@ -132,4 +98,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry configuration - only enable if auth token is available
+export default process.env['SENTRY_AUTH_TOKEN']
+  ? withSentryConfig(nextConfig, {
+      org: process.env['SENTRY_ORG'],
+      project: process.env['SENTRY_PROJECT'],
+      silent: !process.env['CI'],
+      widenClientFileUpload: true,
+      tunnelRoute: '/monitoring',
+    })
+  : nextConfig;

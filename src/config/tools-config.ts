@@ -1,4 +1,5 @@
-import { Shield, Search, Lock, Brain, Zap, FileSearch, Bot, MessageSquare, Code, Network, PenTool } from 'lucide-react';
+import { Shield, Search, Lock, Brain, Zap, FileSearch, Bot, MessageSquare, Code, Network, PenTool, Server, Terminal } from 'lucide-react';
+
 import { LucideIcon } from 'lucide-react';
 
 export interface Tool {
@@ -55,7 +56,7 @@ export const tools: Tool[] = [
             'Remediation recommendations',
             'Compliance mapping',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'blue-500',
     },
     {
@@ -72,7 +73,7 @@ export const tools: Tool[] = [
             'Evidence collection',
             'Timeline reconstruction',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'red-500',
     },
     {
@@ -89,7 +90,7 @@ export const tools: Tool[] = [
             'Pattern recognition',
             'Threat correlation',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'purple-500',
     },
     {
@@ -174,7 +175,7 @@ export const tools: Tool[] = [
             'IOC extraction',
             'Brand impersonation detection',
         ],
-        status: 'coming-soon',
+        status: 'new',
         color: 'orange-500',
     },
     {
@@ -195,7 +196,42 @@ export const tools: Tool[] = [
         color: 'cyan-500',
     },
     {
+        id: 'cyber-defense-terminal',
+        name: 'Cyber Defense Terminal',
+        tagline: 'WarGames-style incident simulator',
+        description: 'Drop analysts into a cinematic command line where every typed action contains, deceives, or purges an unfolding intrusion scenario.',
+        icon: Terminal,
+        category: 'AI Security Tools',
+        path: '/tools/cyber-defense-terminal',
+        features: [
+            'Interactive CLI with branching responses',
+            'Dynamic telemetry tied to typed commands',
+            'Retro aesthetic inspired by 1980s cyber war rooms',
+            'Training narrative for containment, deception, and recovery',
+        ],
+        status: 'new',
+        color: 'lime-400',
+    },
+    {
+        id: 'local-llm',
+        name: 'Local LLM Platform',
+        tagline: 'On-prem private ChatGPT experience',
+        description: 'Deliver a chat-style assistant entirely on your own network. Our local LLM appliance combines managed hardware, optimized models, and secure orchestration to keep prompts and telemetry in-house.',
+        icon: Server,
+        category: 'AI Security Tools',
+        path: '/tools/local-llm',
+        features: [
+            'Hardened GPU and storage stack with remote monitoring',
+            'Quantized 70B models tuned for low-latency dialogue',
+            'Air-gapped content connectors and secure syncing',
+            'Built-in chat UI with RBAC and SSO controls',
+        ],
+        status: 'new',
+        color: 'amber-500',
+    },
+    {
         id: 'ai-writing-assistant',
+
         name: 'AI Writing Assistant',
         tagline: 'Professional Business Communication',
         description: 'AI-powered writing assistant for crafting professional business emails, reports, and documents. Get grammar corrections, style improvements, and tone adjustments for official communications.',

@@ -3,6 +3,9 @@
  * Provides real-time threat intelligence for IOCs
  */
 
+// Default timeout for VirusTotal API calls (30 seconds)
+const VT_TIMEOUT_MS = 30000;
+
 export interface VirusTotalIPReport {
   data: {
     attributes: {
@@ -69,12 +72,18 @@ export async function analyzeIP(ip: string): Promise<VirusTotalIPReport | null> 
     return null;
   }
 
+  const abortController = new AbortController();
+  const timeoutId = setTimeout(() => abortController.abort(), VT_TIMEOUT_MS);
+
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/ip_addresses/${ip}`, {
       headers: {
         'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
+      signal: abortController.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error('VirusTotal IP lookup failed:', response.statusText);
@@ -83,7 +92,12 @@ export async function analyzeIP(ip: string): Promise<VirusTotalIPReport | null> 
 
     return await response.json();
   } catch (error) {
-    console.error('VirusTotal IP analysis error:', error);
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('VirusTotal IP analysis timed out');
+    } else {
+      console.error('VirusTotal IP analysis error:', error);
+    }
     return null;
   }
 }
@@ -96,12 +110,18 @@ export async function analyzeDomain(domain: string): Promise<VirusTotalDomainRep
     return null;
   }
 
+  const abortController = new AbortController();
+  const timeoutId = setTimeout(() => abortController.abort(), VT_TIMEOUT_MS);
+
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/domains/${domain}`, {
       headers: {
         'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
+      signal: abortController.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error('VirusTotal domain lookup failed:', response.statusText);
@@ -110,7 +130,12 @@ export async function analyzeDomain(domain: string): Promise<VirusTotalDomainRep
 
     return await response.json();
   } catch (error) {
-    console.error('VirusTotal domain analysis error:', error);
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('VirusTotal domain analysis timed out');
+    } else {
+      console.error('VirusTotal domain analysis error:', error);
+    }
     return null;
   }
 }
@@ -123,12 +148,18 @@ export async function analyzeFileHash(hash: string): Promise<VirusTotalFileRepor
     return null;
   }
 
+  const abortController = new AbortController();
+  const timeoutId = setTimeout(() => abortController.abort(), VT_TIMEOUT_MS);
+
   try {
     const response = await fetch(`https://www.virustotal.com/api/v3/files/${hash}`, {
       headers: {
         'x-apikey': process.env['VIRUSTOTAL_API_KEY']!,
       },
+      signal: abortController.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error('VirusTotal file lookup failed:', response.statusText);
@@ -137,7 +168,12 @@ export async function analyzeFileHash(hash: string): Promise<VirusTotalFileRepor
 
     return await response.json();
   } catch (error) {
-    console.error('VirusTotal file analysis error:', error);
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('VirusTotal file analysis timed out');
+    } else {
+      console.error('VirusTotal file analysis error:', error);
+    }
     return null;
   }
 }
@@ -179,6 +215,20 @@ export async function analyzeIOC(ioc: string): Promise<{
 }
 
 /**
+ * Type guard to check if data is an IP report
+ */
+function isIPReport(data: VirusTotalIPReport | VirusTotalDomainReport | VirusTotalFileReport): data is VirusTotalIPReport {
+  return 'country' in data.data.attributes;
+}
+
+/**
+ * Type guard to check if data is a file report
+ */
+function isFileReport(data: VirusTotalIPReport | VirusTotalDomainReport | VirusTotalFileReport): data is VirusTotalFileReport {
+  return 'sha256' in data.data.attributes;
+}
+
+/**
  * Generate a summary of VirusTotal results
  */
 export function summarizeVTResults(
@@ -211,25 +261,23 @@ export function summarizeVTResults(
   summary += `- Harmless: ${stats.harmless}\n`;
   summary += `- Undetected: ${stats.undetected}\n`;
 
-  // Add type-specific information
-  if (type === 'ip' && 'country' in vtData.data.attributes) {
-    const ipData = vtData as VirusTotalIPReport;
-    summary += `\n**Geolocation**: ${ipData.data.attributes.country}\n`;
-    if (ipData.data.attributes.as_owner) {
-      summary += `**AS Owner**: ${ipData.data.attributes.as_owner}\n`;
+  // Add type-specific information using type guards
+  if (type === 'ip' && isIPReport(vtData)) {
+    summary += `\n**Geolocation**: ${vtData.data.attributes.country}\n`;
+    if (vtData.data.attributes.as_owner) {
+      summary += `**AS Owner**: ${vtData.data.attributes.as_owner}\n`;
     }
-    if (ipData.data.attributes.network) {
-      summary += `**Network**: ${ipData.data.attributes.network}\n`;
+    if (vtData.data.attributes.network) {
+      summary += `**Network**: ${vtData.data.attributes.network}\n`;
     }
   }
 
-  if (type === 'hash' && 'sha256' in vtData.data.attributes) {
-    const fileData = vtData as VirusTotalFileReport;
-    if (fileData.data.attributes.meaningful_name) {
-      summary += `\n**File Name**: ${fileData.data.attributes.meaningful_name}\n`;
+  if (type === 'hash' && isFileReport(vtData)) {
+    if (vtData.data.attributes.meaningful_name) {
+      summary += `\n**File Name**: ${vtData.data.attributes.meaningful_name}\n`;
     }
-    if (fileData.data.attributes.type_description) {
-      summary += `**File Type**: ${fileData.data.attributes.type_description}\n`;
+    if (vtData.data.attributes.type_description) {
+      summary += `**File Type**: ${vtData.data.attributes.type_description}\n`;
     }
   }
 

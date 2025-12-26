@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
@@ -17,11 +18,22 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log error to error reporting service
+    // Log error to console for development
     console.error('Application error:', error);
 
-    // TODO: Send to error tracking service (Sentry, LogRocket, etc.)
-    // captureException(error);
+    // Send to Sentry error tracking
+    Sentry.captureException(error, {
+      tags: {
+        errorBoundary: 'global',
+      },
+      contexts: {
+        errorInfo: {
+          digest: error.digest,
+          message: error.message,
+          name: error.name,
+        },
+      },
+    });
   }, [error]);
 
   return (

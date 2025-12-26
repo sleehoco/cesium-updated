@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
-import { Brain, Network, Eye, Zap, Shield, ChevronRight, Check } from 'lucide-react';
+import { Brain, Network, Eye, Zap, Shield, ChevronRight, Check, Cpu } from 'lucide-react';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -91,7 +92,24 @@ const services = [
     gradient: 'from-indigo-500 to-blue-500',
   },
   {
+    id: 'local-llm-appliance',
+    icon: Cpu,
+    title: 'Local LLM Appliance',
+    tagline: 'On-prem generative AI with managed hardware and software',
+    description: 'Deliver ChatGPT-grade experiences behind your firewall. Our packaged appliance includes hardened hardware, tuned models, and orchestration software to keep prompts, outputs, and telemetry entirely on-site.',
+    features: [
+      'Rack-ready GPU infrastructure with redundant power and cooling',
+      'Preloaded 70B-class models optimized for low-latency chat',
+      'Secure gateway for private network access and SSO enforcement',
+      'Local vector store with encrypted snapshot/restore workflows',
+      'Observability dashboard for usage, drift, and hardware health',
+      'Quarterly model refresh, patching, and capacity planning support',
+    ],
+    gradient: 'from-amber-500 to-rose-500',
+  },
+  {
     id: 'ai-security',
+
     icon: Shield,
     title: 'AI Security & Protection',
     tagline: 'Secure your AI systems and defend against AI-powered threats',

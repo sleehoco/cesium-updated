@@ -13,15 +13,18 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).describe('Supabase anonymous key'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional().describe('Supabase service role key (server-side only)'),
 
+  // Database Configuration (Supabase Postgres)
+  DATABASE_URL: z.string().url().optional().describe('Database connection URL for Drizzle ORM'),
+
   // Vercel Postgres (optional - only needed when using Vercel Postgres)
   POSTGRES_URL: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres connection URL'),
   POSTGRES_PRISMA_URL: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres Prisma URL'),
   POSTGRES_URL_NON_POOLING: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres non-pooling URL'),
 
   // AI Services (Required for AI Security Co-Pilot)
-  TOGETHER_API_KEY: z.string().min(1).optional().describe('Together.ai API key'),
-  GROQ_API_KEY: z.string().min(1).optional().describe('Groq API key'),
-  OPENAI_API_KEY: z.string().startsWith('sk-').optional().describe('OpenAI API key'),
+  TOGETHER_API_KEY: z.string().optional().describe('Together.ai API key'),
+  GROQ_API_KEY: z.string().optional().describe('Groq API key'),
+  OPENAI_API_KEY: z.string().optional().describe('OpenAI API key'),
 
   // Threat Intelligence APIs
   VIRUSTOTAL_API_KEY: z.string().min(1).optional().describe('VirusTotal API key'),
