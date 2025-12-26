@@ -14,6 +14,12 @@ export const severityLevelEnum = pgEnum('severity_level', [
   'high',
   'critical',
 ]);
+export const emailSourceEnum = pgEnum('email_source', [
+  'tool-gate',
+  'newsletter',
+  'assessment',
+  'footer',
+]);
 
 // Users table (extends Supabase auth.users)
 export const users = pgTable('users', {
@@ -92,6 +98,20 @@ export const incidentResponses = pgTable('incident_responses', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// Email captures table (for lead generation)
+export const emailCaptures = pgTable('email_captures', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  email: text('email').notNull().unique(),
+  name: text('name'),
+  toolId: text('tool_id').notNull(),
+  source: emailSourceEnum('source').notNull().default('tool-gate'),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  emailVerified: text('email_verified').notNull().default('false'),
+  unsubscribed: text('unsubscribed').notNull().default('false'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   threatAnalyses: many(threatAnalyses),
@@ -158,3 +178,5 @@ export type PhishingAnalysis = typeof phishingAnalyses.$inferSelect;
 export type NewPhishingAnalysis = typeof phishingAnalyses.$inferInsert;
 export type IncidentResponse = typeof incidentResponses.$inferSelect;
 export type NewIncidentResponse = typeof incidentResponses.$inferInsert;
+export type EmailCapture = typeof emailCaptures.$inferSelect;
+export type NewEmailCapture = typeof emailCaptures.$inferInsert;

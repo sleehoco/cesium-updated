@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SafeMarkdown } from '@/components/shared/SafeMarkdown';
 import { MessageSquare, AlertTriangle, Loader2, ShieldAlert } from 'lucide-react';
+import EmailCaptureModal from '@/components/marketing/EmailCaptureModal';
+import { useToolUsage } from '@/hooks/useToolUsage';
 
 export default function PhishingDetectorPage() {
   const [content, setContent] = useState('');
@@ -17,11 +19,22 @@ export default function PhishingDetectorPage() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Email capture integration
+  const {
+    shouldShowModal,
+    trackUsage,
+    markSignedUp,
+    closeModal,
+  } = useToolUsage('ai-phishing-detector');
+
   const handleAnalyze = async () => {
     if (!content.trim()) {
       setError('Please enter content to analyze');
       return;
     }
+
+    // Track tool usage for email capture modal
+    trackUsage();
 
     setLoading(true);
     setError(null);
@@ -52,6 +65,31 @@ export default function PhishingDetectorPage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Email capture submission handler
+  const handleEmailSubmit = async (email: string, name: string) => {
+    try {
+      const response = await fetch('/api/marketing/capture-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          toolId: 'ai-phishing-detector',
+          source: 'tool-gate',
+        }),
+      });
+
+      if (response.ok) {
+        markSignedUp();
+      }
+    } catch (error) {
+      console.error('Email capture failed:', error);
+      throw error;
     }
   };
 
@@ -292,6 +330,14 @@ If you did not request this, please ignore this email.`);
             </Card>
           ))}
         </div>
+
+        {/* Email capture modal */}
+        <EmailCaptureModal
+          isOpen={shouldShowModal}
+          onClose={closeModal}
+          onSubmit={handleEmailSubmit}
+          toolName="AI Phishing Detector"
+        />
       </div>
     </div>
   );

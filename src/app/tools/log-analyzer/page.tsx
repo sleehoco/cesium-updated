@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SafeMarkdown } from '@/components/shared/SafeMarkdown';
 import { FileSearch, AlertTriangle, Loader2, Info } from 'lucide-react';
+import EmailCaptureModal from '@/components/marketing/EmailCaptureModal';
+import { useToolUsage } from '@/hooks/useToolUsage';
 
 export default function LogAnalyzerPage() {
   const [logs, setLogs] = useState('');
@@ -16,11 +18,22 @@ export default function LogAnalyzerPage() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Email capture integration
+  const {
+    shouldShowModal,
+    trackUsage,
+    markSignedUp,
+    closeModal,
+  } = useToolUsage('log-analyzer');
+
   const handleAnalyze = async () => {
     if (!logs.trim()) {
       setError('Please paste security logs to analyze');
       return;
     }
+
+    // Track tool usage for email capture modal
+    trackUsage();
 
     setLoading(true);
     setError(null);
@@ -50,6 +63,31 @@ export default function LogAnalyzerPage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Email capture submission handler
+  const handleEmailSubmit = async (email: string, name: string) => {
+    try {
+      const response = await fetch('/api/marketing/capture-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          toolId: 'log-analyzer',
+          source: 'tool-gate',
+        }),
+      });
+
+      if (response.ok) {
+        markSignedUp();
+      }
+    } catch (error) {
+      console.error('Email capture failed:', error);
+      throw error;
     }
   };
 
@@ -256,6 +294,14 @@ export default function LogAnalyzerPage() {
             </Card>
           ))}
         </div>
+
+        {/* Email capture modal */}
+        <EmailCaptureModal
+          isOpen={shouldShowModal}
+          onClose={closeModal}
+          onSubmit={handleEmailSubmit}
+          toolName="Security Log Analyzer"
+        />
       </div>
     </div>
   );
