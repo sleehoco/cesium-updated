@@ -227,7 +227,15 @@ export function parseCommand(input: string): Command {
  * Process a player action and return updated game state
  */
 export function processAction(state: GameState, command: Command): GameState {
-  const newState = { ...state };
+  // Deep copy state to avoid mutating the original
+  const newState: GameState = {
+    ...state,
+    playerAssets: { ...state.playerAssets },
+    enemyAssets: { ...state.enemyAssets },
+    casualties: { ...state.casualties },
+    strikes: { ...state.strikes },
+    history: [...state.history],
+  };
 
   switch (command.type) {
     case 'LAUNCH':
