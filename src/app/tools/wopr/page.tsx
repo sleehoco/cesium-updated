@@ -74,6 +74,7 @@ export default function WOPRPage() {
   // Sound effects using Web Audio API
   const audioContextRef = useRef<AudioContext | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const voiceEnabledRef = useRef(false); // Ref for immediate synchronous access
 
   // Tic-Tac-Toe game state (use ref for immediate updates)
   const ticTacToeGameRef = useRef<TicTacToeState | null>(null);
@@ -127,9 +128,9 @@ export default function WOPRPage() {
   };
 
   const speakText = async (text: string) => {
-    console.log('[WOPR Voice] speakText called:', { text, voiceEnabled });
+    console.log('[WOPR Voice] speakText called:', { text, voiceEnabled: voiceEnabledRef.current });
 
-    if (!voiceEnabled || typeof window === 'undefined') {
+    if (!voiceEnabledRef.current || typeof window === 'undefined') {
       console.log('[WOPR Voice] Voice disabled or not in browser');
       return;
     }
@@ -686,6 +687,7 @@ export default function WOPRPage() {
     } else if (cmd === 'voice' || cmd === 'voice on' || cmd === 'voice off') {
       const newState = cmd === 'voice off' ? false : !voiceEnabled;
       setVoiceEnabled(newState);
+      voiceEnabledRef.current = newState; // Update ref immediately for synchronous access
       const status = newState ? 'ENABLED' : 'DISABLED';
       await typeText(term, `\r\nVOICE SYNTHESIS ${status}.\r\n`, 10);
 
