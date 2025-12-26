@@ -505,6 +505,36 @@ export default function WOPRPage() {
       await typeText(term, '\r\n', 10);
       await typeText(term, '==============================================================\r\n', 10);
       term.write('\r\n');
+    } else if (gameEngineRef.current === 'AWAITING_SIDE_SELECTION') {
+      // Handle side selection for advanced game engine (MUST come before number shortcut!)
+      if (cmd === '1' || cmd.includes('united') || cmd.includes('usa') || cmd.includes('america')) {
+        const newGame = initializeGame('global-thermonuclear-war', 'USA');
+        gameEngineRef.current = newGame;
+
+        await typeText(term, '\r\nSIDE SELECTED: UNITED STATES\r\n\r\n', 20);
+        await speakText('United States selected. Game initialized.');
+        await sleep(500);
+
+        await typeText(term, displayGameState(newGame) + '\r\n', 10);
+        await typeText(term, '\r\n' + getAvailableCommands(newGame) + '\r\n', 10);
+        return;
+      }
+
+      if (cmd === '2' || cmd.includes('soviet') || cmd.includes('ussr') || cmd.includes('russia')) {
+        const newGame = initializeGame('global-thermonuclear-war', 'USSR');
+        gameEngineRef.current = newGame;
+
+        await typeText(term, '\r\nSIDE SELECTED: SOVIET UNION\r\n\r\n', 20);
+        await speakText('Soviet Union selected. Game initialized.');
+        await sleep(500);
+
+        await typeText(term, displayGameState(newGame) + '\r\n', 10);
+        await typeText(term, '\r\n' + getAvailableCommands(newGame) + '\r\n', 10);
+        return;
+      }
+
+      await typeText(term, '\r\nINVALID SELECTION. Enter 1 or 2.\r\n', 20);
+      return;
     } else if (cmd.match(/^[1-7]$/)) {
       // Shortcut: just type a number to play that game
       await processCommand(term, `PLAY ${cmd}`);
@@ -669,36 +699,6 @@ export default function WOPRPage() {
       await typeText(term, '\r\n', 20);
       await typeText(term, '==============================================================\r\n', 20);
       term.write('\r\n');
-    } else if (gameEngineRef.current === 'AWAITING_SIDE_SELECTION') {
-      // Handle side selection for advanced game engine
-      if (cmd === '1' || cmd.includes('united') || cmd.includes('usa') || cmd.includes('america')) {
-        const newGame = initializeGame('global-thermonuclear-war', 'USA');
-        gameEngineRef.current = newGame;
-
-        await typeText(term, '\r\nSIDE SELECTED: UNITED STATES\r\n\r\n', 20);
-        await speakText('United States selected. Game initialized.');
-        await sleep(500);
-
-        await typeText(term, displayGameState(newGame) + '\r\n', 10);
-        await typeText(term, '\r\n' + getAvailableCommands(newGame) + '\r\n', 10);
-        return;
-      }
-
-      if (cmd === '2' || cmd.includes('soviet') || cmd.includes('ussr') || cmd.includes('russia')) {
-        const newGame = initializeGame('global-thermonuclear-war', 'USSR');
-        gameEngineRef.current = newGame;
-
-        await typeText(term, '\r\nSIDE SELECTED: SOVIET UNION\r\n\r\n', 20);
-        await speakText('Soviet Union selected. Game initialized.');
-        await sleep(500);
-
-        await typeText(term, displayGameState(newGame) + '\r\n', 10);
-        await typeText(term, '\r\n' + getAvailableCommands(newGame) + '\r\n', 10);
-        return;
-      }
-
-      await typeText(term, '\r\nINVALID SELECTION. Enter 1 or 2.\r\n', 20);
-      return;
     } else if (gameEngineRef.current &&
                typeof gameEngineRef.current !== 'string' &&
                !gameEngineRef.current.gameOver) {
