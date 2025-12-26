@@ -122,12 +122,20 @@ export function initializeGame(scenario: string, playerSide: PlayerSide = 'USA')
   const assets = SCENARIO_ASSETS[scenario] ?? SCENARIO_ASSETS['global-thermonuclear-war']!;
   const enemySide: PlayerSide = playerSide === 'USA' ? 'USSR' : 'USA';
 
+  // Set appropriate DEFCON level based on scenario
+  let initialDefcon: DefconLevel = 5;
+  if (scenario === 'global-thermonuclear-war') {
+    initialDefcon = 1; // Maximum alert for global nuclear war
+  } else if (scenario === 'europe-theater' || scenario === 'pacific-theater') {
+    initialDefcon = 3; // Elevated readiness for regional conflicts
+  }
+
   return {
     sessionId: generateSessionId(),
     scenario,
     playerSide,
     enemySide,
-    defcon: 5,
+    defcon: initialDefcon,
     turn: 1,
     phase: 'SETUP',
 

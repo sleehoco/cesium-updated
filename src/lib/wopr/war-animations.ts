@@ -98,19 +98,23 @@ export function getMultipleMissilesAnimation(): MissileAnimation {
 export function getDefconAlertAnimation(): MissileAnimation {
   return {
     frames: [
-      '!!! WARNING !!!',
-      'DEFCON 1 ACTIVATED',
-      'NUCLEAR LAUNCH AUTHORIZED',
+      '!!! ALERT !!!',
+      'DEFCON 5 - PEACETIME CONDITIONS',
+      '',
+      '!!! ESCALATION DETECTED !!!',
+      'DEFCON 4 - INCREASED INTELLIGENCE WATCH',
       '',
       '!!! WARNING !!!',
-      'DEFCON 1 ACTIVATED',
-      'NUCLEAR LAUNCH AUTHORIZED',
+      'DEFCON 3 - INCREASE IN FORCE READINESS',
       '',
-      '!!! WARNING !!!',
-      'DEFCON 1 ACTIVATED',
-      'NUCLEAR LAUNCH AUTHORIZED',
+      '!!! CRITICAL !!!',
+      'DEFCON 2 - FURTHER INCREASE IN FORCE READINESS',
+      '',
+      '!!! MAXIMUM ALERT !!!',
+      'DEFCON 1 - NUCLEAR WAR IMMINENT',
+      'STRATEGIC AIR COMMAND ON FULL ALERT',
     ],
-    delay: 200,
+    delay: 300,
   };
 }
 

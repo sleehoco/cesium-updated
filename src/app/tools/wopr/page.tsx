@@ -534,10 +534,10 @@ export default function WOPRPage() {
         if (scenarioNum === '1') {
           // Global Thermonuclear War - Advanced Engine
           await typeText(term, '\r\nINITIALIZING GLOBAL THERMONUCLEAR WAR...\r\n', 30);
-          await typeText(term, 'SETTING DEFCON LEVEL TO 5...\r\n', 30);
+          await typeText(term, 'ESCALATION SEQUENCE INITIATED...\r\n', 30);
           await sleep(500);
 
-          // DEFCON alert animation
+          // DEFCON alert animation (escalates from 5 to 1)
           await playAnimation(term, getDefconAlertAnimation());
           await typeText(term, '\r\n', 10);
 
