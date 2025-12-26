@@ -300,8 +300,18 @@ function processLaunch(state: GameState, command: Command): GameState {
     description: `Launched ${quantity} ${weapon}(s) at ${command.target}. ${hits} hit, ${intercepted} intercepted.`,
   });
 
-  // Enemy retaliates (80% chance if DEFCON <= 2)
-  if (state.defcon <= 2 && Math.random() < 0.8) {
+  // Enemy retaliates based on DEFCON level
+  // DEFCON 1: 100% retaliation (nuclear war - always strike back)
+  // DEFCON 2: 80% retaliation (high alert)
+  // DEFCON 3+: No automatic retaliation
+  let retaliationChance = 0;
+  if (state.defcon === 1) {
+    retaliationChance = 1.0; // 100% at maximum alert
+  } else if (state.defcon === 2) {
+    retaliationChance = 0.8; // 80% at high alert
+  }
+
+  if (retaliationChance > 0 && Math.random() < retaliationChance) {
     state = processEnemyRetaliation(state);
   }
 
