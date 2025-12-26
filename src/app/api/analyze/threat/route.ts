@@ -9,7 +9,6 @@ import { generateCompletion } from '@/lib/ai/completions';
 import { getSecurityPrompt } from '@/lib/ai/prompts';
 import { analyzeIOC, summarizeVTResults, hasVirusTotalKey } from '@/lib/threat-intel/virustotal';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
-import { requireAuthAPI } from '@/lib/auth/utils';
 
 const requestSchema = z.object({
   ioc: z.string().min(1).max(1000).describe('Indicator of Compromise to analyze'),
@@ -36,14 +35,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Require authentication
-    const authResult = await requireAuthAPI();
-    if ('error' in authResult) {
-      return NextResponse.json(
-        { error: authResult.error },
-        { status: authResult.status }
-      );
-    }
+    // Allow anonymous users for lead capture flow
+    // Authentication is optional - usage tracked via frontend localStorage
 
     const body = await req.json();
     const { ioc, provider } = requestSchema.parse(body);

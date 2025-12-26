@@ -4,7 +4,6 @@ import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { extractURLs, checkMultipleURLs } from '@/lib/threat-intel/url-checker';
-import { requireAuthAPI } from '@/lib/auth/utils';
 
 /**
  * Phishing Detector API
@@ -39,14 +38,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Require authentication
-  const authResult = await requireAuthAPI();
-  if ('error' in authResult) {
-    return NextResponse.json(
-      { error: authResult.error },
-      { status: authResult.status }
-    );
-  }
 
   try {
     const body = await req.json();

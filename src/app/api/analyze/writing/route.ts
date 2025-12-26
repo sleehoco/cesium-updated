@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
-import { requireAuthAPI } from '@/lib/auth/utils';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -32,14 +31,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Require authentication
-    const authResult = await requireAuthAPI();
-    if ('error' in authResult) {
-      return NextResponse.json(
-        { error: authResult.error },
-        { status: authResult.status }
-      );
-    }
 
     const body = await req.json();
     const { text, mode } = requestSchema.parse(body);
