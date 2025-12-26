@@ -130,43 +130,56 @@ export default function WOPRPage() {
     if (!voiceEnabled || typeof window === 'undefined') return;
 
     try {
-      // Use browser speech synthesis for now (ElevenLabs can be added later)
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
+      const apiKey = process.env['NEXT_PUBLIC_ELEVENLABS_API_KEY'];
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.75; // Slower, more robotic
-      utterance.pitch = 0.5; // Deeper voice
-      utterance.volume = 0.8;
-
-      // Try to get a more robotic voice
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v =>
-        v.name.includes('Google') ||
-        v.name.includes('Microsoft') ||
-        v.name.includes('Male')
-      );
-
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
+      if (!apiKey) {
+        console.warn('ElevenLabs API key not found, voice disabled');
+        return;
       }
 
-      window.speechSynthesis.speak(utterance);
+      // Use ElevenLabs for realistic AI voice
+      // Voice ID: Adam (deep, authoritative male voice - good for WOPR)
+      const voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam voice
+
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey,
+        },
+        body: JSON.stringify({
+          text,
+          model_id: 'eleven_monolingual_v1',
+          voice_settings: {
+            stability: 0.75,
+            similarity_boost: 0.75,
+            style: 0.0,
+            use_speaker_boost: true,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`ElevenLabs API error: ${response.status}`);
+      }
+
+      // Convert response to audio and play
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      audio.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      await audio.play();
     } catch (error) {
       console.error('Voice synthesis error:', error);
     }
   };
 
-  useEffect(() => {
-    // Load voices for speech synthesis
-    if (typeof window !== 'undefined') {
-      window.speechSynthesis.getVoices();
-      // Some browsers need this event
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-      };
-    }
-  }, []);
+  // ElevenLabs voice synthesis - no initialization needed
 
   useEffect(() => {
     if (!terminalRef.current || xtermRef.current) return;
@@ -658,30 +671,13 @@ export default function WOPRPage() {
       await typeText(term, `\r\nVOICE SYNTHESIS ${status}.\r\n`, 10);
 
       if (newState) {
-        await typeText(term, 'WOPR will now speak all responses.\r\n', 10);
+        await typeText(term, 'WOPR will now speak all responses using ElevenLabs AI voice.\r\n', 10);
         await typeText(term, 'Testing voice... Listen for audio.\r\n', 10);
 
-        // Test voice immediately with direct call
-        if (typeof window !== 'undefined' && window.speechSynthesis) {
-          console.log('Voice enabled, attempting to speak...');
-          const testUtterance = new SpeechSynthesisUtterance('Voice synthesis enabled. Greetings Professor Falken.');
-          testUtterance.rate = 0.75;
-          testUtterance.pitch = 0.5;
-          testUtterance.volume = 1.0;
-
-          testUtterance.onstart = () => console.log('Speech started');
-          testUtterance.onend = () => console.log('Speech ended');
-          testUtterance.onerror = (e) => console.error('Speech error:', e);
-
-          window.speechSynthesis.speak(testUtterance);
-        } else {
-          await typeText(term, 'ERROR: Speech synthesis not available in browser.\r\n', 10);
-        }
+        // Test voice using ElevenLabs
+        await speakText('Voice synthesis enabled. Greetings Professor Falken.');
       } else {
         await typeText(term, 'Voice output deactivated.\r\n', 10);
-        if (typeof window !== 'undefined') {
-          window.speechSynthesis.cancel();
-        }
       }
       term.write('\r\n');
     } else if (cmd === 'defcon') {
