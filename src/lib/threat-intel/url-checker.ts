@@ -31,7 +31,60 @@ export interface URLCheckResult {
 }
 
 /**
+ * Validate URL to prevent SSRF attacks
+ */
+function isAllowedURL(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    
+    // Only allow HTTP and HTTPS protocols
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return false;
+    }
+    
+    const hostname = parsed.hostname.toLowerCase();
+    
+    // Block localhost variations
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1') {
+      return false;
+    }
+    
+    // Block private IP ranges
+    const privateIPPatterns = [
+      /^10\./,                              // 10.0.0.0/8
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./,    // 172.16.0.0/12
+      /^192\.168\./,                        // 192.168.0.0/16
+      /^169\.254\./,                        // 169.254.0.0/16 (link-local)
+      /^fc00:/,                             // IPv6 private
+      /^fe80:/,                             // IPv6 link-local
+    ];
+    
+    for (const pattern of privateIPPatterns) {
+      if (pattern.test(hostname)) {
+        return false;
+      }
+    }
+    
+    // Block cloud metadata endpoints
+    const metadataEndpoints = [
+      '169.254.169.254',  // AWS, Azure, GCP metadata
+      '169.254.170.2',    // AWS ECS metadata
+      'metadata.google.internal',
+    ];
+    
+    if (metadataEndpoints.includes(hostname)) {
+      return false;
+    }
+    
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Extract URLs from text content
+ * SECURITY: Validates URLs to prevent SSRF attacks
  */
 export function extractURLs(text: string): string[] {
   // Regex to match URLs (http, https, and naked domains)
@@ -39,7 +92,7 @@ export function extractURLs(text: string): string[] {
 
   const matches = text.match(urlRegex) || [];
 
-  // Deduplicate and normalize URLs
+  // Deduplicate, normalize, and validate URLs
   const urls = new Set<string>();
   matches.forEach(url => {
     let normalized = url.trim();
@@ -47,7 +100,11 @@ export function extractURLs(text: string): string[] {
     if (!normalized.startsWith('http')) {
       normalized = 'https://' + normalized;
     }
-    urls.add(normalized);
+    
+    // SECURITY: Only add URLs that pass SSRF validation
+    if (isAllowedURL(normalized)) {
+      urls.add(normalized);
+    }
   });
 
   return Array.from(urls);

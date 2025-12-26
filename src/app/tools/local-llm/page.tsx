@@ -240,7 +240,7 @@ export default function LocalLLMPage() {
                   <p className="text-xs uppercase tracking-wide text-cesium mb-2">
                     {message.role === 'analyst' ? 'Security Analyst' : 'Local LLM' }
                   </p>
-                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: message.text }} />
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
                 </div>
               ))}
             </div>
