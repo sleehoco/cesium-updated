@@ -161,12 +161,12 @@ export default function HomePage() {
                       </div>
 
                       <div className="pt-2">
-                        <Button 
-                          asChild 
+                        <Button
+                          asChild
                           size="lg"
                           className="bg-emerald-600 hover:bg-emerald-500 text-black font-bold text-lg px-8 rounded-none tracking-widest border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                         >
-                          <Link href="/tools/cyber-defense-terminal">
+                          <Link href="/tools/wopr">
                             ENTER TERMINAL_
                           </Link>
                         </Button>
