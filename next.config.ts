@@ -68,48 +68,8 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000',
   },
 
-  // Webpack configuration for optimizations
-  webpack: (config, { dev, isServer }) => {
-    // Optimize bundle size
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk for react and react-dom
-            framework: {
-              name: 'framework',
-              chunks: 'all',
-              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-              priority: 40,
-              enforce: true,
-            },
-            // Common libraries chunk
-            lib: {
-              test: /[\\/]node_modules[\\/]/,
-              name(module: any) {
-                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)?.[1];
-                return `npm.${packageName?.replace('@', '')}`;
-              },
-              priority: 30,
-            },
-            // Commons chunk for shared code
-            commons: {
-              name: 'commons',
-              minChunks: 2,
-              priority: 20,
-            },
-          },
-        },
-      };
-    }
-
-    return config;
-  },
+  // Turbopack configuration (Next.js 16+)
+  turbopack: {},
 
   // Experimental features
   experimental: {

@@ -22,9 +22,9 @@ const envSchema = z.object({
   POSTGRES_URL_NON_POOLING: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres non-pooling URL'),
 
   // AI Services (Required for AI Security Co-Pilot)
-  TOGETHER_API_KEY: z.string().min(1).optional().describe('Together.ai API key'),
-  GROQ_API_KEY: z.string().min(1).optional().describe('Groq API key'),
-  OPENAI_API_KEY: z.string().startsWith('sk-').optional().describe('OpenAI API key'),
+  TOGETHER_API_KEY: z.string().optional().describe('Together.ai API key'),
+  GROQ_API_KEY: z.string().optional().describe('Groq API key'),
+  OPENAI_API_KEY: z.string().optional().describe('OpenAI API key'),
 
   // Threat Intelligence APIs
   VIRUSTOTAL_API_KEY: z.string().min(1).optional().describe('VirusTotal API key'),
