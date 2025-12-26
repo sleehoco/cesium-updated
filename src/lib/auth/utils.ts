@@ -46,3 +46,21 @@ export async function getSession() {
   } = await supabase.auth.getSession();
   return session;
 }
+
+/**
+ * Require authentication for API routes
+ * Returns user if authenticated, null if not
+ * Use this in API route handlers to enforce authentication
+ */
+export async function requireAuthAPI(): Promise<{ user: User } | { error: string; status: number }> {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return {
+      error: 'Authentication required. Please sign in to use this tool.',
+      status: 401,
+    };
+  }
+
+  return { user };
+}

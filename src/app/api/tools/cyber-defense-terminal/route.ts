@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
+import { requireAuthAPI } from '@/lib/auth/utils';
+import { sanitizePromptInput } from '@/lib/ai/sanitize';
 
 const chatSchema = z.object({
   message: z.string().min(1).max(1000),
@@ -63,9 +65,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Require authentication
+  const authResult = await requireAuthAPI();
+  if ('error' in authResult) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = chatSchema.parse(body);
+
+    // SECURITY: Sanitize user message to prevent prompt injection
+    const sanitizedMessage = sanitizePromptInput(parsed.message);
 
     const scenarioContext = parsed.scenario
       ? `SCENARIO: ${parsed.scenario.title.toUpperCase()} (${parsed.scenario.industry ?? 'SECTOR'}). ${parsed.scenario.description ?? ''}`
@@ -84,7 +98,7 @@ export async function POST(req: NextRequest) {
       injectContext,
       gameStateContext,
       transcript,
-      `ANALYST: ${parsed.message}`,
+      `ANALYST: ${sanitizedMessage}`,
       'WOPR:',
     ]
       .filter(Boolean)

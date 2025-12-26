@@ -4,6 +4,7 @@ import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { extractURLs, checkMultipleURLs } from '@/lib/threat-intel/url-checker';
+import { requireAuthAPI } from '@/lib/auth/utils';
 
 /**
  * Phishing Detector API
@@ -11,10 +12,10 @@ import { extractURLs, checkMultipleURLs } from '@/lib/threat-intel/url-checker';
  */
 
 const phishingAnalysisSchema = z.object({
-  content: z.string().min(1, 'Content is required'),
+  content: z.string().min(1, 'Content is required').max(50000, 'Content too large (max 50KB)'),
   analysisType: z.enum(['email', 'url', 'content']),
-  sender: z.string().optional(),
-  subject: z.string().optional(),
+  sender: z.string().max(500).optional(),
+  subject: z.string().max(500).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -35,6 +36,15 @@ export async function POST(req: NextRequest) {
           ).toString(),
         },
       }
+    );
+  }
+
+  // Require authentication
+  const authResult = await requireAuthAPI();
+  if ('error' in authResult) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
     );
   }
 
@@ -146,14 +156,4 @@ ${urlCheckResults && urlCheckResults.length > 0 ? 'IMPORTANT: Consider the URL t
   }
 }
 
-// OPTIONS handler for CORS
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-}
+// OPTIONS handler removed - CORS not needed for authenticated same-origin requests

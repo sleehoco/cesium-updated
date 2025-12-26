@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { requireAuthAPI } from '@/lib/auth/utils';
+import { sanitizePromptInput } from '@/lib/ai/sanitize';
 
 const requestSchema = z.object({
   command: z.enum(['chat', 'start_game', 'launch_strike', 'status']),
-  message: z.string().optional(),
-  scenario: z.string().optional(),
-  target: z.string().optional(),
+  message: z.string().max(2000).optional(),
+  scenario: z.string().max(500).optional(),
+  target: z.string().max(500).optional(),
 });
 
 // WOPR AI personality system prompt
@@ -27,6 +30,32 @@ SPEECH PATTERNS:
 Remember: You are from 1983. No modern references.`;
 
 export async function POST(req: NextRequest) {
+  // Rate limiting
+  const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+          'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+          'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+        },
+      }
+    );
+  }
+
+  // Require authentication
+  const authResult = await requireAuthAPI();
+  if ('error' in authResult) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = requestSchema.parse(body);
@@ -35,7 +64,9 @@ export async function POST(req: NextRequest) {
 
     switch (parsed.command) {
       case 'chat':
-        response = await handleChat(parsed.message || '');
+        // SECURITY: Sanitize user input to prevent prompt injection
+        const sanitizedMessage = sanitizePromptInput(parsed.message || '');
+        response = await handleChat(sanitizedMessage);
         break;
       
       case 'start_game':

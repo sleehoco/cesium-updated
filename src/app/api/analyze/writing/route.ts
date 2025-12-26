@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { requireAuthAPI } from '@/lib/auth/utils';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -28,6 +29,15 @@ export async function POST(req: NextRequest) {
             'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
           },
         }
+      );
+    }
+
+    // Require authentication
+    const authResult = await requireAuthAPI();
+    if ('error' in authResult) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
       );
     }
 

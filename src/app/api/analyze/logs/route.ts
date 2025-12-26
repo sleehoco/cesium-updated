@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { requireAuthAPI } from '@/lib/auth/utils';
 
 /**
  * Security Log Analyzer API
@@ -10,8 +11,8 @@ import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
  */
 
 const logAnalysisSchema = z.object({
-  logs: z.string().min(1, 'Logs are required'),
-  logSource: z.string().optional(),
+  logs: z.string().min(1, 'Logs are required').max(100000, 'Logs too large (max 100KB)'),
+  logSource: z.string().max(200).optional(),
   focusArea: z.enum(['all', 'authentication', 'network', 'application', 'system']).default('all'),
 });
 
@@ -33,6 +34,15 @@ export async function POST(req: NextRequest) {
           ).toString(),
         },
       }
+    );
+  }
+
+  // Require authentication
+  const authResult = await requireAuthAPI();
+  if ('error' in authResult) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
     );
   }
 
@@ -114,14 +124,4 @@ Focus on actionable intelligence and clear explanations.
   }
 }
 
-// OPTIONS handler for CORS
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-}
+// OPTIONS handler removed - CORS not needed for authenticated same-origin requests

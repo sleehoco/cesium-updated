@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { requireAuthAPI } from '@/lib/auth/utils';
 
 /**
  * Incident Response API
@@ -10,7 +11,7 @@ import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
  */
 
 const incidentResponseSchema = z.object({
-  incidentDescription: z.string().min(1, 'Incident description is required'),
+  incidentDescription: z.string().min(1, 'Incident description is required').max(10000, 'Description too large'),
   incidentType: z.enum([
     'malware',
     'ransomware',
@@ -22,7 +23,7 @@ const incidentResponseSchema = z.object({
     'general',
   ]),
   severity: z.enum(['low', 'medium', 'high', 'critical']).optional(),
-  affectedSystems: z.string().optional(),
+  affectedSystems: z.string().max(2000, 'Affected systems list too large').optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -43,6 +44,15 @@ export async function POST(req: NextRequest) {
           ).toString(),
         },
       }
+    );
+  }
+
+  // Require authentication
+  const authResult = await requireAuthAPI();
+  if ('error' in authResult) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
     );
   }
 
@@ -126,14 +136,4 @@ Format the response as a structured incident response playbook that can be follo
   }
 }
 
-// OPTIONS handler for CORS
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-}
+// OPTIONS handler removed - CORS not needed for authenticated same-origin requests

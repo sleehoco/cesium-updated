@@ -9,6 +9,7 @@ import { generateCompletion } from '@/lib/ai/completions';
 import { getSecurityPrompt } from '@/lib/ai/prompts';
 import { analyzeIOC, summarizeVTResults, hasVirusTotalKey } from '@/lib/threat-intel/virustotal';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { requireAuthAPI } from '@/lib/auth/utils';
 
 const requestSchema = z.object({
   ioc: z.string().min(1).max(1000).describe('Indicator of Compromise to analyze'),
@@ -32,6 +33,15 @@ export async function POST(req: NextRequest) {
             'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
           },
         }
+      );
+    }
+
+    // Require authentication
+    const authResult = await requireAuthAPI();
+    if ('error' in authResult) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
       );
     }
 
@@ -77,6 +87,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    // SECURITY: Log full error details server-side only
     console.error('Threat analysis error:', error);
 
     if (error instanceof z.ZodError) {
@@ -90,10 +101,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // SECURITY: Don't expose internal error details to client
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Internal server error',
+        error: 'Failed to analyze threat. Please try again.',
       },
       { status: 500 }
     );
