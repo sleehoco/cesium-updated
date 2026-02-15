@@ -25,7 +25,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-white font-[var(--font-orbitron)]">
+            <span className="text-2xl font-bold text-white font-[var(--font-display)]">
               Cesium<span className="text-cesium">Cyber</span>
             </span>
           </Link>

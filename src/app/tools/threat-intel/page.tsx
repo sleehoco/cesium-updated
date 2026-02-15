@@ -82,7 +82,7 @@ export default function ThreatIntelPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
             <Shield className="h-10 w-10 text-cesium" />
-            <h1 className="text-4xl lg:text-5xl font-black text-white font-[var(--font-orbitron)]">
+            <h1 className="text-4xl lg:text-5xl font-black text-white font-[var(--font-display)]">
               THREAT INTELLIGENCE <span className="text-cesium">ANALYZER</span>
             </h1>
           </div>

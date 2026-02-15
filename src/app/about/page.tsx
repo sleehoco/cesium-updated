@@ -70,7 +70,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-[var(--font-orbitron)]">
+          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-[var(--font-display)]">
             About CesiumCyber
           </h1>
           <p className="text-xl text-gray-300">
@@ -92,7 +92,7 @@ export default function AboutPage() {
 
         {/* Values */}
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white text-center mb-12 font-[var(--font-orbitron)]">
+          <h2 className="text-3xl font-bold text-white text-center mb-12 font-[var(--font-display)]">
             Our Values
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -119,7 +119,7 @@ export default function AboutPage() {
 
         {/* Team Section */}
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white text-center mb-4 font-[var(--font-orbitron)]">
+          <h2 className="text-3xl font-bold text-white text-center mb-4 font-[var(--font-display)]">
             Leadership Team
           </h2>
           <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">

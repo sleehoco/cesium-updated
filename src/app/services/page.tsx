@@ -120,7 +120,7 @@ export default function ServicesPage() {
               CYBERSECURITY & AI SOLUTIONS
             </span>
           </div>
-          <h1 className="text-5xl lg:text-7xl font-black text-white mb-6 font-[var(--font-orbitron)]">
+          <h1 className="text-5xl lg:text-7xl font-black text-white mb-6 font-[var(--font-display)]">
             OUR <span className="text-cesium">SERVICES</span>
           </h1>
           <p className="text-xl text-gray-300 leading-relaxed">

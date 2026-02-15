@@ -8,6 +8,15 @@ import { Badge } from '@/components/ui/badge';
 import { toolCategories, getToolsByCategory } from '@/config/tools-config';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
+const colorClasses: Record<string, { bg: string; border: string; text: string }> = {
+    'cesium': { bg: 'bg-cesium/10', border: 'border-cesium/30', text: 'text-cesium' },
+    'blue-500': { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-500' },
+    'red-500': { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-500' },
+    'purple-500': { bg: 'bg-purple-500/10', border: 'border-purple-500/30', text: 'text-purple-500' },
+    'green-500': { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-500' },
+    'yellow-500': { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-yellow-500' },
+};
+
 export default function ToolsPage() {
     // Get all categories except "All Tools"
     const categories = toolCategories.filter(cat => cat !== 'All Tools');
@@ -45,7 +54,7 @@ export default function ToolsPage() {
                 >
                     <div className="inline-flex items-center gap-3 mb-6">
                         <Sparkles className="h-12 w-12 text-cesium" />
-                        <h1 className="text-5xl lg:text-6xl font-bold text-white font-[var(--font-orbitron)] bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
+                        <h1 className="text-5xl lg:text-6xl font-bold text-white font-[var(--font-display)] bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
                             AI-Powered Security Tools
                         </h1>
                     </div>
@@ -68,7 +77,7 @@ export default function ToolsPage() {
                         >
                             {/* Category Header */}
                             <div className="mb-8">
-                                <h2 className="text-3xl font-bold text-white mb-2 font-[var(--font-orbitron)]">
+                                <h2 className="text-3xl font-bold text-white mb-2 font-[var(--font-display)]">
                                     <span className="text-cesium">{'//'}</span> {category}
                                 </h2>
                                 <div className="h-1 w-20 bg-cesium"></div>
@@ -93,8 +102,8 @@ export default function ToolsPage() {
                                 >
                                     <CardHeader>
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className={`p-3 rounded-lg bg-${tool.color}/10 border border-${tool.color}/30 group-hover:scale-110 transition-transform duration-300`}>
-                                                <Icon className={`h-8 w-8 text-${tool.color}`} />
+                                            <div className={`p-3 rounded-lg ${colorClasses[tool.color]?.bg ?? ''} border ${colorClasses[tool.color]?.border ?? ''} group-hover:scale-110 transition-transform duration-300`}>
+                                                <Icon className={`h-8 w-8 ${colorClasses[tool.color]?.text ?? ''}`} />
                                             </div>
                                             {tool.status && (
                                                 <Badge
