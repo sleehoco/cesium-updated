@@ -30,7 +30,7 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <Shield className="h-8 w-8 text-cesium" />
-              <span className="text-xl font-bold text-white font-[var(--font-display)]">
+              <span className="text-xl font-bold text-white font-display">
                 Cesium<span className="text-cesium">Cyber</span>
               </span>
             </div>

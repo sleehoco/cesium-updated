@@ -168,7 +168,7 @@ export default function ContactPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-[var(--font-display)] bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
+          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-display bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
             Contact Us
           </h1>
           <p className="text-xl text-gray-300">
@@ -393,7 +393,7 @@ export default function ContactPage() {
                   >
                     <Button
                       type="submit"
-                      variant="gold"
+                      variant="accent"
                       size="lg"
                       className={`w-full transition-all duration-300 ${isFormValid && !loading ? 'animate-pulse' : ''
                         }`}

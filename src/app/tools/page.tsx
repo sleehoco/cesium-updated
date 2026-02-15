@@ -54,7 +54,7 @@ export default function ToolsPage() {
                 >
                     <div className="inline-flex items-center gap-3 mb-6">
                         <Sparkles className="h-12 w-12 text-cesium" />
-                        <h1 className="text-5xl lg:text-6xl font-bold text-white font-[var(--font-display)] bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
+                        <h1 className="text-5xl lg:text-6xl font-bold text-white font-display bg-gradient-to-r from-white via-cesium to-white bg-clip-text text-transparent">
                             AI-Powered Security Tools
                         </h1>
                     </div>
@@ -77,7 +77,7 @@ export default function ToolsPage() {
                         >
                             {/* Category Header */}
                             <div className="mb-8">
-                                <h2 className="text-3xl font-bold text-white mb-2 font-[var(--font-display)]">
+                                <h2 className="text-3xl font-bold text-white mb-2 font-display">
                                     <span className="text-cesium">{'//'}</span> {category}
                                 </h2>
                                 <div className="h-1 w-20 bg-cesium"></div>
@@ -161,7 +161,7 @@ export default function ToolsPage() {
                                         ) : (
                                             <Link href={tool.path} className="w-full">
                                                 <Button
-                                                    variant="gold"
+                                                    variant="accent"
                                                     className="w-full group-hover:scale-105 transition-transform duration-300"
                                                 >
                                                     Launch Tool

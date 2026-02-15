@@ -24,7 +24,7 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                <h1 className="text-7xl lg:text-8xl font-black text-white font-[var(--font-display)] leading-none tracking-tight">
+                <h1 className="text-7xl lg:text-8xl font-black text-white font-display leading-none tracking-tight">
                   CESIUM
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cesium to-cesium-light">
@@ -130,7 +130,7 @@ export default function HomePage() {
         <section className="relative py-32 bg-gradient-to-b from-black to-cyber-dark">
           <div className="container mx-auto px-4">
             <div className="text-center mb-20">
-              <h2 className="text-5xl lg:text-6xl font-black text-white mb-6 font-[var(--font-display)]">
+              <h2 className="text-5xl lg:text-6xl font-black text-white mb-6 font-display">
                 SECURITY <span className="text-cesium">SERVICES</span>
               </h2>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
@@ -214,7 +214,7 @@ export default function HomePage() {
 
           <div className="container relative z-10 mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center space-y-8">
-              <h2 className="text-5xl lg:text-7xl font-black text-white font-[var(--font-display)] leading-tight">
+              <h2 className="text-5xl lg:text-7xl font-black text-white font-display leading-tight">
                 READY TO
                 <br />
                 <span className="text-cesium">SECURE YOUR FUTURE?</span>

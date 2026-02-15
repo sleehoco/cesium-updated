@@ -25,7 +25,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-white font-[var(--font-display)]">
+            <span className="text-2xl font-bold text-white font-display">
               Cesium<span className="text-cesium">Cyber</span>
             </span>
           </Link>
@@ -46,7 +46,7 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
-            <Button variant="gold" size="sm" asChild>
+            <Button variant="accent" size="sm" asChild>
               <Link href="/contact">Get Started</Link>
             </Button>
           </div>
@@ -86,7 +86,7 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
-            <Button variant="gold" size="sm" className="w-full" asChild>
+            <Button variant="accent" size="sm" className="w-full" asChild>
               <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                 Get Started
               </Link>
