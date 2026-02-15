@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 import { Shield, Target, Award, Users } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about CesiumCyber - our mission, values, and expert team protecting organizations worldwide.',
+  description: 'Learn about CesiumCyber - our mission, values, and expert team protecting Maryland businesses with expert cybersecurity.',
 };
 
 const team = [
@@ -66,152 +65,153 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-cyber-dark via-cyber to-cyber-light">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-display">
-            About CesiumCyber
-          </h1>
-          <p className="text-xl text-gray-300">
-            Protecting organizations worldwide with cutting-edge cybersecurity solutions and expert guidance
-          </p>
-        </div>
-
-        {/* Mission Statement */}
-        <Card className="bg-cesium/10 border-cesium/30 backdrop-blur max-w-4xl mx-auto mb-20">
-          <CardHeader>
-            <CardTitle className="text-white text-3xl text-center">Our Mission</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-300 text-lg text-center leading-relaxed">
-              To empower organizations with proactive cybersecurity solutions that anticipate and neutralize threats before they impact business operations.
+    <main>
+      {/* Hero Section - Dark */}
+      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-display">
+              About CesiumCyber
+            </h1>
+            <p className="text-xl text-gray-300">
+              Protecting Maryland businesses with expert cybersecurity solutions and trusted guidance
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+      </section>
 
-        {/* Values */}
-        <div className="mb-20">
+      {/* Mission Statement - Light */}
+      <section className="bg-white py-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-slate-900 mb-6 font-display">Our Mission</h2>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              To empower Maryland businesses with proactive cybersecurity solutions that anticipate and neutralize threats before they impact operations. Based in Columbia, MD, we understand the unique challenges local businesses face and deliver security that fits.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Values - Dark */}
+      <section className="bg-navy-900 py-24">
+        <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-white text-center mb-12 font-display">
             Our Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, index) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {values.map((value) => {
               const Icon = value.icon;
               return (
-                <Card
+                <div
                   key={value.title}
-                  className="bg-cyber-light/50 border-cesium/20 backdrop-blur hover:border-cesium/40 transition-all duration-300 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  className="rounded-lg border border-navy-700 bg-navy-800 p-6 text-center"
                 >
-                  <CardHeader className="text-center">
-                    <Icon className="h-12 w-12 text-cesium mx-auto mb-4" />
-                    <CardTitle className="text-white">{value.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400 text-center text-sm">{value.description}</p>
-                  </CardContent>
-                </Card>
+                  <Icon className="h-12 w-12 text-sky-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold text-lg mb-2">{value.title}</h3>
+                  <p className="text-slate-300 text-sm">{value.description}</p>
+                </div>
               );
             })}
           </div>
         </div>
+      </section>
 
-        {/* Team Section */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white text-center mb-4 font-display">
+      {/* Team Section - Light */}
+      <section className="bg-gray-50 py-24">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4 font-display">
             Leadership Team
           </h2>
-          <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-slate-600 text-center mb-12 max-w-2xl mx-auto">
             Our team brings together decades of experience from top cybersecurity firms, government agencies, and research institutions.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {team.map((member, index) => (
-              <Card
+            {team.map((member) => (
+              <div
                 key={member.name}
-                className="bg-cyber-light/50 border-cesium/20 backdrop-blur hover:border-cesium/40 transition-all duration-300 animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="rounded-lg border border-slate-200 bg-white p-6 transition-shadow hover:shadow-lg"
               >
-                <CardHeader>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-muted border-2 border-cesium/30">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        className="object-cover"
-                        sizes="96px"
-                      />
-                    </div>
-                    <div>
-                      <CardTitle className="text-white">{member.name}</CardTitle>
-                      <CardDescription className="text-cesium">{member.role}</CardDescription>
-                    </div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 border-2 border-sky-200">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      sizes="96px"
+                    />
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-300 text-sm">{member.bio}</p>
                   <div>
-                    <h4 className="text-white font-semibold mb-2 text-sm">Expertise:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {member.expertise.map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-3 py-1 bg-cesium/20 text-cesium text-xs rounded-full border border-cesium/30"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                    <h3 className="text-lg font-semibold text-slate-900">{member.name}</h3>
+                    <p className="text-sky-600 font-medium text-sm">{member.role}</p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                <p className="text-slate-600 text-sm mb-4 leading-relaxed">{member.bio}</p>
+                <div>
+                  <h4 className="text-slate-900 font-semibold mb-2 text-sm">Expertise:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {member.expertise.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-3 py-1 bg-sky-50 text-sky-700 text-xs rounded-full border border-sky-200"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Stats Section */}
-        <div className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+      {/* Stats Section - Dark */}
+      <section className="bg-navy-950 py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 max-w-5xl mx-auto">
             {[
               { number: '500+', label: 'Clients Protected' },
               { number: '15+', label: 'Years Experience' },
               { number: '10k+', label: 'Threats Mitigated' },
               { number: '99.9%', label: 'Client Satisfaction' },
-            ].map((stat, index) => (
-              <Card
+            ].map((stat) => (
+              <div
                 key={stat.label}
-                className="bg-cesium/10 border-cesium/30 backdrop-blur text-center animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="text-center"
               >
-                <CardHeader>
-                  <CardTitle className="text-cesium text-4xl font-bold">{stat.number}</CardTitle>
-                  <CardDescription className="text-gray-300">{stat.label}</CardDescription>
-                </CardHeader>
-              </Card>
+                <div className="text-4xl font-bold text-sky-400 font-display">{stat.number}</div>
+                <div className="text-gray-300 text-sm mt-1">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
-
-        {/* CTA */}
-        <Card className="bg-cesium/10 border-cesium/30 backdrop-blur max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-white text-2xl text-center">Ready to Work Together?</CardTitle>
-            <CardDescription className="text-gray-300 text-center">
-              Let&apos;s discuss how we can help secure your organization
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="accent" asChild>
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild className="border-cesium text-cesium hover:bg-cesium hover:text-cyber-dark">
-              <Link href="/services">View Services</Link>
-            </Button>
-          </CardContent>
-        </Card>
       </section>
 
+      {/* CTA - Light */}
+      <section className="bg-white py-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <h2 className="text-3xl font-bold text-slate-900 font-display">Ready to Work Together?</h2>
+            <p className="text-slate-600">
+              Let&apos;s discuss how we can help secure your organization.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button size="lg" variant="accent" asChild>
+                <Link href="/contact">Contact Us</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-slate-300 text-slate-700 hover:bg-slate-50"
+                asChild
+              >
+                <Link href="/services">View Services</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

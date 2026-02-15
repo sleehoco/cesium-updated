@@ -38,7 +38,7 @@ export const tools: Tool[] = [
             'Threat level assessment',
             'Malware family detection',
         ],
-        color: 'cesium',
+        color: 'sky-500',
     },
     {
         id: 'vuln-scanner',
