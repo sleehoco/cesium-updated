@@ -32,11 +32,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
-    default: 'CesiumCyber - Advanced Cybersecurity Solutions',
+    default: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
     template: '%s | CesiumCyber',
   },
   description:
-    'Protect your digital assets with our comprehensive security solutions including penetration testing, vulnerability assessment, and incident response services.',
+    'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
   keywords: [
     'cybersecurity',
     'penetration testing',
@@ -45,8 +45,12 @@ export const metadata: Metadata = {
     'incident response',
     'cloud security',
     'data protection',
-    'GDPR compliance',
     'HIPAA compliance',
+    'CMMC compliance',
+    'PCI-DSS',
+    'Maryland cybersecurity',
+    'cybersecurity consulting Maryland',
+    'Columbia MD cybersecurity',
   ],
   authors: [{ name: 'CesiumCyber' }],
   creator: 'CesiumCyber',
@@ -67,8 +71,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: env.NEXT_PUBLIC_APP_URL,
     siteName: 'CesiumCyber',
-    title: 'CesiumCyber - Advanced Cybersecurity Solutions',
-    description: 'Comprehensive security solutions for modern businesses',
+    title: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
+    description: 'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
     images: [
       {
         url: '/og-image.png',
@@ -80,8 +84,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CesiumCyber - Advanced Cybersecurity Solutions',
-    description: 'Comprehensive security solutions for modern businesses',
+    title: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
+    description: 'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
     images: ['/og-image.png'],
   },
 

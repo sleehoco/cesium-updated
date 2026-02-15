@@ -44,14 +44,14 @@ const industries = [
     icon: Landmark,
     painPoint: 'PCI-DSS compliance & fraud prevention',
     badge: 'PCI-DSS',
-    slug: 'financial-services',
+    slug: 'financial',
   },
   {
     title: 'Retail & Consumer',
     icon: ShoppingCart,
     painPoint: 'POS security & customer data protection',
     badge: 'PCI-DSS',
-    slug: 'retail-consumer',
+    slug: 'retail',
   },
 ];
 
