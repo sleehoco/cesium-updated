@@ -27,7 +27,7 @@ export default function HomePage() {
                 <h1 className="text-7xl lg:text-8xl font-black text-white font-[var(--font-display)] leading-none tracking-tight">
                   CESIUM
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cesium via-gold-light to-cesium animate-shimmer bg-[length:200%_100%]">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cesium to-cesium-light">
                     CYBER
                   </span>
                 </h1>
@@ -80,7 +80,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="relative w-96 h-96">
                       {/* Center core */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-cesium to-gold-dark flex items-center justify-center animate-pulse">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-cesium to-cesium-dark flex items-center justify-center animate-pulse">
                         <Brain className="w-16 h-16 text-cyber-dark" />
                       </div>
 
@@ -209,7 +209,7 @@ export default function HomePage() {
 
         {/* CTA - Bold, Diagonal */}
         <section className="relative py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-cesium via-gold-light to-cesium-dark opacity-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-cesium via-cesium-light to-cesium-dark opacity-10"></div>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cesium to-transparent"></div>
 
           <div className="container relative z-10 mx-auto px-4">
