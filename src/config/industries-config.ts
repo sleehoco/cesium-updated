@@ -1,5 +1,4 @@
 export interface IndustryConfig {
-  slug: string;
   name: string;
   headline: string;
   heroStat: string;
@@ -18,7 +17,6 @@ export interface IndustryConfig {
 }
 
 const healthcare: IndustryConfig = {
-  slug: 'healthcare',
   name: 'Healthcare',
   headline: 'Protecting Patient Data & Meeting HIPAA Requirements',
   heroStat:
@@ -74,11 +72,10 @@ const healthcare: IndustryConfig = {
 };
 
 const manufacturing: IndustryConfig = {
-  slug: 'manufacturing',
   name: 'Manufacturing',
   headline: 'CMMC Readiness & OT/IT Security for Manufacturers',
   heroStat:
-    'DoD contractors must achieve CMMC Level 2 certification by 2025 — non-compliance means losing contracts',
+    'CMMC Level 2 certification is now required for DoD contracts — non-compliant contractors risk losing existing and future awards',
   complianceBadges: ['CMMC 2.0', 'NIST 800-171'],
   threats: [
     {
@@ -130,7 +127,6 @@ const manufacturing: IndustryConfig = {
 };
 
 const legal: IndustryConfig = {
-  slug: 'legal',
   name: 'Legal',
   headline:
     'Protecting Client Confidentiality & Meeting Cyber Insurance Requirements',
@@ -187,7 +183,6 @@ const legal: IndustryConfig = {
 };
 
 const financial: IndustryConfig = {
-  slug: 'financial',
   name: 'Financial Services',
   headline: 'PCI-DSS Compliance & Financial Data Protection',
   heroStat:
@@ -243,7 +238,6 @@ const financial: IndustryConfig = {
 };
 
 const retail: IndustryConfig = {
-  slug: 'retail',
   name: 'Retail & Consumer Business',
   headline: 'POS Security & Customer Data Protection for Retailers',
   heroStat:

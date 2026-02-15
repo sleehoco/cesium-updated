@@ -116,11 +116,16 @@ export function IndustryPage({ config }: { config: IndustryConfig }) {
                       {mapping.requirement}
                     </p>
                   </div>
-                  <div className="flex gap-3">
-                    <CheckCircle className="h-5 w-5 text-sky-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      {mapping.delivery}
+                  <div>
+                    <p className="text-sm font-semibold text-sky-400 uppercase tracking-wider md:hidden mb-2">
+                      How We Deliver It
                     </p>
+                    <div className="flex gap-3">
+                      <CheckCircle className="h-5 w-5 text-sky-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        {mapping.delivery}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
