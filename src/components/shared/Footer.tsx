@@ -1,29 +1,10 @@
 import Link from 'next/link';
 import { Shield, Mail, Phone, MapPin } from 'lucide-react';
-
-const services = [
-  { name: 'Security Assessment', href: '/services#security-assessment' },
-  { name: 'Compliance & Risk Management', href: '/services#compliance-risk' },
-  { name: 'Penetration Testing', href: '/services#penetration-testing' },
-  { name: 'Cloud Security (M365)', href: '/services#cloud-security-m365' },
-  { name: 'AI Integration', href: '/services#ai-business-integration' },
-  { name: 'Managed Security', href: '/services#managed-security' },
-];
-
-const industries = [
-  { name: 'Healthcare', href: '/industries/healthcare' },
-  { name: 'Manufacturing', href: '/industries/manufacturing' },
-  { name: 'Legal', href: '/industries/legal' },
-  { name: 'Financial Services', href: '/industries/financial' },
-  { name: 'Retail & Consumer Business', href: '/industries/retail' },
-];
-
-const company = [
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'Privacy Policy', href: '/privacy' },
-  { name: 'Terms of Service', href: '/terms' },
-];
+import {
+  serviceLinks,
+  industryLinks,
+  companyLinks,
+} from '@/lib/navigation';
 
 export function Footer() {
   return (
@@ -47,7 +28,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
-              {services.map((item) => (
+              {serviceLinks.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
@@ -64,7 +45,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Industries</h3>
             <ul className="space-y-2">
-              {industries.map((item) => (
+              {industryLinks.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
@@ -81,7 +62,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
-              {company.map((item) => (
+              {companyLinks.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}

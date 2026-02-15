@@ -6,11 +6,12 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-interface NavLink {
-  name: string;
-  href: string;
-}
+import {
+  type NavLink,
+  serviceLinks,
+  industryLinks,
+  resourceLinks,
+} from '@/lib/navigation';
 
 interface NavDropdown {
   name: string;
@@ -25,40 +26,11 @@ interface NavDirect {
 type NavItem = (NavDropdown & { type: 'dropdown' }) | (NavDirect & { type: 'direct' });
 
 const navItems: NavItem[] = [
-  {
-    type: 'dropdown',
-    name: 'Services',
-    items: [
-      { name: 'Security Assessment', href: '/services#security-assessment' },
-      { name: 'Compliance & Risk Management', href: '/services#compliance-risk' },
-      { name: 'Penetration Testing', href: '/services#penetration-testing' },
-      { name: 'Cloud Security (M365)', href: '/services#cloud-security-m365' },
-      { name: 'AI Integration', href: '/services#ai-business-integration' },
-      { name: 'Managed Security', href: '/services#managed-security' },
-    ],
-  },
-  {
-    type: 'dropdown',
-    name: 'Industries',
-    items: [
-      { name: 'Healthcare', href: '/industries/healthcare' },
-      { name: 'Manufacturing', href: '/industries/manufacturing' },
-      { name: 'Legal', href: '/industries/legal' },
-      { name: 'Financial Services', href: '/industries/financial' },
-      { name: 'Retail & Consumer Business', href: '/industries/retail' },
-    ],
-  },
+  { type: 'dropdown', name: 'Services', items: serviceLinks },
+  { type: 'dropdown', name: 'Industries', items: industryLinks },
   { type: 'direct', name: 'Tools', href: '/tools' },
   { type: 'direct', name: 'About', href: '/about' },
-  {
-    type: 'dropdown',
-    name: 'Resources',
-    items: [
-      { name: 'Blog / Insights', href: '/blog' },
-      { name: 'Compliance Guides', href: '/resources/guides' },
-      { name: 'Case Studies', href: '/resources/case-studies' },
-    ],
-  },
+  { type: 'dropdown', name: 'Resources', items: resourceLinks },
 ];
 
 function isLinkActive(pathname: string, href: string): boolean {
@@ -76,7 +48,6 @@ function isDropdownActive(pathname: string, items: NavLink[]): boolean {
 function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'dropdown' }; pathname: string }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = useCallback(() => {
     if (timeoutRef.current) {
@@ -92,6 +63,7 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
     }, 150);
   }, []);
 
+  // Clean up hover timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -100,11 +72,26 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
     };
   }, []);
 
+  // Close dropdown on Escape key
+  useEffect(() => {
+    if (!open) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]);
+
   const active = isDropdownActive(pathname, item.items);
 
   return (
     <div
-      ref={dropdownRef}
       className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -135,13 +122,11 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
             ? 'opacity-100 scale-100 pointer-events-auto'
             : 'opacity-0 scale-95 pointer-events-none'
         )}
-        role="menu"
       >
         {item.items.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            role="menuitem"
             className={cn(
               'block px-4 py-2 text-sm transition-colors hover:bg-navy-700 hover:text-sky-400',
               isLinkActive(pathname, link.href) ? 'text-sky-400' : 'text-gray-300'
