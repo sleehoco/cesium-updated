@@ -7,10 +7,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-cyber-dark">
+    <main className="min-h-screen bg-navy-950">
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-8 text-cesium">
+          <h1 className="text-4xl md:text-5xl font-bold mb-8 text-sky-400">
             Privacy Policy
           </h1>
 
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">2. Information We Collect</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">2.1 Information You Provide</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">2.1 Information You Provide</h3>
               <p className="mb-4">We may collect information that you voluntarily provide to us, including:</p>
               <ul className="list-disc list-inside mb-4 space-y-2 ml-4">
                 <li>Name and contact information (email address, phone number)</li>
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
                 <li>Communications with our support team</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">2.2 Automatically Collected Information</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">2.2 Automatically Collected Information</h3>
               <p className="mb-4">When you visit our website, we may automatically collect:</p>
               <ul className="list-disc list-inside mb-4 space-y-2 ml-4">
                 <li>IP address and location data</li>
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
                 <li>Referring website addresses</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">2.3 Threat Intelligence Tool Data</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">2.3 Threat Intelligence Tool Data</h3>
               <p className="mb-4">
                 When you use our Threat Intelligence Analyzer tool, we may process:
               </p>
@@ -79,7 +79,7 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-bold text-white mb-4">4. Information Sharing and Disclosure</h2>
               <p className="mb-4">We do not sell your personal information. We may share your information with:</p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.1 Service Providers</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.1 Service Providers</h3>
               <p className="mb-4">
                 Third-party vendors who perform services on our behalf, including:
               </p>
@@ -90,13 +90,13 @@ export default function PrivacyPage() {
                 <li>Security analysis services (VirusTotal)</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.2 Legal Requirements</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.2 Legal Requirements</h3>
               <p className="mb-4">
                 We may disclose your information if required to do so by law or in response to valid
                 requests by public authorities (e.g., a court or government agency).
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.3 Business Transfers</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.3 Business Transfers</h3>
               <p className="mb-4">
                 In the event of a merger, acquisition, or sale of assets, your information may be
                 transferred to the acquiring entity.
@@ -144,7 +144,7 @@ export default function PrivacyPage() {
               </ul>
               <p className="mb-4">
                 To exercise these rights, please contact us at{' '}
-                <a href="mailto:privacy@cesiumcyber.com" className="text-cesium hover:underline">
+                <a href="mailto:privacy@cesiumcyber.com" className="text-sky-400 hover:underline">
                   privacy@cesiumcyber.com
                 </a>
               </p>
@@ -214,16 +214,16 @@ export default function PrivacyPage() {
               <p className="mb-4">
                 If you have questions or concerns about this Privacy Policy, please contact us:
               </p>
-              <div className="bg-cyber-light p-6 border-l-4 border-cesium">
+              <div className="bg-navy-800 p-6 border-l-4 border-sky-500">
                 <p className="mb-2">
                   <strong className="text-white">Email:</strong>{' '}
-                  <a href="mailto:privacy@cesiumcyber.com" className="text-cesium hover:underline">
+                  <a href="mailto:privacy@cesiumcyber.com" className="text-sky-400 hover:underline">
                     privacy@cesiumcyber.com
                   </a>
                 </p>
                 <p className="mb-2">
                   <strong className="text-white">Email:</strong>{' '}
-                  <a href="mailto:information@cesiumcyber.com" className="text-cesium hover:underline">
+                  <a href="mailto:information@cesiumcyber.com" className="text-sky-400 hover:underline">
                     information@cesiumcyber.com
                   </a>
                 </p>

@@ -7,10 +7,10 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-cyber-dark">
+    <main className="min-h-screen bg-navy-950">
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-8 text-cesium">
+          <h1 className="text-4xl md:text-5xl font-bold mb-8 text-sky-400">
             Terms of Service
           </h1>
 
@@ -54,7 +54,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">3. User Obligations</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">3.1 Acceptable Use</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">3.1 Acceptable Use</h3>
               <p className="mb-4">You agree to use our Services only for lawful purposes and in accordance with these Terms. You agree NOT to:</p>
               <ul className="list-disc list-inside mb-4 space-y-2 ml-4">
                 <li>Use the Services for any illegal or unauthorized purpose</li>
@@ -67,14 +67,14 @@ export default function TermsPage() {
                 <li>Collect or harvest information about other users</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">3.2 Account Security</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">3.2 Account Security</h3>
               <p className="mb-4">
                 If you create an account with us, you are responsible for maintaining the confidentiality
                 of your account credentials and for all activities under your account. You agree to notify
                 us immediately of any unauthorized use of your account.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">3.3 Accurate Information</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">3.3 Accurate Information</h3>
               <p className="mb-4">
                 You agree to provide accurate, current, and complete information when using our Services
                 and to update such information as necessary.
@@ -84,14 +84,14 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">4. Intellectual Property Rights</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.1 Our Content</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.1 Our Content</h3>
               <p className="mb-4">
                 All content on our website, including text, graphics, logos, icons, images, audio clips,
                 digital downloads, and software, is the property of CesiumCyber or its licensors and is
                 protected by copyright, trademark, and other intellectual property laws.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.2 Limited License</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.2 Limited License</h3>
               <p className="mb-4">
                 We grant you a limited, non-exclusive, non-transferable license to access and use our
                 Services for your personal or internal business purposes. This license does not include
@@ -104,7 +104,7 @@ export default function TermsPage() {
                 <li>Transfer or sublicense your rights to others</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">4.3 User Content</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">4.3 User Content</h3>
               <p className="mb-4">
                 You retain ownership of any content you submit to our Services. By submitting content,
                 you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify,
@@ -117,7 +117,7 @@ export default function TermsPage() {
               <p className="mb-4">
                 Your use of our Services is also governed by our Privacy Policy, which is incorporated
                 into these Terms by reference. Please review our{' '}
-                <a href="/privacy" className="text-cesium hover:underline">Privacy Policy</a> to
+                <a href="/privacy" className="text-sky-400 hover:underline">Privacy Policy</a> to
                 understand our data practices.
               </p>
             </section>
@@ -134,21 +134,21 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">7. Disclaimers and Limitations</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">7.1 No Warranty</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">7.1 No Warranty</h3>
               <p className="mb-4">
                 THE SERVICES ARE PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES
                 OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF
                 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">7.2 No Guarantee of Security</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">7.2 No Guarantee of Security</h3>
               <p className="mb-4">
                 While we strive to provide accurate security analysis and recommendations, we do not
                 guarantee that our Services will detect all threats or vulnerabilities. Cybersecurity is
                 an evolving field, and no solution can provide 100% protection.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">7.3 Limitation of Liability</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">7.3 Limitation of Liability</h3>
               <p className="mb-4">
                 TO THE MAXIMUM EXTENT PERMITTED BY LAW, CESIUMCYBER SHALL NOT BE LIABLE FOR ANY INDIRECT,
                 INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES,
@@ -182,14 +182,14 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">9. Professional Services</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">9.1 Consulting Engagements</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">9.1 Consulting Engagements</h3>
               <p className="mb-4">
                 Professional consulting services are subject to separate written agreements that specify
                 the scope of work, deliverables, timeline, and pricing. These Terms apply to such engagements
                 unless explicitly superseded by the written agreement.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">9.2 Penetration Testing</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">9.2 Penetration Testing</h3>
               <p className="mb-4">
                 Penetration testing services require prior written authorization and a defined scope.
                 Unauthorized testing of systems or networks is strictly prohibited and may be illegal.
@@ -222,20 +222,20 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">12. Dispute Resolution</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">12.1 Governing Law</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">12.1 Governing Law</h3>
               <p className="mb-4">
                 These Terms shall be governed by and construed in accordance with the laws of the state
                 in which CesiumCyber is registered, without regard to its conflict of law provisions.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">12.2 Arbitration</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">12.2 Arbitration</h3>
               <p className="mb-4">
                 Any dispute arising out of or relating to these Terms or the Services shall be resolved
                 through binding arbitration in accordance with the rules of the American Arbitration
                 Association. The arbitration shall take place in the state where CesiumCyber is registered.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">12.3 Class Action Waiver</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">12.3 Class Action Waiver</h3>
               <p className="mb-4">
                 You agree that any dispute resolution proceedings will be conducted only on an individual
                 basis and not in a class, consolidated, or representative action.
@@ -245,26 +245,26 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">13. General Provisions</h2>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">13.1 Entire Agreement</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">13.1 Entire Agreement</h3>
               <p className="mb-4">
                 These Terms, together with our Privacy Policy and any separate written agreements,
                 constitute the entire agreement between you and CesiumCyber regarding the Services.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">13.2 Severability</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">13.2 Severability</h3>
               <p className="mb-4">
                 If any provision of these Terms is found to be unenforceable or invalid, that provision
                 shall be limited or eliminated to the minimum extent necessary, and the remaining provisions
                 shall remain in full force and effect.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">13.3 Waiver</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">13.3 Waiver</h3>
               <p className="mb-4">
                 Our failure to enforce any right or provision of these Terms shall not constitute a waiver
                 of such right or provision.
               </p>
 
-              <h3 className="text-xl font-semibold text-cesium mb-3">13.4 Assignment</h3>
+              <h3 className="text-xl font-semibold text-sky-400 mb-3">13.4 Assignment</h3>
               <p className="mb-4">
                 You may not assign or transfer these Terms or your rights hereunder without our prior
                 written consent. We may assign these Terms without restriction.
@@ -276,16 +276,16 @@ export default function TermsPage() {
               <p className="mb-4">
                 If you have any questions about these Terms, please contact us:
               </p>
-              <div className="bg-cyber-light p-6 border-l-4 border-cesium">
+              <div className="bg-navy-800 p-6 border-l-4 border-sky-500">
                 <p className="mb-2">
                   <strong className="text-white">Email:</strong>{' '}
-                  <a href="mailto:legal@cesiumcyber.com" className="text-cesium hover:underline">
+                  <a href="mailto:legal@cesiumcyber.com" className="text-sky-400 hover:underline">
                     legal@cesiumcyber.com
                   </a>
                 </p>
                 <p className="mb-2">
                   <strong className="text-white">Email:</strong>{' '}
-                  <a href="mailto:information@cesiumcyber.com" className="text-cesium hover:underline">
+                  <a href="mailto:information@cesiumcyber.com" className="text-sky-400 hover:underline">
                     information@cesiumcyber.com
                   </a>
                 </p>
