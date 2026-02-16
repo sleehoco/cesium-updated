@@ -1,4 +1,4 @@
-import { Shield, KeyRound, Mail, Globe, ClipboardCheck } from 'lucide-react';
+import { Shield, KeyRound, Mail, Globe, ClipboardCheck, FileSearch } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Tool {
@@ -90,6 +90,23 @@ export const tools: Tool[] = [
         ],
         status: 'new',
         color: 'purple-500',
+    },
+    {
+        id: 'email-header-analyzer',
+        name: 'Email Header Analyzer',
+        tagline: 'Phishing & Spoofing Detection',
+        description: 'Paste raw email headers to detect authentication failures, sender spoofing, routing anomalies, and red flags. 100% client-side analysis — nothing leaves your browser.',
+        icon: FileSearch,
+        category: 'Email Security',
+        path: '/tools/email-header-analyzer',
+        features: [
+            'SPF/DKIM/DMARC verification',
+            'Sender identity mismatch detection',
+            'Lookalike domain detection',
+            'Routing path analysis',
+        ],
+        status: 'new',
+        color: 'indigo-500',
     },
     {
         id: 'compliance-quiz',
