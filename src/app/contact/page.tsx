@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertTriangle, ShieldCheck, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function ContactPage() {
+  const searchParams = useSearchParams();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,6 +24,19 @@ export default function ContactPage() {
   const [error, setError] = useState<string | null>(null);
   const [validFields, setValidFields] = useState<Record<string, boolean>>({});
   const [charCount, setCharCount] = useState(0);
+
+  // Pre-fill from query params (e.g. /contact?industry=healthcare&service=penetration-testing)
+  useEffect(() => {
+    const industry = searchParams.get('industry');
+    const service = searchParams.get('service');
+    if (industry || service) {
+      setFormData((prev) => ({
+        ...prev,
+        ...(industry && { industry }),
+        ...(service && { service }),
+      }));
+    }
+  }, [searchParams]);
 
   // Auto-focus first field on mount
   useEffect(() => {

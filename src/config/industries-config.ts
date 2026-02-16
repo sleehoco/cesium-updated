@@ -68,7 +68,7 @@ const healthcare: IndustryConfig = {
   ],
   ctaHeadline: 'Get Your Free HIPAA Risk Assessment',
   ctaButtonText: 'Schedule Assessment',
-  ctaHref: '/contact',
+  ctaHref: '/contact?industry=healthcare',
 };
 
 const manufacturing: IndustryConfig = {
@@ -123,7 +123,7 @@ const manufacturing: IndustryConfig = {
   ],
   ctaHeadline: 'Check Your CMMC Readiness',
   ctaButtonText: 'Start CMMC Assessment',
-  ctaHref: '/contact',
+  ctaHref: '/contact?industry=manufacturing',
 };
 
 const legal: IndustryConfig = {
@@ -179,7 +179,7 @@ const legal: IndustryConfig = {
   ],
   ctaHeadline: 'Get Cyber Insurance Ready',
   ctaButtonText: 'Schedule Review',
-  ctaHref: '/contact',
+  ctaHref: '/contact?industry=legal',
 };
 
 const financial: IndustryConfig = {
@@ -234,7 +234,7 @@ const financial: IndustryConfig = {
   ],
   ctaHeadline: 'Schedule a Compliance Review',
   ctaButtonText: 'Book Consultation',
-  ctaHref: '/contact',
+  ctaHref: '/contact?industry=financial-services',
 };
 
 const retail: IndustryConfig = {
@@ -289,7 +289,7 @@ const retail: IndustryConfig = {
   ],
   ctaHeadline: 'Protect Your Customer Data',
   ctaButtonText: 'Get Started',
-  ctaHref: '/contact',
+  ctaHref: '/contact?industry=retail-consumer',
 };
 
 export const industries = {

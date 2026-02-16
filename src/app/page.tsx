@@ -270,10 +270,21 @@ export default function HomePage() {
               don&apos;t know about. Find out where you stand with a free risk
               assessment.
             </p>
-            <div className="pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button size="lg" variant="accent" asChild>
                 <Link href="/contact">
                   Get Your Free Risk Score
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-navy-700 text-gray-300 hover:bg-navy-800 hover:text-white"
+                asChild
+              >
+                <Link href="/tools">
+                  Try Free Security Tools
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

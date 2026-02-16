@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { getSecurityPrompt } from '@/lib/ai/prompts';
 import { analyzeIOC, summarizeVTResults, hasVirusTotalKey } from '@/lib/threat-intel/virustotal';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 const requestSchema = z.object({
   ioc: z.string().min(1).max(1000).describe('Indicator of Compromise to analyze'),
@@ -16,6 +17,46 @@ const requestSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 10 requests per minute per IP
+    const ip = getClientIp(req);
+    const { allowed } = rateLimit(`threat:${ip}`, 10, 60 * 1000);
+    if (!allowed) {
+      return NextResponse.json(
+        { success: false, error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    // Origin check: only allow requests from our own domain
+    const origin = req.headers.get('origin');
+    const referer = req.headers.get('referer');
+    const appUrl = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000';
+    const allowedOrigin = new URL(appUrl).origin;
+
+    if (origin && origin !== allowedOrigin) {
+      return NextResponse.json(
+        { success: false, error: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+    if (!origin && referer) {
+      try {
+        const refererOrigin = new URL(referer).origin;
+        if (refererOrigin !== allowedOrigin) {
+          return NextResponse.json(
+            { success: false, error: 'Forbidden' },
+            { status: 403 }
+          );
+        }
+      } catch {
+        // Invalid referer URL, reject
+        return NextResponse.json(
+          { success: false, error: 'Forbidden' },
+          { status: 403 }
+        );
+      }
+    }
+
     const body = await req.json();
     const { ioc, provider } = requestSchema.parse(body);
 

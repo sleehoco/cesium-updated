@@ -41,8 +41,8 @@ const nextConfig: NextConfig = {
             value: 'SAMEORIGIN',
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.virustotal.com https://vitals.vercel-insights.com; frame-ancestors 'none';",
           },
           {
             key: 'Referrer-Policy',

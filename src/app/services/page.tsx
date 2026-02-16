@@ -184,8 +184,8 @@ export default function ServicesPage() {
                     className="w-full"
                     asChild
                   >
-                    <Link href="/contact">
-                      Learn More
+                    <Link href={`/contact?service=${service.id}`}>
+                      Get Started
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -221,7 +221,7 @@ export default function ServicesPage() {
                 className="border-navy-700 text-gray-300 hover:bg-navy-800 hover:text-white"
                 asChild
               >
-                <Link href="/about">Meet Our Team</Link>
+                <Link href="/tools">Try Free Security Tools</Link>
               </Button>
             </div>
           </div>

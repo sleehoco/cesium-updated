@@ -9,8 +9,8 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
   // Supabase Configuration
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().describe('Supabase project URL'),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).describe('Supabase anonymous key'),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional().describe('Supabase project URL'),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional().describe('Supabase anonymous key'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional().describe('Supabase service role key (server-side only)'),
 
   // Vercel Postgres (optional - only needed when using Vercel Postgres)
