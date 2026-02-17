@@ -1,4 +1,4 @@
-import { Shield, KeyRound, Mail, Globe, ClipboardCheck, FileSearch } from 'lucide-react';
+import { Shield, KeyRound, Mail, Globe, ClipboardCheck, FileSearch, ScanSearch } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Tool {
@@ -16,6 +16,7 @@ export interface Tool {
 
 export const toolCategories = [
     'All Tools',
+    'AI Security',
     'Threat Intelligence',
     'Authentication',
     'Email Security',
@@ -24,6 +25,23 @@ export const toolCategories = [
 ] as const;
 
 export const tools: Tool[] = [
+    {
+        id: 'prompt-injection-scanner',
+        name: 'Prompt Injection Scanner',
+        tagline: 'LLM Security Testing',
+        description: 'Test your AI system prompts for injection vulnerabilities or analyze suspicious inputs for attack patterns. Instant client-side pattern matching plus AI-powered deep analysis.',
+        icon: ScanSearch,
+        category: 'AI Security',
+        path: '/tools/prompt-injection-scanner',
+        features: [
+            'System prompt vulnerability testing',
+            'Malicious input detection',
+            'AI-powered deep analysis',
+            'Fix suggestions for every finding',
+        ],
+        status: 'new',
+        color: 'violet-500',
+    },
     {
         id: 'threat-intel',
         name: 'Threat Intelligence Analyzer',

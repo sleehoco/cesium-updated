@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Shield } from 'lucide-react';
 import {
+  productLinks,
   serviceLinks,
   toolLinks,
   industryLinks,
@@ -49,7 +50,7 @@ export function Footer() {
     <footer className="bg-charcoal-950 border-t border-white/5">
       <div className="container mx-auto px-4 pt-16 pb-8">
         {/* Main grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-6">
           {/* Logo + tagline */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1 mb-4 lg:mb-0">
             <Link href="/" className="flex items-center gap-2 mb-4">
@@ -80,6 +81,9 @@ export function Footer() {
               </SocialIcon>
             </div>
           </div>
+
+          {/* Products */}
+          <FooterColumn title="Products" links={productLinks} />
 
           {/* Services */}
           <FooterColumn title="Services" links={serviceLinks} />

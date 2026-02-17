@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
   type NavLink,
+  productLinks,
   serviceLinks,
   industryLinks,
 } from '@/lib/navigation';
@@ -30,6 +31,8 @@ const navItems: NavItem[] = [
     type: 'dropdown',
     name: 'For Business',
     items: [
+      { name: 'Products', href: '#' },
+      ...productLinks,
       { name: 'Services', href: '/services' },
       ...serviceLinks.slice(0, 3),
       { name: 'Industries', href: '#' },

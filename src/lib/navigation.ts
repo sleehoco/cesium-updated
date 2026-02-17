@@ -12,6 +12,10 @@ export const serviceLinks: NavLink[] = [
   { name: 'Managed Security', href: '/services#managed-security' },
 ];
 
+export const productLinks: NavLink[] = [
+  { name: 'GenAI Security', href: '/products/genai-security' },
+];
+
 export const industryLinks: NavLink[] = [
   { name: 'Healthcare', href: '/industries/healthcare' },
   { name: 'Manufacturing', href: '/industries/manufacturing' },
@@ -27,6 +31,7 @@ export const resourceLinks: NavLink[] = [
 ];
 
 export const toolLinks: NavLink[] = [
+  { name: 'Prompt Injection Scanner', href: '/tools/prompt-injection-scanner' },
   { name: 'Threat Intelligence', href: '/tools/threat-intel' },
   { name: 'Password Tester', href: '/tools/password-tester' },
   { name: 'Email Security', href: '/tools/email-security' },
