@@ -139,15 +139,15 @@ export default function EmailSecurityPage() {
   ];
 
   return (
-    <main className="bg-navy-950">
+    <main className="bg-black">
       {/* Header */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-20">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-4">
-              <Mail className="h-10 w-10 text-sky-400" />
+              <Mail className="h-10 w-10 text-violet-400" />
               <h1 className="text-4xl lg:text-5xl font-bold text-white font-display">
-                Email Security <span className="text-sky-400">Checker</span>
+                Email Security <span className="text-violet-400">Checker</span>
               </h1>
             </div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -162,7 +162,7 @@ export default function EmailSecurityPage() {
       <section className="py-12 pb-24">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Domain Input Card */}
-          <Card className="bg-navy-800 border-navy-700 mb-8">
+          <Card className="bg-[#121212] border-white/10 mb-8">
             <CardHeader>
               <CardTitle className="text-white text-2xl font-bold font-display">Enter Domain</CardTitle>
               <CardDescription className="text-gray-400">
@@ -177,7 +177,7 @@ export default function EmailSecurityPage() {
                 onChange={(e) => setDomain(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={loading}
-                className="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent disabled:opacity-50"
+                className="w-full px-4 py-3 bg-[#0A0A0A] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:opacity-50"
               />
 
               {/* Quick Examples */}
@@ -190,7 +190,7 @@ export default function EmailSecurityPage() {
                     size="sm"
                     onClick={() => setDomain(example.value)}
                     disabled={loading}
-                    className="border-navy-700 text-sky-400 hover:bg-navy-700 rounded-lg text-xs"
+                    className="border-white/10 text-violet-400 hover:bg-white/5 rounded-lg text-xs"
                   >
                     {example.label}
                   </Button>
@@ -231,7 +231,7 @@ export default function EmailSecurityPage() {
           {result && (
             <>
               {/* Grade Overview */}
-              <Card className="bg-navy-800 border-navy-700 mb-8">
+              <Card className="bg-[#121212] border-white/10 mb-8">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-center gap-8">
                     {/* Grade Badge */}
@@ -246,12 +246,12 @@ export default function EmailSecurityPage() {
                         Email Security Score: {result.overallScore}/100
                       </h2>
                       <p className="text-gray-400 mb-4">
-                        Results for <span className="text-sky-400 font-semibold">{result.domain}</span>
+                        Results for <span className="text-violet-400 font-semibold">{result.domain}</span>
                       </p>
 
                       {/* Score Breakdown Bar */}
                       <div className="flex gap-1 items-center">
-                        <div className="flex-1 bg-navy-900 rounded-full h-4 overflow-hidden">
+                        <div className="flex-1 bg-[#0A0A0A] rounded-full h-4 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
                               result.overallScore >= 90
@@ -272,13 +272,13 @@ export default function EmailSecurityPage() {
 
                       {/* Component Scores */}
                       <div className="flex flex-wrap gap-4 mt-4">
-                        <Badge className="bg-navy-900 border-navy-700 text-gray-300 px-3 py-1">
+                        <Badge className="bg-[#0A0A0A] border-white/10 text-gray-300 px-3 py-1">
                           SPF: {result.spf.score}/30
                         </Badge>
-                        <Badge className="bg-navy-900 border-navy-700 text-gray-300 px-3 py-1">
+                        <Badge className="bg-[#0A0A0A] border-white/10 text-gray-300 px-3 py-1">
                           DMARC: {result.dmarc.score}/40
                         </Badge>
-                        <Badge className="bg-navy-900 border-navy-700 text-gray-300 px-3 py-1">
+                        <Badge className="bg-[#0A0A0A] border-white/10 text-gray-300 px-3 py-1">
                           DKIM: {result.dkim.score}/30
                         </Badge>
                       </div>
@@ -288,7 +288,7 @@ export default function EmailSecurityPage() {
               </Card>
 
               {/* SPF Section */}
-              <Card className="bg-navy-800 border-navy-700 mb-6">
+              <Card className="bg-[#121212] border-white/10 mb-6">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -318,9 +318,9 @@ export default function EmailSecurityPage() {
                 <CardContent className="space-y-4">
                   {/* Record Value */}
                   {result.spf.record && (
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Record Value</p>
-                      <code className="text-sm text-sky-400 break-all">{result.spf.record}</code>
+                      <code className="text-sm text-violet-400 break-all">{result.spf.record}</code>
                     </div>
                   )}
 
@@ -342,7 +342,7 @@ export default function EmailSecurityPage() {
               </Card>
 
               {/* DMARC Section */}
-              <Card className="bg-navy-800 border-navy-700 mb-6">
+              <Card className="bg-[#121212] border-white/10 mb-6">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -372,9 +372,9 @@ export default function EmailSecurityPage() {
                 <CardContent className="space-y-4">
                   {/* Record Value */}
                   {result.dmarc.record && (
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Record Value</p>
-                      <code className="text-sm text-sky-400 break-all">{result.dmarc.record}</code>
+                      <code className="text-sm text-violet-400 break-all">{result.dmarc.record}</code>
                     </div>
                   )}
 
@@ -414,7 +414,7 @@ export default function EmailSecurityPage() {
               </Card>
 
               {/* DKIM Section */}
-              <Card className="bg-navy-800 border-navy-700 mb-6">
+              <Card className="bg-[#121212] border-white/10 mb-6">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -442,7 +442,7 @@ export default function EmailSecurityPage() {
                 <CardContent className="space-y-4">
                   {/* Found Selectors */}
                   {result.dkim.selectors.length > 0 && (
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">
                         Active Selectors
                       </p>
@@ -465,12 +465,12 @@ export default function EmailSecurityPage() {
               </Card>
 
               {/* Lead CTA */}
-              <Card className="bg-navy-800 border-navy-700 mt-8">
+              <Card className="bg-[#121212] border-white/10 mt-8">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-center gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 rounded-2xl bg-sky-500/20 flex items-center justify-center">
-                        <Shield className="h-8 w-8 text-sky-400" />
+                      <div className="w-16 h-16 rounded-2xl bg-violet-500/20 flex items-center justify-center">
+                        <Shield className="h-8 w-8 text-violet-400" />
                       </div>
                     </div>
                     <div className="flex-1 text-center md:text-left">

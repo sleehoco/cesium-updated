@@ -86,14 +86,14 @@ function CollapsibleExplanation({ explanation }: { explanation: string }) {
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 text-xs text-sky-400 hover:text-sky-300 transition-colors"
+        className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors"
       >
         <Info className="h-3 w-3" />
         What does this mean?
         {open ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
       </button>
       {open && (
-        <p className="mt-2 text-sm text-gray-400 bg-navy-900 border border-navy-700 rounded-lg p-3">
+        <p className="mt-2 text-sm text-gray-400 bg-[#0A0A0A] border border-white/10 rounded-lg p-3">
           {explanation}
         </p>
       )}
@@ -124,15 +124,15 @@ export default function EmailHeaderAnalyzerPage() {
   };
 
   return (
-    <main className="bg-navy-950">
+    <main className="bg-black">
       {/* Header */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-20">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-4">
-              <FileSearch className="h-10 w-10 text-sky-400" />
+              <FileSearch className="h-10 w-10 text-violet-400" />
               <h1 className="text-4xl lg:text-5xl font-bold text-white font-display">
-                Email Header <span className="text-sky-400">Analyzer</span>
+                Email Header <span className="text-violet-400">Analyzer</span>
               </h1>
             </div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -147,7 +147,7 @@ export default function EmailHeaderAnalyzerPage() {
       <section className="py-12 pb-24">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Input Card */}
-          <Card className="bg-navy-800 border-navy-700 mb-8">
+          <Card className="bg-[#121212] border-white/10 mb-8">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -162,7 +162,7 @@ export default function EmailHeaderAnalyzerPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => setShowHelp(!showHelp)}
-                  className="border-navy-700 text-sky-400 hover:bg-navy-700 rounded-lg text-xs"
+                  className="border-white/10 text-violet-400 hover:bg-white/5 rounded-lg text-xs"
                 >
                   {showHelp ? 'Hide' : 'How to get headers'}
                 </Button>
@@ -171,10 +171,10 @@ export default function EmailHeaderAnalyzerPage() {
             <CardContent className="space-y-4">
               {/* Help Instructions */}
               {showHelp && (
-                <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 space-y-3">
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 space-y-3">
                   {HELP_INSTRUCTIONS.map((item) => (
                     <div key={item.client}>
-                      <span className="text-sm font-semibold text-sky-400">{item.client}:</span>{' '}
+                      <span className="text-sm font-semibold text-violet-400">{item.client}:</span>{' '}
                       <span className="text-sm text-gray-300">{item.steps}</span>
                     </div>
                   ))}
@@ -186,7 +186,7 @@ export default function EmailHeaderAnalyzerPage() {
                 value={rawHeaders}
                 onChange={(e) => setRawHeaders(e.target.value)}
                 rows={12}
-                className="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent font-mono text-sm resize-y"
+                className="w-full px-4 py-3 bg-[#0A0A0A] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent font-mono text-sm resize-y"
               />
 
               <div className="flex flex-wrap gap-2">
@@ -194,7 +194,7 @@ export default function EmailHeaderAnalyzerPage() {
                   variant="outline"
                   size="sm"
                   onClick={handleLoadSample}
-                  className="border-navy-700 text-sky-400 hover:bg-navy-700 rounded-lg text-xs"
+                  className="border-white/10 text-violet-400 hover:bg-white/5 rounded-lg text-xs"
                 >
                   Load sample (suspicious email)
                 </Button>
@@ -225,7 +225,7 @@ export default function EmailHeaderAnalyzerPage() {
           {result && (
             <>
               {/* Risk Overview */}
-              <Card className="bg-navy-800 border-navy-700 mb-8">
+              <Card className="bg-[#121212] border-white/10 mb-8">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-center gap-8">
                     <div
@@ -244,7 +244,7 @@ export default function EmailHeaderAnalyzerPage() {
                       </h2>
                       <p className="text-gray-300 leading-relaxed">{result.summary}</p>
                       <div className="flex flex-wrap gap-3 mt-4">
-                        <Badge className="bg-navy-900 border-navy-700 text-gray-300 px-3 py-1">
+                        <Badge className="bg-[#0A0A0A] border-white/10 text-gray-300 px-3 py-1">
                           {result.headers.length} headers parsed
                         </Badge>
                         <Badge className={`px-3 py-1 ${result.auth.verdictColor.replace('text-', 'bg-').replace('400', '500/20')} ${result.auth.verdictColor} border-transparent`}>
@@ -267,10 +267,10 @@ export default function EmailHeaderAnalyzerPage() {
               </Card>
 
               {/* Authentication */}
-              <Card className="bg-navy-800 border-navy-700 mb-6">
+              <Card className="bg-[#121212] border-white/10 mb-6">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <Shield className="h-6 w-6 text-sky-400" />
+                    <Shield className="h-6 w-6 text-violet-400" />
                     <CardTitle className="text-white text-xl font-bold font-display">
                       Authentication Results
                     </CardTitle>
@@ -285,7 +285,7 @@ export default function EmailHeaderAnalyzerPage() {
                     const passed = check.result === 'pass';
                     const failed = check.result === 'fail';
                     return (
-                      <div key={check.method} className="bg-navy-900 border border-navy-700 rounded-lg p-4">
+                      <div key={check.method} className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {passed ? (
@@ -323,10 +323,10 @@ export default function EmailHeaderAnalyzerPage() {
               </Card>
 
               {/* Sender Identity */}
-              <Card className="bg-navy-800 border-navy-700 mb-6">
+              <Card className="bg-[#121212] border-white/10 mb-6">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <Send className="h-6 w-6 text-sky-400" />
+                    <Send className="h-6 w-6 text-violet-400" />
                     <CardTitle className="text-white text-xl font-bold font-display">
                       Sender Identity
                     </CardTitle>
@@ -336,24 +336,24 @@ export default function EmailHeaderAnalyzerPage() {
                   {/* Sender details */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {result.sender.from && (
-                      <div className="bg-navy-900 border border-navy-700 rounded-lg p-3">
+                      <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-3">
                         <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">From</p>
                         {result.sender.from.name && (
                           <p className="text-sm text-white font-semibold">{result.sender.from.name}</p>
                         )}
-                        <p className="text-sm text-sky-400 break-all">{result.sender.from.email}</p>
+                        <p className="text-sm text-violet-400 break-all">{result.sender.from.email}</p>
                       </div>
                     )}
                     {result.sender.replyTo && (
-                      <div className="bg-navy-900 border border-navy-700 rounded-lg p-3">
+                      <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-3">
                         <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Reply-To</p>
-                        <p className="text-sm text-sky-400 break-all">{result.sender.replyTo.email}</p>
+                        <p className="text-sm text-violet-400 break-all">{result.sender.replyTo.email}</p>
                       </div>
                     )}
                     {result.sender.returnPath && (
-                      <div className="bg-navy-900 border border-navy-700 rounded-lg p-3">
+                      <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-3">
                         <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Return-Path</p>
-                        <p className="text-sm text-sky-400 break-all">{result.sender.returnPath.email}</p>
+                        <p className="text-sm text-violet-400 break-all">{result.sender.returnPath.email}</p>
                       </div>
                     )}
                   </div>
@@ -386,14 +386,14 @@ export default function EmailHeaderAnalyzerPage() {
 
               {/* Routing Path */}
               {result.routing.hops.length > 0 && (
-                <Card className="bg-navy-800 border-navy-700 mb-6">
+                <Card className="bg-[#121212] border-white/10 mb-6">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <Clock className="h-6 w-6 text-sky-400" />
+                      <Clock className="h-6 w-6 text-violet-400" />
                       <CardTitle className="text-white text-xl font-bold font-display">
                         Routing Path
                       </CardTitle>
-                      <Badge className="bg-navy-900 border-navy-700 text-gray-300">
+                      <Badge className="bg-[#0A0A0A] border-white/10 text-gray-300">
                         {result.routing.totalHops} hop{result.routing.totalHops > 1 ? 's' : ''}
                       </Badge>
                     </div>
@@ -404,16 +404,16 @@ export default function EmailHeaderAnalyzerPage() {
                         <div key={hop.index} className="flex gap-4">
                           {/* Timeline line */}
                           <div className="flex flex-col items-center">
-                            <div className="w-8 h-8 rounded-full bg-navy-900 border-2 border-sky-500 flex items-center justify-center text-xs text-sky-400 font-bold flex-shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-[#0A0A0A] border-2 border-violet-500 flex items-center justify-center text-xs text-violet-400 font-bold flex-shrink-0">
                               {hop.index}
                             </div>
                             {hop.index < result.routing.hops.length && (
-                              <div className="w-0.5 h-full bg-navy-700 min-h-[2rem]" />
+                              <div className="w-0.5 h-full bg-white/10 min-h-[2rem]" />
                             )}
                           </div>
                           {/* Hop content */}
                           <div className="pb-4 flex-1 min-w-0">
-                            <div className="bg-navy-900 border border-navy-700 rounded-lg p-3">
+                            <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-3">
                               {hop.from && (
                                 <p className="text-sm text-gray-300">
                                   <span className="text-gray-500">from</span>{' '}
@@ -429,7 +429,7 @@ export default function EmailHeaderAnalyzerPage() {
                               {hop.ip && (
                                 <p className="text-sm text-gray-300">
                                   <span className="text-gray-500">IP:</span>{' '}
-                                  <span className="text-sky-400 font-mono">{hop.ip}</span>
+                                  <span className="text-violet-400 font-mono">{hop.ip}</span>
                                 </p>
                               )}
                               {hop.timestamp && (
@@ -471,10 +471,10 @@ export default function EmailHeaderAnalyzerPage() {
 
               {/* Red Flags */}
               {result.redFlags.length > 0 && (
-                <Card className="bg-navy-800 border-navy-700 mb-6">
+                <Card className="bg-[#121212] border-white/10 mb-6">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <Flag className="h-6 w-6 text-sky-400" />
+                      <Flag className="h-6 w-6 text-violet-400" />
                       <CardTitle className="text-white text-xl font-bold font-display">
                         Red Flags
                       </CardTitle>
@@ -485,7 +485,7 @@ export default function EmailHeaderAnalyzerPage() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {result.redFlags.map((flag, i) => (
-                      <div key={i} className="bg-navy-900 border border-navy-700 rounded-lg p-4">
+                      <div key={i} className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <SeverityBadge severity={flag.severity} />
@@ -494,8 +494,8 @@ export default function EmailHeaderAnalyzerPage() {
                           <code className="text-xs text-gray-500">{flag.header}</code>
                         </div>
                         {flag.value && (
-                          <div className="bg-navy-950 rounded p-2 mb-2">
-                            <code className="text-xs text-sky-400 break-all">{flag.value}</code>
+                          <div className="bg-black rounded p-2 mb-2">
+                            <code className="text-xs text-violet-400 break-all">{flag.value}</code>
                           </div>
                         )}
                         <CollapsibleExplanation explanation={flag.explanation} />
@@ -506,12 +506,12 @@ export default function EmailHeaderAnalyzerPage() {
               )}
 
               {/* Lead CTA */}
-              <Card className="bg-navy-800 border-navy-700 mt-8">
+              <Card className="bg-[#121212] border-white/10 mt-8">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-center gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 rounded-2xl bg-sky-500/20 flex items-center justify-center">
-                        <Shield className="h-8 w-8 text-sky-400" />
+                      <div className="w-16 h-16 rounded-2xl bg-violet-500/20 flex items-center justify-center">
+                        <Shield className="h-8 w-8 text-violet-400" />
                       </div>
                     </div>
                     <div className="flex-1 text-center md:text-left">

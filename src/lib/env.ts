@@ -9,9 +9,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
   // Supabase Configuration
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional().describe('Supabase project URL'),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional().describe('Supabase anonymous key'),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional().describe('Supabase service role key (server-side only)'),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional().or(z.literal('')).describe('Supabase project URL'),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional().or(z.literal('')).describe('Supabase anonymous key'),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional().or(z.literal('')).describe('Supabase service role key (server-side only)'),
 
   // Vercel Postgres (optional - only needed when using Vercel Postgres)
   POSTGRES_URL: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres connection URL'),
@@ -19,15 +19,15 @@ const envSchema = z.object({
   POSTGRES_URL_NON_POOLING: z.string().url().optional().or(z.literal('')).describe('Vercel Postgres non-pooling URL'),
 
   // AI Services (Required for AI Security Co-Pilot)
-  TOGETHER_API_KEY: z.string().min(1).optional().describe('Together.ai API key'),
-  GROQ_API_KEY: z.string().min(1).optional().describe('Groq API key'),
-  OPENAI_API_KEY: z.string().startsWith('sk-').optional().describe('OpenAI API key'),
+  TOGETHER_API_KEY: z.string().min(1).optional().or(z.literal('')).describe('Together.ai API key'),
+  GROQ_API_KEY: z.string().min(1).optional().or(z.literal('')).describe('Groq API key'),
+  OPENAI_API_KEY: z.string().startsWith('sk-').optional().or(z.literal('')).describe('OpenAI API key'),
 
   // Threat Intelligence APIs
-  VIRUSTOTAL_API_KEY: z.string().min(1).optional().describe('VirusTotal API key'),
+  VIRUSTOTAL_API_KEY: z.string().min(1).optional().or(z.literal('')).describe('VirusTotal API key'),
 
   // Email Service
-  RESEND_API_KEY: z.string().min(1).optional().describe('Resend API key for sending emails'),
+  RESEND_API_KEY: z.string().min(1).optional().or(z.literal('')).describe('Resend API key for sending emails'),
 
   // Analytics
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z

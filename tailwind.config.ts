@@ -62,7 +62,7 @@ const config: Config = {
           DEFAULT: '#0F1729',
           light: '#1E293B',
         },
-        // Primary: Deep navy - conveys trust and security
+        // Primary: Deep navy - kept for backward compat
         navy: {
           DEFAULT: '#0F1729',
           light: '#1E293B',
@@ -78,6 +78,37 @@ const config: Config = {
           800: '#0F1F3D',
           900: '#0F1729',
           950: '#0A0F1C',
+        },
+        // Charcoal: New primary dark palette
+        charcoal: {
+          DEFAULT: '#0A0A0A',
+          50: '#f5f5f5',
+          100: '#e5e5e5',
+          200: '#cccccc',
+          300: '#999999',
+          400: '#666666',
+          500: '#404040',
+          600: '#2a2a2a',
+          700: '#1a1a1a',
+          800: '#121212',
+          900: '#0A0A0A',
+          950: '#050505',
+        },
+        // Violet: New accent color
+        violet: {
+          DEFAULT: '#8B5CF6',
+          50: '#f5f3ff',
+          100: '#ede9fe',
+          200: '#ddd6fe',
+          300: '#c4b5fd',
+          400: '#a78bfa',
+          500: '#8B5CF6',
+          600: '#7C3AED',
+          700: '#6D28D9',
+          800: '#5B21B6',
+          900: '#4C1D95',
+          950: '#2E1065',
+          glow: 'rgba(139, 92, 246, 0.4)',
         },
         // Accent: Teal/cyan - modern tech feel
         teal: {

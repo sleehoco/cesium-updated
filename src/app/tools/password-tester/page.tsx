@@ -27,15 +27,15 @@ export default function PasswordTesterPage() {
   }
 
   return (
-    <main className="bg-navy-950">
+    <main className="bg-black">
       {/* Header */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-20">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-3 mb-4">
-              <KeyRound className="h-10 w-10 text-sky-400" />
+              <KeyRound className="h-10 w-10 text-violet-400" />
               <h1 className="text-4xl lg:text-5xl font-bold text-white font-display">
-                Password Strength <span className="text-sky-400">Tester</span>
+                Password Strength <span className="text-violet-400">Tester</span>
               </h1>
             </div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -60,7 +60,7 @@ export default function PasswordTesterPage() {
       <section className="py-12 pb-24">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Password Input Card */}
-          <Card className="bg-navy-800 border-navy-700 mb-8">
+          <Card className="bg-[#121212] border-white/10 mb-8">
             <CardHeader>
               <CardTitle className="text-white text-2xl font-bold font-display">
                 Enter a Password
@@ -73,7 +73,7 @@ export default function PasswordTesterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Type a password to test..."
-                  className="w-full px-4 py-3 pr-12 bg-navy-900 border border-navy-700 text-white placeholder:text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  className="w-full px-4 py-3 pr-12 bg-[#0A0A0A] border border-white/10 text-white placeholder:text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
                 <button
                   type="button"
@@ -95,7 +95,7 @@ export default function PasswordTesterPage() {
           {password.length > 0 && (
             <div className="space-y-6">
               {/* Score Bar */}
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-gray-300 font-medium">Password Strength</span>
@@ -116,7 +116,7 @@ export default function PasswordTesterPage() {
               </Card>
 
               {/* Character Analysis Grid */}
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardHeader>
                   <CardTitle className="text-white text-lg font-display">
                     Character Analysis
@@ -125,7 +125,7 @@ export default function PasswordTesterPage() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {/* Length */}
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 text-center">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 text-center">
                       <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Length</p>
                       <p className="text-2xl font-bold text-white">
                         {analysis.characterAnalysis.length}
@@ -133,7 +133,7 @@ export default function PasswordTesterPage() {
                     </div>
 
                     {/* Uppercase */}
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 text-center">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 text-center">
                       <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">
                         Uppercase
                       </p>
@@ -145,7 +145,7 @@ export default function PasswordTesterPage() {
                     </div>
 
                     {/* Lowercase */}
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 text-center">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 text-center">
                       <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">
                         Lowercase
                       </p>
@@ -157,7 +157,7 @@ export default function PasswordTesterPage() {
                     </div>
 
                     {/* Numbers */}
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 text-center">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 text-center">
                       <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">
                         Numbers
                       </p>
@@ -169,7 +169,7 @@ export default function PasswordTesterPage() {
                     </div>
 
                     {/* Symbols */}
-                    <div className="bg-navy-900 border border-navy-700 rounded-lg p-4 text-center">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 text-center">
                       <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">
                         Symbols
                       </p>
@@ -185,10 +185,10 @@ export default function PasswordTesterPage() {
 
               {/* Crack Time Estimates */}
               <div className="grid md:grid-cols-2 gap-4">
-                <Card className="bg-navy-900 border-navy-700">
+                <Card className="bg-[#0A0A0A] border-white/10">
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <Shield className="h-5 w-5 text-sky-400" />
+                      <Shield className="h-5 w-5 text-violet-400" />
                       <h3 className="text-white font-semibold">Brute Force Attack</h3>
                     </div>
                     <p className="text-sm text-gray-400 mb-2">
@@ -200,10 +200,10 @@ export default function PasswordTesterPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-navy-900 border-navy-700">
+                <Card className="bg-[#0A0A0A] border-white/10">
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <Shield className="h-5 w-5 text-sky-400" />
+                      <Shield className="h-5 w-5 text-violet-400" />
                       <h3 className="text-white font-semibold">Dictionary Attack</h3>
                     </div>
                     <p className="text-sm text-gray-400 mb-2">
@@ -233,7 +233,7 @@ export default function PasswordTesterPage() {
 
               {/* Improvement Suggestions */}
               {analysis.suggestions.length > 0 && (
-                <Card className="bg-navy-800 border-navy-700">
+                <Card className="bg-[#121212] border-white/10">
                   <CardHeader>
                     <CardTitle className="text-white text-lg font-display">
                       Improvement Suggestions
@@ -255,10 +255,10 @@ export default function PasswordTesterPage() {
           )}
 
           {/* Lead CTA Section */}
-          <Card className="bg-navy-800 border-navy-700 mt-12">
+          <Card className="bg-[#121212] border-white/10 mt-12">
             <CardContent className="pt-6 text-center">
               <h2 className="text-2xl font-bold text-white font-display mb-3">
-                Your employees probably use <span className="text-sky-400">worse passwords</span>
+                Your employees probably use <span className="text-violet-400">worse passwords</span>
               </h2>
               <p className="text-gray-300 mb-6 max-w-xl mx-auto">
                 A security assessment identifies weak authentication across your entire organization

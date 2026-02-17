@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.virustotal.com https://vitals.vercel-insights.com; frame-ancestors 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.virustotal.com https://vitals.vercel-insights.com https://*.supabase.co https://api.x.ai; frame-ancestors 'none';",
           },
           {
             key: 'Referrer-Policy',
@@ -116,6 +116,7 @@ const nextConfig: NextConfig = {
       'lucide-react',
       '@radix-ui/react-icons',
       'framer-motion',
+      'three',
     ],
   },
 

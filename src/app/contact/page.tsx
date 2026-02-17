@@ -114,14 +114,14 @@ export default function ContactPage() {
 
   const isFormValid = validFields['name'] && validFields['email'] && validFields['message'];
 
-  const inputClasses = 'w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent disabled:opacity-50 transition-all duration-200';
-  const selectClasses = 'w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent disabled:opacity-50 transition-all duration-200 cursor-pointer';
+  const inputClasses = 'w-full px-4 py-3 bg-[#0A0A0A] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:opacity-50 transition-all duration-200';
+  const selectClasses = 'w-full px-4 py-3 bg-[#0A0A0A] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:opacity-50 transition-all duration-200 cursor-pointer';
   const labelClasses = 'block text-sm font-medium text-gray-300 mb-2';
 
   return (
     <main>
       {/* Header - Dark */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-display">
@@ -135,12 +135,12 @@ export default function ContactPage() {
       </section>
 
       {/* Form Section - Dark */}
-      <section className="bg-navy-950 py-24">
+      <section className="bg-black py-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Contact Form */}
             <div>
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardHeader>
                   <CardTitle className="text-white text-2xl font-display">
                     Send us a message
@@ -357,13 +357,13 @@ export default function ContactPage() {
                   </form>
 
                   {/* Trust Signals */}
-                  <div className="mt-6 pt-6 border-t border-navy-700 space-y-3">
+                  <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
                     <div className="flex items-center gap-3 text-sm text-gray-400">
-                      <Clock className="h-4 w-4 text-sky-400 flex-shrink-0" />
+                      <Clock className="h-4 w-4 text-violet-400 flex-shrink-0" />
                       <span>We respond within 24 hours</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-gray-400">
-                      <ShieldCheck className="h-4 w-4 text-sky-400 flex-shrink-0" />
+                      <ShieldCheck className="h-4 w-4 text-violet-400 flex-shrink-0" />
                       <span>Your information is secure and never shared</span>
                     </div>
                   </div>
@@ -373,7 +373,7 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div className="space-y-6">
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardHeader>
                   <CardTitle className="text-white text-2xl font-display">Contact Information</CardTitle>
                   <CardDescription className="text-gray-400">
@@ -381,13 +381,13 @@ export default function ContactPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-navy-700/50 transition-colors duration-200 group">
-                    <Mail className="h-6 w-6 text-sky-400 flex-shrink-0 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200 group">
+                    <Mail className="h-6 w-6 text-violet-400 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="text-white font-semibold mb-1">Email</h3>
                       <a
                         href="mailto:information@cesiumcyber.com"
-                        className="text-gray-300 hover:text-sky-400 transition-colors"
+                        className="text-gray-300 hover:text-violet-400 transition-colors"
                       >
                         information@cesiumcyber.com
                       </a>
@@ -395,13 +395,13 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-navy-700/50 transition-colors duration-200 group">
-                    <Phone className="h-6 w-6 text-sky-400 flex-shrink-0 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200 group">
+                    <Phone className="h-6 w-6 text-violet-400 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="text-white font-semibold mb-1">Phone</h3>
                       <a
                         href="tel:+17175434981"
-                        className="text-gray-300 hover:text-sky-400 transition-colors"
+                        className="text-gray-300 hover:text-violet-400 transition-colors"
                       >
                         +1 (717) 543-4981
                       </a>
@@ -409,8 +409,8 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-navy-700/50 transition-colors duration-200 group">
-                    <MapPin className="h-6 w-6 text-sky-400 flex-shrink-0 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200 group">
+                    <MapPin className="h-6 w-6 text-violet-400 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="text-white font-semibold mb-1">Office</h3>
                       <p className="text-gray-300">3500 Cedar Ave</p>
@@ -421,26 +421,26 @@ export default function ContactPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardHeader>
                   <CardTitle className="text-white font-display">Business Hours</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3 text-gray-300">
-                    <div className="flex justify-between items-center p-2 rounded hover:bg-navy-700/50 transition-colors">
+                    <div className="flex justify-between items-center p-2 rounded hover:bg-white/5 transition-colors">
                       <span>Monday - Friday:</span>
-                      <span className="text-sky-400 font-semibold">9:00 AM - 6:00 PM EST</span>
+                      <span className="text-violet-400 font-semibold">9:00 AM - 6:00 PM EST</span>
                     </div>
-                    <div className="flex justify-between items-center p-2 rounded hover:bg-navy-700/50 transition-colors">
+                    <div className="flex justify-between items-center p-2 rounded hover:bg-white/5 transition-colors">
                       <span>Saturday - Sunday:</span>
                       <span className="text-gray-400">Closed</span>
                     </div>
-                    <div className="pt-3 border-t border-navy-700">
+                    <div className="pt-3 border-t border-white/10">
                       <p className="text-sm text-gray-400">
                         For urgent security matters, please email us at{' '}
                         <a
                           href="mailto:information@cesiumcyber.com"
-                          className="text-sky-400 hover:underline transition-all"
+                          className="text-violet-400 hover:underline transition-all"
                         >
                           information@cesiumcyber.com
                         </a>

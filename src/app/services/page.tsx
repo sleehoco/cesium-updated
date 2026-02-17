@@ -12,7 +12,7 @@ const services = [
   {
     id: 'security-assessment',
     icon: Shield,
-    iconColor: 'text-sky-400',
+    iconColor: 'text-violet-400',
     title: 'Security Assessment',
     tagline: 'Understand where your business is vulnerable',
     description: 'We take a close look at your systems, applications, and processes to find security gaps before they become problems. You get a clear report with prioritized steps to fix what matters most.',
@@ -46,7 +46,7 @@ const services = [
   {
     id: 'penetration-testing',
     icon: Zap,
-    iconColor: 'text-sky-500',
+    iconColor: 'text-violet-400',
     title: 'Penetration Testing',
     tagline: 'Find out what a hacker would find',
     description: 'Our certified ethical hackers test your systems the same way a real attacker would. We find the weak spots in your network, applications, and even your team\'s awareness so you can fix them before someone exploits them.',
@@ -80,7 +80,7 @@ const services = [
   {
     id: 'ai-business-integration',
     icon: Brain,
-    iconColor: 'text-sky-400',
+    iconColor: 'text-violet-400',
     title: 'AI Business Integration',
     tagline: 'Put AI to work for your business',
     description: 'We help you use artificial intelligence to save time, reduce costs, and make better decisions. From automating repetitive tasks to building custom AI tools, we tailor solutions to fit your specific business needs.',
@@ -118,11 +118,11 @@ export default function ServicesPage() {
   return (
     <main>
       {/* Header - Dark Section */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 font-display">
-              Our <span className="text-sky-400">Services</span>
+              Our <span className="text-violet-400">Services</span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
               Comprehensive security assessments, cloud protection, and AI-powered solutions
@@ -133,7 +133,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid - Light Section */}
-      <section className="bg-white py-24">
+      <section className="bg-[#0A0A0A] py-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {services.map((service) => {
@@ -141,23 +141,23 @@ export default function ServicesPage() {
               return (
                 <div
                   key={service.id}
-                  className="group rounded-lg border border-slate-200 bg-white p-8 transition-shadow hover:shadow-lg"
+                  className="group rounded-lg border border-white/10 bg-[#0A0A0A] p-8 transition-shadow hover:shadow-violet-500/5"
                 >
                   <div className="mb-5">
                     <Icon className={`h-12 w-12 ${service.iconColor}`} />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2 font-display">{service.title}</h3>
-                  <p className="text-sky-600 font-semibold text-sm mb-4">
+                  <h3 className="text-2xl font-bold text-white mb-2 font-display">{service.title}</h3>
+                  <p className="text-violet-500 font-semibold text-sm mb-4">
                     {service.tagline}
                   </p>
-                  <p className="text-slate-600 leading-relaxed mb-6">{service.description}</p>
+                  <p className="text-gray-400 leading-relaxed mb-6">{service.description}</p>
 
                   {/* Compliance Tags */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {service.complianceTags.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-block rounded-full bg-sky-50 border border-sky-200 px-3 py-1 text-xs font-medium text-sky-700"
+                        className="inline-block rounded-full bg-violet-500/10 border border-violet-500/20 px-3 py-1 text-xs font-medium text-violet-300"
                       >
                         {tag}
                       </span>
@@ -165,14 +165,14 @@ export default function ServicesPage() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="text-slate-900 font-bold mb-3 flex items-center text-sm">
-                      <Check className="h-4 w-4 text-sky-500 mr-2" />
+                    <h4 className="text-white font-bold mb-3 flex items-center text-sm">
+                      <Check className="h-4 w-4 text-violet-400 mr-2" />
                       What&apos;s Included:
                     </h4>
                     <ul className="space-y-2">
                       {service.features.map((feature) => (
-                        <li key={feature} className="text-sm text-slate-600 flex items-start">
-                          <ChevronRight className="h-4 w-4 text-sky-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <li key={feature} className="text-sm text-gray-400 flex items-start">
+                          <ChevronRight className="h-4 w-4 text-violet-400 mr-2 flex-shrink-0 mt-0.5" />
                           {feature}
                         </li>
                       ))}
@@ -197,7 +197,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA - Dark Section */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <h2 className="text-4xl lg:text-5xl font-bold text-white font-display">
@@ -218,7 +218,7 @@ export default function ServicesPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-navy-700 text-gray-300 hover:bg-navy-800 hover:text-white"
+                className="border-white/10 text-gray-300 hover:bg-white/5 hover:text-white"
                 asChild
               >
                 <Link href="/tools">Try Free Security Tools</Link>

@@ -67,7 +67,7 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero Section - Dark */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 font-display">
@@ -81,11 +81,11 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Statement - Light */}
-      <section className="bg-white py-24">
+      <section className="bg-[#0A0A0A] py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6 font-display">Our Mission</h2>
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <h2 className="text-3xl font-bold text-white mb-6 font-display">Our Mission</h2>
+            <p className="text-gray-400 text-lg leading-relaxed">
               To empower Maryland businesses with proactive cybersecurity solutions that anticipate and neutralize threats before they impact operations. Based in Columbia, MD, we understand the unique challenges local businesses face and deliver security that fits.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values - Dark */}
-      <section className="bg-navy-900 py-24">
+      <section className="bg-[#0A0A0A] py-24">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-white text-center mb-12 font-display">
             Our Values
@@ -104,11 +104,11 @@ export default function AboutPage() {
               return (
                 <div
                   key={value.title}
-                  className="rounded-lg border border-navy-700 bg-navy-800 p-6 text-center"
+                  className="rounded-lg border border-white/10 bg-[#121212] p-6 text-center"
                 >
-                  <Icon className="h-12 w-12 text-sky-400 mx-auto mb-4" />
+                  <Icon className="h-12 w-12 text-violet-400 mx-auto mb-4" />
                   <h3 className="text-white font-semibold text-lg mb-2">{value.title}</h3>
-                  <p className="text-slate-300 text-sm">{value.description}</p>
+                  <p className="text-gray-400 text-sm">{value.description}</p>
                 </div>
               );
             })}
@@ -117,22 +117,22 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section - Light */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-[#050505] py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4 font-display">
+          <h2 className="text-3xl font-bold text-white text-center mb-4 font-display">
             Leadership Team
           </h2>
-          <p className="text-slate-600 text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
             Our team brings together decades of experience from top cybersecurity firms, government agencies, and research institutions.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {team.map((member) => (
               <div
                 key={member.name}
-                className="rounded-lg border border-slate-200 bg-white p-6 transition-shadow hover:shadow-lg"
+                className="rounded-lg border border-white/10 bg-[#0A0A0A] p-6 transition-shadow hover:shadow-violet-500/5"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 border-2 border-sky-200">
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-[#121212] border-2 border-violet-500/20">
                     <Image
                       src={member.image}
                       alt={member.name}
@@ -142,18 +142,18 @@ export default function AboutPage() {
                     />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-900">{member.name}</h3>
-                    <p className="text-sky-600 font-medium text-sm">{member.role}</p>
+                    <h3 className="text-lg font-semibold text-white">{member.name}</h3>
+                    <p className="text-violet-500 font-medium text-sm">{member.role}</p>
                   </div>
                 </div>
-                <p className="text-slate-600 text-sm mb-4 leading-relaxed">{member.bio}</p>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">{member.bio}</p>
                 <div>
-                  <h4 className="text-slate-900 font-semibold mb-2 text-sm">Expertise:</h4>
+                  <h4 className="text-white font-semibold mb-2 text-sm">Expertise:</h4>
                   <div className="flex flex-wrap gap-2">
                     {member.expertise.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 bg-sky-50 text-sky-700 text-xs rounded-full border border-sky-200"
+                        className="px-3 py-1 bg-violet-500/10 text-violet-300 text-xs rounded-full border border-violet-500/20"
                       >
                         {skill}
                       </span>
@@ -167,7 +167,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section - Dark */}
-      <section className="bg-navy-950 py-24">
+      <section className="bg-black py-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 max-w-5xl mx-auto">
             {[
@@ -180,7 +180,7 @@ export default function AboutPage() {
                 key={stat.label}
                 className="text-center"
               >
-                <div className="text-4xl font-bold text-sky-400 font-display">{stat.number}</div>
+                <div className="text-4xl font-bold text-violet-400 font-display">{stat.number}</div>
                 <div className="text-gray-300 text-sm mt-1">{stat.label}</div>
               </div>
             ))}
@@ -189,11 +189,11 @@ export default function AboutPage() {
       </section>
 
       {/* CTA - Light */}
-      <section className="bg-white py-24">
+      <section className="bg-[#0A0A0A] py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl font-bold text-slate-900 font-display">Ready to Work Together?</h2>
-            <p className="text-slate-600">
+            <h2 className="text-3xl font-bold text-white font-display">Ready to Work Together?</h2>
+            <p className="text-gray-400">
               Let&apos;s discuss how we can help secure your organization.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -203,7 +203,7 @@ export default function AboutPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-slate-300 text-slate-700 hover:bg-slate-50"
+                className="border-white/10 text-gray-400 hover:bg-white/5"
                 asChild
               >
                 <Link href="/services">View Services</Link>

@@ -5,6 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Providers } from './providers';
 import { Navbar } from '@/components/shared/Navbar';
 import { Footer } from '@/components/shared/Footer';
+import { SecurityRobot } from '@/components/robot/SecurityRobot';
 import '@/styles/globals.css';
 import { env } from '@/lib/env';
 
@@ -32,25 +33,24 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
-    default: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
-    template: '%s | CesiumCyber',
+    default: 'Cesium — Security for Everyone',
+    template: '%s | Cesium',
   },
   description:
-    'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
+    'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
   keywords: [
-    'cybersecurity',
-    'penetration testing',
-    'vulnerability assessment',
-    'security consulting',
-    'incident response',
-    'cloud security',
-    'data protection',
-    'HIPAA compliance',
-    'CMMC compliance',
-    'PCI-DSS',
-    'Maryland cybersecurity',
-    'cybersecurity consulting Maryland',
-    'Columbia MD cybersecurity',
+    'cybersecurity tools',
+    'security scanner',
+    'threat intelligence',
+    'phishing detection',
+    'password tester',
+    'email security',
+    'website security',
+    'vulnerability scanner',
+    'online security',
+    'cyber protection',
+    'security platform',
+    'free security tools',
   ],
   authors: [{ name: 'CesiumCyber' }],
   creator: 'CesiumCyber',
@@ -70,22 +70,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: env.NEXT_PUBLIC_APP_URL,
-    siteName: 'CesiumCyber',
-    title: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
-    description: 'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
+    siteName: 'Cesium',
+    title: 'Cesium — Security for Everyone',
+    description: 'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'CesiumCyber',
+        alt: 'Cesium — Security for Everyone',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CesiumCyber - Cybersecurity & Compliance for Maryland Businesses',
-    description: 'Expert cybersecurity and compliance services for Maryland businesses. HIPAA, CMMC, PCI-DSS compliance, penetration testing, and managed security from Columbia, MD.',
+    title: 'Cesium — Security for Everyone',
+    description: 'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
     images: ['/og-image.png'],
   },
 
@@ -107,6 +107,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          <SecurityRobot />
         </Providers>
         <Analytics />
         <SpeedInsights />

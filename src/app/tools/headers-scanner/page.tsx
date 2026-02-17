@@ -34,7 +34,7 @@ function getGradeColor(grade: string): string {
     case 'A':
       return 'text-green-400';
     case 'B':
-      return 'text-sky-400';
+      return 'text-violet-400';
     case 'C':
       return 'text-yellow-400';
     case 'D':
@@ -51,7 +51,7 @@ function getGradeBgColor(grade: string): string {
     case 'A':
       return 'bg-green-500/20 border-green-500/50';
     case 'B':
-      return 'bg-sky-500/20 border-sky-500/50';
+      return 'bg-violet-500/20 border-violet-500/50';
     case 'C':
       return 'bg-yellow-500/20 border-yellow-500/50';
     case 'D':
@@ -68,7 +68,7 @@ function getProgressColor(grade: string): string {
     case 'A':
       return 'bg-green-500';
     case 'B':
-      return 'bg-sky-500';
+      return 'bg-violet-600';
     case 'C':
       return 'bg-yellow-500';
     case 'D':
@@ -169,15 +169,15 @@ export default function HeadersScannerPage() {
   };
 
   return (
-    <main className="bg-navy-950">
+    <main className="bg-black">
       {/* Header */}
-      <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-20">
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-4">
-              <Globe className="h-10 w-10 text-sky-400" />
+              <Globe className="h-10 w-10 text-violet-400" />
               <h1 className="text-4xl lg:text-5xl font-bold text-white font-display">
-                Website Security Headers <span className="text-sky-400">Scanner</span>
+                Website Security Headers <span className="text-violet-400">Scanner</span>
               </h1>
             </div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -191,7 +191,7 @@ export default function HeadersScannerPage() {
       <section className="py-12 pb-24">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Input Section */}
-          <Card className="bg-navy-800 border-navy-700 mb-8">
+          <Card className="bg-[#121212] border-white/10 mb-8">
             <CardHeader>
               <CardTitle className="text-white text-2xl font-bold font-display">Enter URL to Scan</CardTitle>
             </CardHeader>
@@ -203,7 +203,7 @@ export default function HeadersScannerPage() {
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={loading}
-                className="w-full px-4 py-3 bg-navy-900 border border-navy-700 text-white placeholder:text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent disabled:opacity-50"
+                className="w-full px-4 py-3 bg-[#0A0A0A] border border-white/10 text-white placeholder:text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:opacity-50"
               />
 
               {/* Quick Examples */}
@@ -214,7 +214,7 @@ export default function HeadersScannerPage() {
                   size="sm"
                   onClick={() => handleExample('google.com')}
                   disabled={loading}
-                  className="border-navy-700 text-sky-400 hover:bg-navy-700 rounded-lg text-xs"
+                  className="border-white/10 text-violet-400 hover:bg-white/5 rounded-lg text-xs"
                 >
                   Try google.com
                 </Button>
@@ -223,7 +223,7 @@ export default function HeadersScannerPage() {
                   size="sm"
                   onClick={() => handleExample('github.com')}
                   disabled={loading}
-                  className="border-navy-700 text-sky-400 hover:bg-navy-700 rounded-lg text-xs"
+                  className="border-white/10 text-violet-400 hover:bg-white/5 rounded-lg text-xs"
                 >
                   Try github.com
                 </Button>
@@ -263,7 +263,7 @@ export default function HeadersScannerPage() {
           {result && (
             <>
               {/* Grade + Score */}
-              <Card className="bg-navy-800 border-navy-700 mb-8">
+              <Card className="bg-[#121212] border-white/10 mb-8">
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-6">
@@ -299,7 +299,7 @@ export default function HeadersScannerPage() {
               {/* Header Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {result.headers.map((header) => (
-                  <Card key={header.key} className="bg-navy-800 border-navy-700">
+                  <Card key={header.key} className="bg-[#121212] border-white/10">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -318,7 +318,7 @@ export default function HeadersScannerPage() {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {header.found && header.value && (
-                        <div className="bg-navy-900 font-mono text-sm p-2 rounded break-all text-gray-300">
+                        <div className="bg-[#0A0A0A] font-mono text-sm p-2 rounded break-all text-gray-300">
                           {header.value}
                         </div>
                       )}
@@ -339,9 +339,9 @@ export default function HeadersScannerPage() {
               </div>
 
               {/* Lead CTA */}
-              <Card className="bg-navy-800 border-navy-700">
+              <Card className="bg-[#121212] border-white/10">
                 <CardContent className="p-8 text-center">
-                  <Shield className="h-12 w-12 text-sky-400 mx-auto mb-4" />
+                  <Shield className="h-12 w-12 text-violet-400 mx-auto mb-4" />
                   <h2 className="text-2xl font-bold text-white font-display mb-2">
                     Want to harden your web security?
                   </h2>

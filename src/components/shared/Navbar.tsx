@@ -10,7 +10,6 @@ import {
   type NavLink,
   serviceLinks,
   industryLinks,
-  resourceLinks,
 } from '@/lib/navigation';
 
 interface NavDropdown {
@@ -26,16 +25,22 @@ interface NavDirect {
 type NavItem = (NavDropdown & { type: 'dropdown' }) | (NavDirect & { type: 'direct' });
 
 const navItems: NavItem[] = [
-  { type: 'dropdown', name: 'Services', items: serviceLinks },
-  { type: 'dropdown', name: 'Industries', items: industryLinks },
   { type: 'direct', name: 'Tools', href: '/tools' },
+  {
+    type: 'dropdown',
+    name: 'For Business',
+    items: [
+      { name: 'Services', href: '/services' },
+      ...serviceLinks.slice(0, 3),
+      { name: 'Industries', href: '#' },
+      ...industryLinks,
+    ],
+  },
   { type: 'direct', name: 'About', href: '/about' },
-  { type: 'dropdown', name: 'Resources', items: resourceLinks },
 ];
 
 function isLinkActive(pathname: string, href: string): boolean {
-  if (href === '/') return pathname === '/';
-  // Match exact path or hash-link parent path
+  if (href === '/' || href === '#') return pathname === href;
   const basePath = href.split('#')[0];
   return pathname === basePath || pathname.startsWith(basePath + '/');
 }
@@ -44,7 +49,6 @@ function isDropdownActive(pathname: string, items: NavLink[]): boolean {
   return items.some((item) => isLinkActive(pathname, item.href));
 }
 
-// Desktop dropdown component
 function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'dropdown' }; pathname: string }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -63,7 +67,6 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
     }, 150);
   }, []);
 
-  // Clean up hover timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -72,20 +75,13 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
     };
   }, []);
 
-  // Close dropdown on Escape key
   useEffect(() => {
     if (!open) return;
-
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setOpen(false);
-      }
+      if (event.key === 'Escape') setOpen(false);
     }
-
     document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open]);
 
   const active = isDropdownActive(pathname, item.items);
@@ -99,8 +95,8 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
       <button
         type="button"
         className={cn(
-          'flex items-center gap-1 text-sm font-medium transition-colors hover:text-sky-400',
-          active ? 'text-sky-400' : 'text-gray-300'
+          'flex items-center gap-1 text-sm font-medium transition-colors hover:text-violet-400',
+          active ? 'text-violet-400' : 'text-gray-300'
         )}
         aria-expanded={open}
         aria-haspopup="true"
@@ -116,32 +112,40 @@ function DesktopDropdown({ item, pathname }: { item: NavDropdown & { type: 'drop
       </button>
       <div
         className={cn(
-          'absolute left-0 top-full mt-2 w-56 rounded-md bg-navy-800 border border-navy-700 shadow-lg py-1',
+          'absolute left-0 top-full mt-2 w-56 rounded-md bg-neutral-900/95 backdrop-blur-xl border border-white/10 shadow-lg py-1',
           'transition-all duration-200 origin-top-left',
           open
             ? 'opacity-100 scale-100 pointer-events-auto'
             : 'opacity-0 scale-95 pointer-events-none'
         )}
       >
-        {item.items.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={cn(
-              'block px-4 py-2 text-sm transition-colors hover:bg-navy-700 hover:text-sky-400',
-              isLinkActive(pathname, link.href) ? 'text-sky-400' : 'text-gray-300'
-            )}
-            onClick={() => setOpen(false)}
-          >
-            {link.name}
-          </Link>
-        ))}
+        {item.items.map((link) =>
+          link.href === '#' ? (
+            <div
+              key={link.name}
+              className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-gray-500 mt-1"
+            >
+              {link.name}
+            </div>
+          ) : (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                'block px-4 py-2 text-sm transition-colors hover:bg-white/5 hover:text-violet-400',
+                isLinkActive(pathname, link.href) ? 'text-violet-400' : 'text-gray-300'
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {link.name}
+            </Link>
+          )
+        )}
       </div>
     </div>
   );
 }
 
-// Mobile dropdown component
 function MobileDropdown({
   item,
   pathname,
@@ -160,7 +164,7 @@ function MobileDropdown({
         type="button"
         className={cn(
           'flex w-full items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors',
-          active ? 'text-sky-400' : 'text-gray-300 hover:text-sky-400 hover:bg-navy-800'
+          active ? 'text-violet-400' : 'text-gray-300 hover:text-violet-400 hover:bg-white/5'
         )}
         aria-expanded={open}
         onClick={() => setOpen(!open)}
@@ -180,21 +184,30 @@ function MobileDropdown({
         )}
       >
         <div className="pl-4 py-1 space-y-1">
-          {item.items.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'block px-3 py-2 rounded-md text-sm transition-colors',
-                isLinkActive(pathname, link.href)
-                  ? 'text-sky-400 bg-sky-400/10'
-                  : 'text-gray-400 hover:text-sky-400 hover:bg-navy-800'
-              )}
-              onClick={onNavigate}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {item.items.map((link) =>
+            link.href === '#' ? (
+              <div
+                key={link.name}
+                className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-gray-500"
+              >
+                {link.name}
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'block px-3 py-2 rounded-md text-sm transition-colors',
+                  isLinkActive(pathname, link.href)
+                    ? 'text-violet-400 bg-violet-400/10'
+                    : 'text-gray-400 hover:text-violet-400 hover:bg-white/5'
+                )}
+                onClick={onNavigate}
+              >
+                {link.name}
+              </Link>
+            )
+          )}
         </div>
       </div>
     </div>
@@ -210,13 +223,13 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-navy-900/95 backdrop-blur border-b border-navy-700">
+    <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-2xl font-bold text-white font-display">
-              Cesium<span className="text-sky-400">Cyber</span>
+              Cesium<span className="text-violet-400">Cyber</span>
             </span>
           </Link>
 
@@ -230,23 +243,23 @@ export function Navbar() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'text-sm font-medium transition-colors hover:text-sky-400',
-                    isLinkActive(pathname, item.href) ? 'text-sky-400' : 'text-gray-300'
+                    'text-sm font-medium transition-colors hover:text-violet-400',
+                    isLinkActive(pathname, item.href) ? 'text-violet-400' : 'text-gray-300'
                   )}
                 >
                   {item.name}
                 </Link>
               )
             )}
-            <Button variant="accent" size="sm" asChild>
-              <Link href="/contact">Get a Free Assessment</Link>
+            <Button variant="glow" size="sm" asChild>
+              <Link href="/#access">Enter Code</Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-navy-800"
+            className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/5"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -259,7 +272,7 @@ export function Navbar() {
       {/* Mobile menu */}
       <div
         className={cn(
-          'md:hidden overflow-hidden transition-all duration-300 border-t border-navy-700',
+          'md:hidden overflow-hidden transition-all duration-300 border-t border-white/5',
           mobileMenuOpen ? 'max-h-[calc(100vh-4rem)] opacity-100' : 'max-h-0 opacity-0 border-t-0'
         )}
       >
@@ -279,8 +292,8 @@ export function Navbar() {
                 className={cn(
                   'block px-3 py-2 rounded-md text-base font-medium transition-colors',
                   isLinkActive(pathname, item.href)
-                    ? 'text-sky-400 bg-sky-400/10'
-                    : 'text-gray-300 hover:text-sky-400 hover:bg-navy-800'
+                    ? 'text-violet-400 bg-violet-400/10'
+                    : 'text-gray-300 hover:text-violet-400 hover:bg-white/5'
                 )}
                 onClick={closeMobileMenu}
               >
@@ -289,9 +302,9 @@ export function Navbar() {
             )
           )}
           <div className="pt-2">
-            <Button variant="accent" size="sm" className="w-full" asChild>
-              <Link href="/contact" onClick={closeMobileMenu}>
-                Get a Free Assessment
+            <Button variant="glow" size="sm" className="w-full" asChild>
+              <Link href="/#access" onClick={closeMobileMenu}>
+                Enter Code
               </Link>
             </Button>
           </div>

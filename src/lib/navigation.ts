@@ -26,9 +26,27 @@ export const resourceLinks: NavLink[] = [
   { name: 'Case Studies', href: '/resources/case-studies' },
 ];
 
+export const toolLinks: NavLink[] = [
+  { name: 'Threat Intelligence', href: '/tools/threat-intel' },
+  { name: 'Password Tester', href: '/tools/password-tester' },
+  { name: 'Email Security', href: '/tools/email-security' },
+  { name: 'Headers Scanner', href: '/tools/headers-scanner' },
+  { name: 'Compliance Quiz', href: '/tools/compliance-quiz' },
+  { name: 'Email Header Analyzer', href: '/tools/email-header-analyzer' },
+];
+
 export const companyLinks: NavLink[] = [
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
+];
+
+export const legalLinks: NavLink[] = [
   { name: 'Privacy Policy', href: '/privacy' },
   { name: 'Terms of Service', href: '/terms' },
+];
+
+// Combined "For Business" links for nav dropdown
+export const businessLinks: NavLink[] = [
+  ...serviceLinks.slice(0, 3),
+  ...industryLinks.slice(0, 3),
 ];
