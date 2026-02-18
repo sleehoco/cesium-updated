@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimitByRequest, RATE_LIMITS } from '@/lib/rate-limit';
 import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
 import { sanitizePromptInput } from '@/lib/ai/sanitize';
@@ -48,7 +48,7 @@ function buildTranscript(history: { role: 'user' | 'assistant'; content: string 
 }
 
 export async function POST(req: NextRequest) {
-  const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+  const rateLimitResult = rateLimitByRequest(req, RATE_LIMITS.AI_ENDPOINT);
 
   if (!rateLimitResult.success) {
     return NextResponse.json(

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimitByRequest, RATE_LIMITS } from '@/lib/rate-limit';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,7 @@ const requestSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Apply rate limiting
-    const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+    const rateLimitResult = rateLimitByRequest(req, RATE_LIMITS.AI_ENDPOINT);
 
     if (!rateLimitResult.success) {
       return NextResponse.json(

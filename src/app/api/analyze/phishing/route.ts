@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { SECURITY_PROMPTS } from '@/lib/ai/prompts';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimitByRequest, RATE_LIMITS } from '@/lib/rate-limit';
 import { extractURLs, checkMultipleURLs } from '@/lib/threat-intel/url-checker';
 
 /**
@@ -19,7 +19,7 @@ const phishingAnalysisSchema = z.object({
 
 export async function POST(req: NextRequest) {
   // Rate limiting
-  const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+  const rateLimitResult = rateLimitByRequest(req, RATE_LIMITS.AI_ENDPOINT);
 
   if (!rateLimitResult.success) {
     return NextResponse.json(

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Resend } from 'resend';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimitByRequest, RATE_LIMITS } from '@/lib/rate-limit';
 import { db } from '@/db';
 import { emailCaptures } from '@/db/schema';
 
@@ -21,7 +21,7 @@ const emailCaptureSchema = z.object({
 
 export async function POST(req: NextRequest) {
   // Rate limiting (3 signups per 5 minutes to prevent spam)
-  const rateLimitResult = rateLimit(req, RATE_LIMITS.CONTACT_FORM);
+  const rateLimitResult = rateLimitByRequest(req, RATE_LIMITS.CONTACT_FORM);
 
   if (!rateLimitResult.success) {
     return NextResponse.json(

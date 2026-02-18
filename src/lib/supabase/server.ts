@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient as supabaseCreateClient } from '@supabase/supabase-js';
 
-let serverClient: ReturnType<typeof createClient> | null = null;
+let serverClient: ReturnType<typeof supabaseCreateClient> | null = null;
 
 export function createServerSupabaseClient() {
   if (serverClient) return serverClient;
@@ -12,9 +12,14 @@ export function createServerSupabaseClient() {
     throw new Error('Missing Supabase server environment variables');
   }
 
-  serverClient = createClient(url, key, {
+  serverClient = supabaseCreateClient(url, key, {
     auth: { persistSession: false },
   });
 
   return serverClient;
+}
+
+// Alias used by auth callback routes
+export async function createClient() {
+  return createServerSupabaseClient();
 }

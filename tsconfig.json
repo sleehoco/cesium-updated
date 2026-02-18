@@ -9,7 +9,7 @@
     ],
     "module": "esnext",
     "moduleResolution": "bundler",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     // Strict Type-Checking Options (ALL ENABLED)
     "strict": true,
     "noImplicitAny": true,

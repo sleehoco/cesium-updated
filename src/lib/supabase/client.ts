@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient as supabaseCreateClient } from '@supabase/supabase-js';
 
-let browserClient: ReturnType<typeof createClient> | null = null;
+let browserClient: ReturnType<typeof supabaseCreateClient> | null = null;
 
 export function getSupabaseBrowserClient() {
   if (browserClient) return browserClient;
@@ -12,6 +12,11 @@ export function getSupabaseBrowserClient() {
     throw new Error('Missing Supabase client environment variables');
   }
 
-  browserClient = createClient(url, key);
+  browserClient = supabaseCreateClient(url, key);
   return browserClient;
+}
+
+// Alias used by auth pages
+export function createClient() {
+  return getSupabaseBrowserClient();
 }

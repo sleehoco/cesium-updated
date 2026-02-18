@@ -53,3 +53,34 @@ export function getClientIp(request: Request): string {
   if (forwarded) return forwarded.split(',')[0]!.trim();
   return '127.0.0.1';
 }
+
+// Presets used by main-branch API routes
+interface RateLimitConfig {
+  maxRequests: number;
+  windowMs: number;
+}
+
+export const RATE_LIMITS = {
+  AI_ENDPOINT: { maxRequests: 10, windowMs: 60_000 } as RateLimitConfig,
+  CONTACT_FORM: { maxRequests: 5, windowMs: 60_000 } as RateLimitConfig,
+};
+
+/**
+ * Overload: accept a Request + config object (used by main-branch API routes).
+ * Returns { success, limit, remaining, reset } for backward compatibility.
+ */
+export function rateLimitByRequest(
+  req: Request,
+  config: RateLimitConfig
+): { success: boolean; limit: number; remaining: number; reset: number } {
+  const ip = getClientIp(req);
+  const url = new URL(req.url);
+  const key = `${ip}:${url.pathname}`;
+  const result = rateLimit(key, config.maxRequests, config.windowMs);
+  return {
+    success: result.allowed,
+    limit: config.maxRequests,
+    remaining: result.remaining,
+    reset: Math.floor((Date.now() + config.windowMs) / 1000),
+  };
+}

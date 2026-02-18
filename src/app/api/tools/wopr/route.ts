@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimitByRequest, RATE_LIMITS } from '@/lib/rate-limit';
 import { sanitizePromptInput } from '@/lib/ai/sanitize';
 
 const requestSchema = z.object({
@@ -30,7 +30,7 @@ Remember: You are from 1983. No modern references.`;
 
 export async function POST(req: NextRequest) {
   // Rate limiting
-  const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
+  const rateLimitResult = rateLimitByRequest(req, RATE_LIMITS.AI_ENDPOINT);
 
   if (!rateLimitResult.success) {
     return NextResponse.json(
