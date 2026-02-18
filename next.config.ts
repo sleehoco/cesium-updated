@@ -1,16 +1,10 @@
 import type { NextConfig } from 'next';
-import { withSentryConfig } from '@sentry/nextjs';
-import path from 'path';
 
 const nextConfig: NextConfig = {
   // Enable React strict mode for better development experience
   reactStrictMode: true,
 
-  // Ensure Next.js uses this repo as the workspace root for builds and start
-  outputFileTracingRoot: path.join(__dirname),
-
   // Image optimization configuration
-
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -47,8 +41,8 @@ const nextConfig: NextConfig = {
             value: 'SAMEORIGIN',
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.virustotal.com https://vitals.vercel-insights.com https://*.supabase.co https://api.x.ai; frame-ancestors 'none';",
           },
           {
             key: 'Referrer-Policy',
@@ -68,8 +62,48 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000',
   },
 
-  // Turbopack configuration (Next.js 16+)
-  turbopack: {},
+  // Webpack configuration for optimizations
+  webpack: (config, { dev, isServer }) => {
+    // Optimize bundle size
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // Vendor chunk for react and react-dom
+            framework: {
+              name: 'framework',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              priority: 40,
+              enforce: true,
+            },
+            // Common libraries chunk
+            lib: {
+              test: /[\\/]node_modules[\\/]/,
+              name(module: any) {
+                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)?.[1];
+                return `npm.${packageName?.replace('@', '')}`;
+              },
+              priority: 30,
+            },
+            // Commons chunk for shared code
+            commons: {
+              name: 'commons',
+              minChunks: 2,
+              priority: 20,
+            },
+          },
+        },
+      };
+    }
+
+    return config;
+  },
 
   // Experimental features
   experimental: {
@@ -82,6 +116,7 @@ const nextConfig: NextConfig = {
       'lucide-react',
       '@radix-ui/react-icons',
       'framer-motion',
+      'three',
     ],
   },
 
@@ -98,13 +133,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Sentry configuration - only enable if auth token is available
-export default process.env['SENTRY_AUTH_TOKEN']
-  ? withSentryConfig(nextConfig, {
-      org: process.env['SENTRY_ORG'],
-      project: process.env['SENTRY_PROJECT'],
-      silent: !process.env['CI'],
-      widenClientFileUpload: true,
-      tunnelRoute: '/monitoring',
-    })
-  : nextConfig;
+export default nextConfig;

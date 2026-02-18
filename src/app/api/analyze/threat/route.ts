@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { generateCompletion } from '@/lib/ai/completions';
 import { getSecurityPrompt } from '@/lib/ai/prompts';
 import { analyzeIOC, summarizeVTResults, hasVirusTotalKey } from '@/lib/threat-intel/virustotal';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 const requestSchema = z.object({
   ioc: z.string().min(1).max(1000).describe('Indicator of Compromise to analyze'),
@@ -17,26 +17,45 @@ const requestSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    // Apply rate limiting
-    const rateLimitResult = rateLimit(req, RATE_LIMITS.AI_ENDPOINT);
-
-    if (!rateLimitResult.success) {
+    // Rate limit: 10 requests per minute per IP
+    const ip = getClientIp(req);
+    const { allowed } = rateLimit(`threat:${ip}`, 10, 60 * 1000);
+    if (!allowed) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
-            'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
-          },
-        }
+        { success: false, error: 'Too many requests. Please try again later.' },
+        { status: 429 }
       );
     }
 
-    // Allow anonymous users for lead capture flow
-    // Authentication is optional - usage tracked via frontend localStorage
+    // Origin check: only allow requests from our own domain
+    const origin = req.headers.get('origin');
+    const referer = req.headers.get('referer');
+    const appUrl = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000';
+    const allowedOrigin = new URL(appUrl).origin;
+
+    if (origin && origin !== allowedOrigin) {
+      return NextResponse.json(
+        { success: false, error: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+    if (!origin && referer) {
+      try {
+        const refererOrigin = new URL(referer).origin;
+        if (refererOrigin !== allowedOrigin) {
+          return NextResponse.json(
+            { success: false, error: 'Forbidden' },
+            { status: 403 }
+          );
+        }
+      } catch {
+        // Invalid referer URL, reject
+        return NextResponse.json(
+          { success: false, error: 'Forbidden' },
+          { status: 403 }
+        );
+      }
+    }
 
     const body = await req.json();
     const { ioc, provider } = requestSchema.parse(body);
@@ -80,7 +99,6 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    // SECURITY: Log full error details server-side only
     console.error('Threat analysis error:', error);
 
     if (error instanceof z.ZodError) {
@@ -94,11 +112,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // SECURITY: Don't expose internal error details to client
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to analyze threat. Please try again.',
+        error: error instanceof Error ? error.message : 'Internal server error',
       },
       { status: 500 }
     );

@@ -1,33 +1,20 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import type { Database } from '@/types/supabase';
+import { createClient } from '@supabase/supabase-js';
 
-/**
- * Create a Supabase client for Server Components
- * This client can be used in server components and API routes
- */
-export async function createClient() {
-  const cookieStore = await cookies();
+let serverClient: ReturnType<typeof createClient> | null = null;
 
-  return createServerClient<Database>(
-    process.env['NEXT_PUBLIC_SUPABASE_URL']!,
-    process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing user sessions.
-          }
-        },
-      },
-    }
-  );
+export function createServerSupabaseClient() {
+  if (serverClient) return serverClient;
+
+  const url = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+  const key = process.env['SUPABASE_SERVICE_ROLE_KEY'];
+
+  if (!url || !key) {
+    throw new Error('Missing Supabase server environment variables');
+  }
+
+  serverClient = createClient(url, key, {
+    auth: { persistSession: false },
+  });
+
+  return serverClient;
 }

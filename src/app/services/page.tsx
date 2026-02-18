@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
-import { Brain, Network, Eye, Zap, Shield, ChevronRight, Check, Cpu } from 'lucide-react';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Brain, Network, Eye, Zap, Shield, ChevronRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -14,57 +12,61 @@ const services = [
   {
     id: 'security-assessment',
     icon: Shield,
+    iconColor: 'text-violet-400',
     title: 'Security Assessment',
-    tagline: 'Comprehensive security evaluations for your organization',
-    description: 'Identify vulnerabilities and strengthen your defense posture with thorough security assessments. We evaluate your infrastructure, applications, and processes to uncover weaknesses before attackers do.',
+    tagline: 'Understand where your business is vulnerable',
+    description: 'We take a close look at your systems, applications, and processes to find security gaps before they become problems. You get a clear report with prioritized steps to fix what matters most.',
     features: [
       'Network and infrastructure vulnerability scanning',
-      'Application security assessment and code review',
+      'Application security review',
       'Security architecture evaluation and recommendations',
       'Risk assessment and threat modeling',
       'Gap analysis against security frameworks (NIST, ISO 27001)',
-      'Detailed remediation roadmap with prioritized actions',
+      'Prioritized remediation roadmap',
     ],
-    gradient: 'from-purple-500 to-pink-500',
+    complianceTags: ['NIST', 'ISO 27001', 'CMMC'],
   },
   {
     id: 'cloud-security-m365',
     icon: Network,
+    iconColor: 'text-teal-400',
     title: 'Cloud Security (M365)',
-    tagline: 'Microsoft 365 security optimization and compliance',
-    description: 'Secure your Microsoft 365 environment with expert configuration reviews, threat protection optimization, and compliance monitoring. Ensure your cloud infrastructure meets security best practices.',
+    tagline: 'Keep your Microsoft 365 environment locked down',
+    description: 'If your team runs on Microsoft 365, we make sure it is configured securely. From email protection to data loss prevention, we optimize your cloud setup so sensitive information stays safe.',
     features: [
       'Microsoft 365 security posture assessment',
       'Azure AD and identity protection configuration',
-      'Data loss prevention (DLP) policy implementation',
-      'Conditional access and MFA optimization',
+      'Data loss prevention (DLP) policy setup',
+      'Multi-factor authentication and conditional access',
       'Microsoft Defender and threat protection tuning',
       'Compliance monitoring (GDPR, HIPAA, SOC 2)',
     ],
-    gradient: 'from-blue-500 to-cyan-500',
+    complianceTags: ['HIPAA', 'SOC 2', 'GDPR'],
   },
   {
     id: 'penetration-testing',
     icon: Zap,
+    iconColor: 'text-violet-400',
     title: 'Penetration Testing',
-    tagline: 'Ethical hacking to discover exploitable weaknesses',
-    description: 'Simulate real-world attacks to identify security gaps in your systems, applications, and network. Our certified ethical hackers use the same techniques as malicious actors to find vulnerabilities before they do.',
+    tagline: 'Find out what a hacker would find',
+    description: 'Our certified ethical hackers test your systems the same way a real attacker would. We find the weak spots in your network, applications, and even your team\'s awareness so you can fix them before someone exploits them.',
     features: [
       'External and internal network penetration testing',
       'Web application security testing (OWASP Top 10)',
       'Mobile application security assessment',
       'Social engineering and phishing simulations',
       'Wireless network security testing',
-      'Detailed executive and technical reports with remediation guidance',
+      'Executive and technical reports with clear next steps',
     ],
-    gradient: 'from-orange-500 to-red-500',
+    complianceTags: ['PCI-DSS', 'HIPAA', 'CMMC'],
   },
   {
     id: 'security-audit',
     icon: Eye,
+    iconColor: 'text-teal-500',
     title: 'Security Audit',
-    tagline: 'In-depth compliance audits and security policy reviews',
-    description: 'Comprehensive audits to ensure your organization meets regulatory requirements and industry standards. We review policies, procedures, and controls to identify compliance gaps and security weaknesses.',
+    tagline: 'Make sure you meet the requirements that matter',
+    description: 'Whether you need to pass a compliance audit or just want to know where you stand, we review your policies, controls, and procedures to identify what is working and what needs attention.',
     features: [
       'Compliance audits (PCI DSS, HIPAA, SOC 2, ISO 27001)',
       'Security policy and procedure review',
@@ -73,114 +75,104 @@ const services = [
       'Incident response plan evaluation',
       'Third-party vendor security assessment',
     ],
-    gradient: 'from-green-500 to-emerald-500',
+    complianceTags: ['PCI-DSS', 'HIPAA', 'SOC 2', 'ISO 27001'],
   },
   {
     id: 'ai-business-integration',
     icon: Brain,
+    iconColor: 'text-violet-400',
     title: 'AI Business Integration',
-    tagline: 'Transform your operations with intelligent automation',
-    description: 'We help businesses leverage AI to automate workflows, enhance decision-making, and unlock new capabilities. From customer service chatbots to predictive analytics, we build custom AI solutions tailored to your needs.',
+    tagline: 'Put AI to work for your business',
+    description: 'We help you use artificial intelligence to save time, reduce costs, and make better decisions. From automating repetitive tasks to building custom AI tools, we tailor solutions to fit your specific business needs.',
     features: [
-      'Custom AI model development and fine-tuning',
-      'Intelligent process automation and workflow optimization',
-      'Natural language processing for customer interactions',
+      'Custom AI solutions tailored to your business',
+      'Workflow automation and process optimization',
+      'Customer service chatbots and AI assistants',
       'Predictive analytics and business intelligence',
-      'AI strategy consulting and implementation roadmaps',
-      'Integration with existing systems and data sources',
+      'AI strategy consulting and implementation planning',
+      'Integration with your existing systems and data',
     ],
-    gradient: 'from-indigo-500 to-blue-500',
-  },
-  {
-    id: 'local-llm-appliance',
-    icon: Cpu,
-    title: 'Local LLM Appliance',
-    tagline: 'On-prem generative AI with managed hardware and software',
-    description: 'Deliver ChatGPT-grade experiences behind your firewall. Our packaged appliance includes hardened hardware, tuned models, and orchestration software to keep prompts, outputs, and telemetry entirely on-site.',
-    features: [
-      'Rack-ready GPU infrastructure with redundant power and cooling',
-      'Preloaded 70B-class models optimized for low-latency chat',
-      'Secure gateway for private network access and SSO enforcement',
-      'Local vector store with encrypted snapshot/restore workflows',
-      'Observability dashboard for usage, drift, and hardware health',
-      'Quarterly model refresh, patching, and capacity planning support',
-    ],
-    gradient: 'from-amber-500 to-rose-500',
+    complianceTags: ['SOC 2', 'GDPR'],
   },
   {
     id: 'ai-security',
-
     icon: Shield,
+    iconColor: 'text-teal-400',
     title: 'AI Security & Protection',
-    tagline: 'Secure your AI systems and defend against AI-powered threats',
-    description: 'Protect your organization from emerging AI-related threats while ensuring your AI systems are secure, compliant, and resilient. We provide comprehensive security for both AI-powered attacks and AI system vulnerabilities.',
+    tagline: 'Stay safe from AI-powered threats',
+    description: 'AI is transforming cybersecurity on both sides. We help protect your organization from new AI-driven attacks while making sure any AI systems you use are secure, compliant, and trustworthy.',
     features: [
-      'AI/ML model security auditing and vulnerability assessment',
+      'AI and machine learning security auditing',
       'Prompt injection and jailbreak attack prevention',
       'Data poisoning and adversarial attack detection',
-      'AI-powered threat detection and response systems',
+      'AI-powered threat detection and response',
       'Secure AI deployment and governance frameworks',
       'Compliance and ethical AI implementation guidance',
     ],
-    gradient: 'from-teal-500 to-green-500',
+    complianceTags: ['NIST AI RMF', 'SOC 2', 'GDPR'],
   },
 ];
 
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-cyber-dark via-cyber to-black">
-      {/* Header */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-4xl mx-auto mb-20">
-          <div className="inline-block mb-6">
-            <span className="px-4 py-2 bg-cesium/20 text-cesium text-sm font-mono border border-cesium/40 rounded-sm backdrop-blur">
-              CYBERSECURITY & AI SOLUTIONS
-            </span>
+    <main>
+      {/* Header - Dark Section */}
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 font-display">
+              Our <span className="text-violet-400">Services</span>
+            </h1>
+            <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+              Comprehensive security assessments, cloud protection, and AI-powered solutions
+              tailored to your business needs.
+            </p>
           </div>
-          <h1 className="text-5xl lg:text-7xl font-black text-white mb-6 font-[var(--font-orbitron)]">
-            OUR <span className="text-cesium">SERVICES</span>
-          </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
-            Comprehensive security assessments, cloud protection, and AI-powered solutions.
-            <br />
-            <span className="text-cesium font-semibold">From pentesting to intelligent automation.</span>
-          </p>
         </div>
+      </section>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <Card
-                key={service.id}
-                className="group relative bg-cyber-light/40 border-2 border-cesium/20 backdrop-blur hover:border-cesium transition-all duration-500 overflow-hidden rounded-none"
-              >
-                {/* Gradient accent */}
-                <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${service.gradient}`}></div>
-
-                <CardHeader className="relative z-10">
-                  <div className="mb-4">
-                    <Icon className="h-14 w-14 text-cesium group-hover:scale-110 transition-transform duration-300" />
+      {/* Services Grid - Light Section */}
+      <section className="bg-[#0A0A0A] py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {services.map((service) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={service.id}
+                  className="group rounded-lg border border-white/10 bg-[#0A0A0A] p-8 transition-shadow hover:shadow-violet-500/5"
+                >
+                  <div className="mb-5">
+                    <Icon className={`h-12 w-12 ${service.iconColor}`} />
                   </div>
-                  <CardTitle className="text-white text-2xl font-black mb-2">{service.title}</CardTitle>
-                  <CardDescription className="text-cesium font-semibold text-base">
+                  <h3 className="text-2xl font-bold text-white mb-2 font-display">{service.title}</h3>
+                  <p className="text-violet-500 font-semibold text-sm mb-4">
                     {service.tagline}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="relative z-10 space-y-6">
-                  <p className="text-gray-300 leading-relaxed">{service.description}</p>
+                  </p>
+                  <p className="text-gray-400 leading-relaxed mb-6">{service.description}</p>
 
-                  <div>
-                    <h4 className="text-white font-bold mb-3 flex items-center">
-                      <Check className="h-4 w-4 text-cesium mr-2" />
-                      Key Features:
+                  {/* Compliance Tags */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {service.complianceTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-block rounded-full bg-violet-500/10 border border-violet-500/20 px-3 py-1 text-xs font-medium text-violet-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mb-6">
+                    <h4 className="text-white font-bold mb-3 flex items-center text-sm">
+                      <Check className="h-4 w-4 text-violet-400 mr-2" />
+                      What&apos;s Included:
                     </h4>
                     <ul className="space-y-2">
                       {service.features.map((feature) => (
                         <li key={feature} className="text-sm text-gray-400 flex items-start">
-                          <ChevronRight className="h-4 w-4 text-cesium mr-2 flex-shrink-0 mt-0.5" />
+                          <ChevronRight className="h-4 w-4 text-violet-400 mr-2 flex-shrink-0 mt-0.5" />
                           {feature}
                         </li>
                       ))}
@@ -188,49 +180,52 @@ export default function ServicesPage() {
                   </div>
 
                   <Button
-                    variant="outline"
-                    className="w-full border-2 border-cesium/50 text-cesium hover:bg-cesium hover:text-black font-bold rounded-none group-hover:border-cesium transition-all"
+                    variant="accent"
+                    className="w-full"
                     asChild
                   >
-                    <Link href="/contact">
-                      Learn More
+                    <Link href={`/contact?service=${service.id}`}>
+                      Get Started
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
         </div>
+      </section>
 
-        {/* CTA */}
-        <Card className="bg-gradient-to-r from-cesium/10 via-transparent to-cesium/10 border-2 border-cesium/30 backdrop-blur rounded-none">
-          <CardHeader className="text-center">
-            <CardTitle className="text-white text-3xl font-black mb-4">
-              READY TO TRANSFORM WITH AI?
-            </CardTitle>
-            <CardDescription className="text-gray-300 text-lg">
-              Schedule a consultation to discuss your AI integration and security needs
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row gap-4 justify-center pb-8">
-            <Button
-              size="lg"
-              className="bg-cesium hover:bg-cesium-dark text-black font-black px-8 rounded-none border-2 border-cesium shadow-[0_0_20px_rgba(212,175,55,0.3)]"
-              asChild
-            >
-              <Link href="/contact">Book Consultation</Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-cesium/50 text-cesium hover:bg-cesium/10 font-bold px-8 rounded-none backdrop-blur"
-              asChild
-            >
-              <Link href="/about">Meet Our Team</Link>
-            </Button>
-          </CardContent>
-        </Card>
+      {/* CTA - Dark Section */}
+      <section className="bg-gradient-to-br from-black via-[#0A0A0A] to-[#121212] py-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white font-display">
+              Not Sure Where to Start?
+            </h2>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Every business has different security needs. Let us help you find the right solution
+              with a free consultation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button
+                size="lg"
+                variant="accent"
+                asChild
+              >
+                <Link href="/contact">Book a Free Consultation</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/10 text-gray-300 hover:bg-white/5 hover:text-white"
+                asChild
+              >
+                <Link href="/tools">Try Free Security Tools</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

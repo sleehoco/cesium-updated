@@ -6,35 +6,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
-import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 const resend = process.env['RESEND_API_KEY'] ? new Resend(process.env['RESEND_API_KEY']) : null;
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   email: z.string().email('Invalid email address'),
   company: z.string().max(100).optional().or(z.literal('')),
   service: z.string().optional().or(z.literal('')),
+  industry: z.string().max(100).optional().or(z.literal('')),
+  referralSource: z.string().max(100).optional().or(z.literal('')),
   message: z.string().min(10, 'Message must be at least 10 characters').max(2000),
 });
 
 export async function POST(req: NextRequest) {
   try {
-    // Apply strict rate limiting for contact forms (prevent spam)
-    const rateLimitResult = rateLimit(req, RATE_LIMITS.CONTACT_FORM);
-
-    if (!rateLimitResult.success) {
+    // Rate limit: 3 requests per minute per IP
+    const ip = getClientIp(req);
+    const { allowed } = rateLimit(`contact:${ip}`, 3, 60 * 1000);
+    if (!allowed) {
       return NextResponse.json(
-        { error: 'Too many contact attempts. Please try again later.' },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
-            'Retry-After': Math.ceil((rateLimitResult.reset * 1000 - Date.now()) / 1000).toString(),
-          },
-        }
+        { success: false, error: 'Too many requests. Please try again later.' },
+        { status: 429 }
       );
     }
 
@@ -58,7 +61,7 @@ export async function POST(req: NextRequest) {
       from: 'CesiumCyber Contact Form <contact@cesiumcyber.com>',
       to: 'information@cesiumcyber.com',
       replyTo: validatedData.email,
-      subject: `New Contact Form Submission from ${validatedData.name}`,
+      subject: `New Contact Form Submission from ${escapeHtml(validatedData.name)}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -82,12 +85,12 @@ export async function POST(req: NextRequest) {
               <div class="content">
                 <div class="field">
                   <div class="label">From:</div>
-                  <div class="value">${validatedData.name}</div>
+                  <div class="value">${escapeHtml(validatedData.name)}</div>
                 </div>
 
                 <div class="field">
                   <div class="label">Email:</div>
-                  <div class="value"><a href="mailto:${validatedData.email}">${validatedData.email}</a></div>
+                  <div class="value"><a href="mailto:${escapeHtml(validatedData.email)}">${escapeHtml(validatedData.email)}</a></div>
                 </div>
 
                 ${
@@ -95,7 +98,7 @@ export async function POST(req: NextRequest) {
                     ? `
                 <div class="field">
                   <div class="label">Company:</div>
-                  <div class="value">${validatedData.company}</div>
+                  <div class="value">${escapeHtml(validatedData.company)}</div>
                 </div>
                 `
                     : ''
@@ -106,7 +109,29 @@ export async function POST(req: NextRequest) {
                     ? `
                 <div class="field">
                   <div class="label">Service Interested In:</div>
-                  <div class="value">${validatedData.service}</div>
+                  <div class="value">${escapeHtml(validatedData.service)}</div>
+                </div>
+                `
+                    : ''
+                }
+
+                ${
+                  validatedData.industry
+                    ? `
+                <div class="field">
+                  <div class="label">Industry:</div>
+                  <div class="value">${escapeHtml(validatedData.industry)}</div>
+                </div>
+                `
+                    : ''
+                }
+
+                ${
+                  validatedData.referralSource
+                    ? `
+                <div class="field">
+                  <div class="label">How They Heard About Us:</div>
+                  <div class="value">${escapeHtml(validatedData.referralSource)}</div>
                 </div>
                 `
                     : ''
@@ -115,7 +140,7 @@ export async function POST(req: NextRequest) {
                 <div class="field">
                   <div class="label">Message:</div>
                   <div class="value" style="white-space: pre-wrap; background: white; padding: 15px; border-radius: 4px; border: 1px solid #ddd;">
-${validatedData.message}
+${escapeHtml(validatedData.message)}
                   </div>
                 </div>
               </div>

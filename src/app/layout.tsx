@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Orbitron } from 'next/font/google';
+import { Inter, Space_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Providers } from './providers';
 import { Navbar } from '@/components/shared/Navbar';
 import { Footer } from '@/components/shared/Footer';
+import { SecurityRobot } from '@/components/robot/SecurityRobot';
 import '@/styles/globals.css';
 import { env } from '@/lib/env';
 
@@ -16,11 +17,11 @@ const inter = Inter({
 });
 
 // Display font for headings
-const orbitron = Orbitron({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-orbitron',
-  weight: ['400', '700', '900'],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const viewport: Viewport = {
@@ -32,21 +33,24 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
-    default: 'CesiumCyber - Advanced Cybersecurity Solutions',
-    template: '%s | CesiumCyber',
+    default: 'Cesium — Security for Everyone',
+    template: '%s | Cesium',
   },
   description:
-    'Protect your digital assets with our comprehensive security solutions including penetration testing, vulnerability assessment, and incident response services.',
+    'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
   keywords: [
-    'cybersecurity',
-    'penetration testing',
-    'vulnerability assessment',
-    'security consulting',
-    'incident response',
-    'cloud security',
-    'data protection',
-    'GDPR compliance',
-    'HIPAA compliance',
+    'cybersecurity tools',
+    'security scanner',
+    'threat intelligence',
+    'phishing detection',
+    'password tester',
+    'email security',
+    'website security',
+    'vulnerability scanner',
+    'online security',
+    'cyber protection',
+    'security platform',
+    'free security tools',
   ],
   authors: [{ name: 'CesiumCyber' }],
   creator: 'CesiumCyber',
@@ -66,22 +70,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: env.NEXT_PUBLIC_APP_URL,
-    siteName: 'CesiumCyber',
-    title: 'CesiumCyber - Advanced Cybersecurity Solutions',
-    description: 'Comprehensive security solutions for modern businesses',
+    siteName: 'Cesium',
+    title: 'Cesium — Security for Everyone',
+    description: 'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'CesiumCyber',
+        alt: 'Cesium — Security for Everyone',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CesiumCyber - Advanced Cybersecurity Solutions',
-    description: 'Comprehensive security solutions for modern businesses',
+    title: 'Cesium — Security for Everyone',
+    description: 'Enterprise-grade security tools for everyone. Scan, monitor, and defend your digital presence — without the enterprise price tag.',
     images: ['/og-image.png'],
   },
 
@@ -97,12 +101,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${orbitron.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="min-h-screen bg-background font-sans antialiased" suppressHydrationWarning>
         <Providers>
           <Navbar />
           {children}
           <Footer />
+          <SecurityRobot />
         </Providers>
         <Analytics />
         <SpeedInsights />
