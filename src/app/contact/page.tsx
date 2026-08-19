@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertTriangle, ShieldCheck, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,6 +24,12 @@ export default function ContactPage() {
   const [error, setError] = useState<string | null>(null);
   const [validFields, setValidFields] = useState<Record<string, boolean>>({});
   const [charCount, setCharCount] = useState(0);
+
+  // Anti-spam. `website` is a honeypot: hidden from real users, so anything a
+  // bot autofills into it flags the submission. `renderedAt` lets the server
+  // reject submissions that arrive faster than a human could type.
+  const [honeypot, setHoneypot] = useState('');
+  const renderedAt = useRef(Date.now());
 
   // Pre-fill from query params (e.g. /contact?industry=healthcare&service=penetration-testing)
   useEffect(() => {
@@ -78,7 +84,11 @@ export default function ContactPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          website: honeypot,
+          renderedAt: renderedAt.current,
+        }),
       });
 
       const data = await response.json();
@@ -98,6 +108,8 @@ export default function ContactPage() {
         message: '',
       });
       setValidFields({});
+      setHoneypot('');
+      renderedAt.current = Date.now();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -169,6 +181,27 @@ export default function ContactPage() {
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-5">
+                    {/*
+                      Honeypot: positioned off-screen rather than display:none so
+                      autofill bots still see it, and hidden from assistive tech
+                      via aria-hidden + tabIndex so real users never reach it.
+                    */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden"
+                    >
+                      <label htmlFor="website">Website (leave this field empty)</label>
+                      <input
+                        type="text"
+                        id="website"
+                        name="website"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                      />
+                    </div>
+
                     {/* Name Field */}
                     <div>
                       <label htmlFor="name" className={labelClasses}>

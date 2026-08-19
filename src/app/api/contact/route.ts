@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
+import { checkSpam } from '@/lib/spam-filter';
 
 const resend = process.env['RESEND_API_KEY'] ? new Resend(process.env['RESEND_API_KEY']) : null;
 
@@ -27,13 +28,26 @@ const contactSchema = z.object({
   industry: z.string().max(100).optional().or(z.literal('')),
   referralSource: z.string().max(100).optional().or(z.literal('')),
   message: z.string().min(10, 'Message must be at least 10 characters').max(2000),
+  // Anti-spam fields. Both are optional so a stale cached page still submits.
+  website: z.string().max(200).optional().or(z.literal('')),
+  renderedAt: z.number().optional(),
 });
+
+/**
+ * Spam is answered with the same success response a real submission gets.
+ * Telling a bot why it was blocked just teaches it how to get through, and a
+ * false positive still leaves the visitor our email address and phone number.
+ */
+const SUCCESS_RESPONSE = {
+  success: true,
+  message: 'Thank you for contacting us! We will get back to you within 24 hours.',
+};
 
 export async function POST(req: NextRequest) {
   try {
-    // Rate limit: 3 requests per minute per IP
+    // Rate limit: 3 submissions per 15 minutes per IP
     const ip = getClientIp(req);
-    const { allowed } = rateLimit(`contact:${ip}`, 3, 60 * 1000);
+    const { allowed } = rateLimit(`contact:${ip}`, 3, 15 * 60 * 1000);
     if (!allowed) {
       return NextResponse.json(
         { success: false, error: 'Too many requests. Please try again later.' },
@@ -55,6 +69,23 @@ export async function POST(req: NextRequest) {
     // Parse and validate request body
     const body = await req.json();
     const validatedData = contactSchema.parse(body);
+
+    // Silently drop spam without sending an email or revealing the filter
+    const spam = checkSpam({
+      name: validatedData.name,
+      email: validatedData.email,
+      company: validatedData.company,
+      message: validatedData.message,
+      honeypot: validatedData.website,
+      renderedAt: validatedData.renderedAt,
+    });
+
+    if (spam.isSpam) {
+      console.warn(
+        `Blocked spam contact submission from ${ip} (score ${spam.score}): ${spam.reasons.join('; ')}`
+      );
+      return NextResponse.json(SUCCESS_RESPONSE);
+    }
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
@@ -166,11 +197,7 @@ ${escapeHtml(validatedData.message)}
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Thank you for contacting us! We will get back to you within 24 hours.',
-      emailId: data?.id,
-    });
+    return NextResponse.json({ ...SUCCESS_RESPONSE, emailId: data?.id });
   } catch (error) {
     console.error('Contact form error:', error);
 

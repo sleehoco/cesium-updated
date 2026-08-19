@@ -3,360 +3,217 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { POST } from './route';
 import { NextRequest } from 'next/server';
-import * as rateLimit from '@/lib/rate-limit';
 
-// Create mock function for send
 const mockSend = vi.fn();
 
-// Mock Resend
 vi.mock('resend', () => ({
   Resend: class {
-    emails = {
-      send: mockSend,
-    };
+    emails = { send: mockSend };
   },
 }));
 
-vi.mock('@/lib/rate-limit');
+vi.mock('@/lib/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/rate-limit')>();
+  return {
+    ...actual,
+    rateLimit: vi.fn(() => ({ allowed: true, remaining: 2 })),
+  };
+});
+
+// The route reads RESEND_API_KEY at module load, so the env var must be set
+// before the dynamic import below.
+process.env['RESEND_API_KEY'] = 'test-api-key';
+
+const { POST } = await import('./route');
+const rateLimitModule = await import('@/lib/rate-limit');
+
+function makeRequest(body: unknown): NextRequest {
+  return new NextRequest('http://localhost:3000/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: typeof body === 'string' ? body : JSON.stringify(body),
+  });
+}
+
+/** A submission that clears every spam heuristic. */
+const validSubmission = {
+  name: 'John Doe',
+  email: 'john@example.com',
+  company: 'Acme Corp',
+  message: 'We would like to discuss a security assessment for our web application.',
+  renderedAt: Date.now() - 30_000,
+};
 
 describe('POST /api/contact', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-
-    // Default: rate limiting passes
-    vi.mocked(rateLimit.rateLimit).mockReturnValue({
-      success: true,
-      limit: 3,
-      remaining: 2,
-      reset: Math.floor(Date.now() / 1000) + 300,
-    });
-
-    // Set up environment
-    process.env.RESEND_API_KEY = 'test-api-key';
+    // The route logs blocked spam and errors; keep test output readable.
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(rateLimitModule.rateLimit).mockReturnValue({ allowed: true, remaining: 2 });
+    mockSend.mockResolvedValue({ data: { id: 'email-id-123' }, error: null });
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
-    delete process.env.RESEND_API_KEY;
+    vi.clearAllMocks();
   });
 
-  describe('Success Cases', () => {
-    it('should send contact form email successfully', async () => {
-      mockSend.mockResolvedValue({
-        data: { id: 'email-id-123' },
-        error: null,
-      });
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'John Doe',
-          email: 'john@example.com',
-          message: 'This is a test message that meets the minimum length requirement.',
-        }),
-      });
-
-      const response = await POST(request);
+  describe('Success cases', () => {
+    it('sends the contact email and returns success', async () => {
+      const response = await POST(makeRequest(validSubmission));
       const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Message sent successfully');
+      expect(data.emailId).toBe('email-id-123');
+      expect(mockSend).toHaveBeenCalledTimes(1);
     });
 
-    it('should accept optional company and service fields', async () => {
-      mockSend.mockResolvedValue({
-        data: { id: 'email-id-123' },
-        error: null,
-      });
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
+    it('accepts a submission with no optional or anti-spam fields', async () => {
+      const response = await POST(
+        makeRequest({
           name: 'Jane Smith',
           email: 'jane@company.com',
-          company: 'Acme Corp',
-          service: 'Penetration Testing',
-          message: 'We need penetration testing services for our web application.',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
+          message: 'We need penetration testing for our internal network.',
+        })
+      );
 
       expect(response.status).toBe(200);
-      expect(data.success).toBe(true);
+      expect(mockSend).toHaveBeenCalledTimes(1);
     });
 
-    it('should accept empty optional fields', async () => {
-      mockSend.mockResolvedValue({
-        data: { id: 'email-id-123' },
-        error: null,
-      });
+    it('escapes HTML in user input before putting it in the email', async () => {
+      await POST(
+        makeRequest({
+          ...validSubmission,
+          name: '<script>alert(1)</script>',
+        })
+      );
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          company: '',
-          service: '',
-          message: 'Message without company or service selection.',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(data.success).toBe(true);
+      const html = mockSend.mock.calls[0]![0].html as string;
+      expect(html).not.toContain('<script>alert(1)</script>');
+      expect(html).toContain('&lt;script&gt;');
     });
   });
 
-  describe('Validation Errors', () => {
-    it('should reject empty name', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: '',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
+  describe('Spam filtering', () => {
+    it('silently drops a submission with the honeypot filled', async () => {
+      const response = await POST(
+        makeRequest({ ...validSubmission, website: 'http://spam.example' })
+      );
       const data = await response.json();
 
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
+      // Looks identical to success so the bot learns nothing.
+      expect(response.status).toBe(200);
+      expect(data.success).toBe(true);
+      expect(mockSend).not.toHaveBeenCalled();
     });
 
-    it('should reject invalid email', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'invalid-email',
-          message: 'Test message that is long enough',
-        }),
-      });
+    it('silently drops a submission filled out faster than a human could', async () => {
+      const response = await POST(
+        makeRequest({ ...validSubmission, renderedAt: Date.now() - 200 })
+      );
 
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(mockSend).not.toHaveBeenCalled();
     });
 
-    it('should reject message shorter than 10 characters', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Short',
-        }),
-      });
+    it('silently drops an email address in the name field', async () => {
+      const response = await POST(
+        makeRequest({ ...validSubmission, name: 'bestseo2024@gmail.com' })
+      );
 
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toContain('10 characters');
+      expect(response.status).toBe(200);
+      expect(mockSend).not.toHaveBeenCalled();
     });
 
-    it('should reject message longer than 2000 characters', async () => {
-      const longMessage = 'a'.repeat(2001);
+    it('silently drops link-stuffed SEO spam', async () => {
+      const response = await POST(
+        makeRequest({
+          ...validSubmission,
+          message:
+            'We build quality backlinks. See https://a.example and https://b.example and www.c.example.',
+        })
+      );
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: longMessage,
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(mockSend).not.toHaveBeenCalled();
     });
 
-    it('should reject name longer than 100 characters', async () => {
-      const longName = 'a'.repeat(101);
+    it('does not drop a genuine inquiry that happens to include a link', async () => {
+      const response = await POST(
+        makeRequest({
+          ...validSubmission,
+          message:
+            'Our site at https://acme.example failed a vulnerability scan and we need help reviewing the findings.',
+        })
+      );
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: longName,
-          email: 'test@example.com',
-          message: 'Valid message here',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
-    });
-
-    it('should reject company longer than 100 characters', async () => {
-      const longCompany = 'a'.repeat(101);
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          company: longCompany,
-          message: 'Valid message here',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
-    });
-
-    it('should reject missing required fields', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          // Missing email and message
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(mockSend).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('Rate Limiting', () => {
-    it('should reject requests when rate limit exceeded', async () => {
-      vi.mocked(rateLimit.rateLimit).mockReturnValue({
-        success: false,
-        limit: 3,
-        remaining: 0,
-        reset: Math.floor(Date.now() / 1000) + 300,
-      });
+  describe('Validation errors', () => {
+    it.each([
+      ['empty name', { ...validSubmission, name: '' }],
+      ['invalid email', { ...validSubmission, email: 'invalid-email' }],
+      ['message under 10 characters', { ...validSubmission, message: 'Short' }],
+      ['message over 2000 characters', { ...validSubmission, message: 'a'.repeat(2001) }],
+      ['name over 100 characters', { ...validSubmission, name: 'a'.repeat(101) }],
+      ['company over 100 characters', { ...validSubmission, company: 'a'.repeat(101) }],
+      ['missing required fields', { name: 'Test User' }],
+    ])('rejects %s', async (_label, body) => {
+      const response = await POST(makeRequest(body));
+      const data = await response.json();
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
+      expect(response.status).toBe(400);
+      expect(data.success).toBe(false);
+      expect(data.error).toBe('Invalid form data');
+      expect(mockSend).not.toHaveBeenCalled();
+    });
+  });
 
-      const response = await POST(request);
+  describe('Rate limiting', () => {
+    it('returns 429 when the limit is exceeded', async () => {
+      vi.mocked(rateLimitModule.rateLimit).mockReturnValue({ allowed: false, remaining: 0 });
+
+      const response = await POST(makeRequest(validSubmission));
       const data = await response.json();
 
       expect(response.status).toBe(429);
-      expect(data.error).toContain('Too many contact attempts');
-      expect(response.headers.get('X-RateLimit-Limit')).toBe('3');
-      expect(response.headers.get('X-RateLimit-Remaining')).toBe('0');
-      expect(response.headers.get('Retry-After')).toBeDefined();
+      expect(data.success).toBe(false);
+      expect(data.error).toContain('Too many requests');
+      expect(mockSend).not.toHaveBeenCalled();
     });
 
-    it('should apply strict contact form rate limit (3 req per 5 min)', async () => {
-      mockSend.mockResolvedValue({
-        data: { id: 'email-id-123' },
-        error: null,
-      });
+    it('applies a 3-per-15-minute per-IP limit', async () => {
+      await POST(makeRequest(validSubmission));
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test',
-          email: 'test@example.com',
-          message: 'Test message',
-        }),
-      });
-
-      await POST(request);
-
-      expect(rateLimit.rateLimit).toHaveBeenCalledWith(
-        request,
-        expect.objectContaining({
-          limit: 3,
-          windowSeconds: 300,
-        })
+      expect(rateLimitModule.rateLimit).toHaveBeenCalledWith(
+        expect.stringContaining('contact:'),
+        3,
+        15 * 60 * 1000
       );
     });
   });
 
-  describe('Resend Configuration', () => {
-    it('should return 503 when Resend is not configured', async () => {
-      delete process.env.RESEND_API_KEY;
+  describe('Email service errors', () => {
+    it('returns 500 when Resend reports an error', async () => {
+      mockSend.mockResolvedValue({ data: null, error: { message: 'API rate limit exceeded' } });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(503);
-      expect(data.success).toBe(false);
-      expect(data.error).toContain('Email service is not configured');
-      expect(data.error).toContain('information@cesiumcyber.com');
-    });
-  });
-
-  describe('Email Service Errors', () => {
-    it('should handle Resend API errors gracefully', async () => {
-      mockSend.mockResolvedValue({
-        data: null,
-        error: { message: 'API rate limit exceeded' },
-      });
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
+      const response = await POST(makeRequest(validSubmission));
       const data = await response.json();
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBeDefined();
+      expect(data.error).toContain('temporarily unavailable');
     });
 
-    it('should handle network errors when sending email', async () => {
+    it('returns 500 when sending throws', async () => {
       mockSend.mockRejectedValue(new Error('Network error'));
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
+      const response = await POST(makeRequest(validSubmission));
       const data = await response.json();
 
       expect(response.status).toBe(500);
@@ -364,84 +221,14 @@ describe('POST /api/contact', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle malformed JSON', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: 'invalid json',
-      });
-
-      const response = await POST(request);
+  describe('Error handling', () => {
+    it('handles malformed JSON', async () => {
+      const response = await POST(makeRequest('invalid json'));
       const data = await response.json();
 
       expect(response.status).toBe(500);
       expect(data.error).toBeDefined();
-    });
-
-    it('should handle unexpected errors', async () => {
-      mockSend.mockImplementation(() => {
-        throw new Error('Unexpected error');
-      });
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(500);
-      expect(data.error).toBeDefined();
-    });
-  });
-
-  describe('Response Structure', () => {
-    it('should return correct structure on success', async () => {
-      mockSend.mockResolvedValue({
-        data: { id: 'email-id-123' },
-        error: null,
-      });
-
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'Test User',
-          email: 'test@example.com',
-          message: 'Test message here',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(data).toHaveProperty('success');
-      expect(data).toHaveProperty('message');
-      expect(data.success).toBe(true);
-    });
-
-    it('should return correct structure on error', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: '',
-          email: 'invalid',
-          message: 'short',
-        }),
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(data).toHaveProperty('error');
-      expect(data.error).toBeTruthy();
+      expect(mockSend).not.toHaveBeenCalled();
     });
   });
 });
